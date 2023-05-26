@@ -1,0 +1,29 @@
+//colors
+$primaryColor: #FB9130;
+$secondaryColor: #E9E9E9;
+$darkColor: #656C7D;
+$linksColor: #0A78BF;
+$darkTextColor: #272323;
+$lightTextColor: #777777;
+$greenColor: #71BE00;
+$redColor: #EB5757;
+
+$mainTransition: 0.3s ease;
+$mainBorder: 1px solid #f9f9fc;
+
+// min-width breakpoints
+$break-xxs: 360px; // @media (min-width: $break-xxs) {}
+$break-xs: 420px; // @media (min-width: $break-xs) {}
+$break-sm: 576px; // @media (min-width: $break-sm) {}
+$break-md: 768px; // @media (min-width: $break-md) {}
+$break-lg: 992px; // @media (min-width: $break-lg) {}
+$break-xl: 1200px; // @media (min-width: $break-xl) {}
+$break-xxl: 1600px; // @media (min-width: $break-xxl) {}
+
+// max-width breakpoints
+$break-xxs-max: 419px; // @media (max-width: $break-xxs-max) {}
+$break-xs-max: 575px; // @media (max-width: $break-xs-max) {}
+$break-sm-max: 767px; // @media (max-width: $break-sm-max) {}
+$break-md-max: 991px; // @media (max-width: $break-md-max) {}
+$break-lg-max: 1199px; // @media (max-width: $break-lg-max) {}
+$break-xl-max: 1599px; // @media (max-width: $break-xl-max) {}

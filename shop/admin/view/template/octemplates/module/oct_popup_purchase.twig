@@ -1,0 +1,509 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		{% if success %}
+	    <script>
+			usNotify('success', '{{ success }}');
+		</script>
+	    {% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab-settings" data-toggle="tab">{{ tab_settings }}</a></li>
+						<li><a href="#tab-byoneclick" data-toggle="tab">{{ tab_by_one_click }}</a></li>
+						<li style="display:none;"><a href="#tab-template" data-toggle="tab">{{ tab_template }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-settings">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<div class="toggle-group">
+										<input type="checkbox" name="oct_popup_purchase_status" {% if oct_popup_purchase_status %}checked="checked"{% endif %} id="input-status" tabindex="1">
+										<label for="input-status"></label>
+										<div class="onoffswitch pull-left" aria-hidden="true">
+											<div class="onoffswitch-label">
+												<div class="onoffswitch-inner"></div>
+												<div class="onoffswitch-switch"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="all_settings" {% if (oct_popup_purchase_status is not defined or (oct_popup_purchase_status is defined and not oct_popup_purchase_status)) %}style="display:none"{% endif %}>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-order-status"><span data-toggle="tooltip" title="{{ help_order_status }}">{{ entry_order_status }}</span></label>
+										<div class="col-sm-8">
+											<select name="oct_popup_purchase_data[order_status_id]" id="input-order-status" class="form-control">
+												{% for order_status in order_statuses %}
+													{% if order_status.order_status_id == oct_popup_purchase_data.order_status_id %}
+														<option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+													{% else %}
+														<option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-firstname">{{ entry_firstname }}</label>
+										<div class="col-sm-8">
+											<select name="oct_popup_purchase_data[firstname]" id="input-firstname" class="form-control">
+												{% if oct_popup_purchase_data.firstname == 1 %} 
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ text_enabled_required }}</option>
+												<option value="0">{{ text_disabled }}</option>
+												{% elseif oct_popup_purchase_data.firstname == 2 %} 
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ text_enabled_required }}</option>
+												<option value="0">{{ text_disabled }}</option>
+												{% else %} 
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ text_enabled_required }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												{% endif %} 
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-email">{{ entry_email }}</label>
+										<div class="col-sm-8">
+											<select name="oct_popup_purchase_data[email]" id="input-email" class="form-control">
+												{% if oct_popup_purchase_data.email == 1 %} 
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ text_enabled_required }}</option>
+												<option value="0">{{ text_disabled }}</option>
+												{% elseif oct_popup_purchase_data.email == 2 %} 
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ text_enabled_required }}</option>
+												<option value="0">{{ text_disabled }}</option>
+												{% else %} 
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ text_enabled_required }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												{% endif %} 
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-notify_email"><span data-toggle="tooltip" title="{{ entry_email_helper }}">{{ entry_notify_email }}</span></label>
+										<div class="col-sm-8">
+											<input type="text" name="oct_popup_purchase_data[notify_email]" value="{{ oct_popup_purchase_data.notify_email is defined ? oct_popup_purchase_data.notify_email : '' }}" id="input-notify_email" class="form-control" />
+											{% if error_notify_email %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_notify_email }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-telephone">{{ entry_telephone }}</label>
+										<div class="col-sm-8">
+											<select name="oct_popup_purchase_data[telephone]" id="input-telephone" class="form-control">
+												{% if oct_popup_purchase_data.telephone == 1 %} 
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ text_enabled_required }}</option>
+												<option value="0">{{ text_disabled }}</option>
+												{% elseif oct_popup_purchase_data.telephone == 2 %} 
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ text_enabled_required }}</option>
+												<option value="0">{{ text_disabled }}</option>
+												{% else %} 
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ text_enabled_required }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												{% endif %} 
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-mask">{{ entry_mask }}</label>
+										<div class="col-sm-8">
+											<input type="text" name="oct_popup_purchase_data[mask]" value="{{ oct_popup_purchase_data.mask }}" placeholder="{{ entry_mask_info }}" id="input-mask" class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-quantity">{{ entry_quantity }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_data[quantity]" {% if oct_popup_purchase_data.quantity %}checked="checked"{% endif %} id="input-quantity" tabindex="1">
+												<label for="input-quantity"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-stock-check"><span data-toggle="tooltip" title="{{ help_stock_checkout }}">{{ text_allow_stock_check }}</span></label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_data[stock_check]" {% if oct_popup_purchase_data.stock_check %}checked="checked"{% endif %} id="input-stock_check" tabindex="1">
+												<label for="input-stock_check"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-image">{{ entry_image }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_data[image]" {% if oct_popup_purchase_data.image %}checked="checked"{% endif %} id="input-image" tabindex="1">
+												<label for="input-image"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-comment">{{ entry_comment }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_data[comment]" {% if oct_popup_purchase_data.comment %}checked="checked"{% endif %} id="input-comment" tabindex="1">
+												<label for="input-comment"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="image_sizes" {% if (oct_popup_purchase_data.image is not defined or (oct_popup_purchase_data.image is defined and not oct_popup_purchase_data.image)) %}style="display:none"{% endif %}>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="input-width">{{ entry_width }}</label>
+										<div class="col-sm-10">
+											<input type="text" name="oct_popup_purchase_data[image_width]" value="{{ oct_popup_purchase_data.image_width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="input-height">{{ entry_height }}</label>
+										<div class="col-sm-10">
+											<input type="text" name="oct_popup_purchase_data[image_height]" value="{{ oct_popup_purchase_data.image_height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">{{ text_options }}</label>
+									<div class="col-sm-10">
+										<div class="well well-sm" style="min-height:150px;max-height:300px;overflow: auto;">
+											{% set row = 0 %}
+											<table class="table table-striped">
+												{% for option in options %}
+												<tr>
+													<td class="checkbox">
+														<label>
+														<input type="checkbox" name="oct_popup_purchase_data[allowed_options][{{ row }}]" value="{{ option.option_id }}" {{ oct_popup_purchase_data.allowed_options[row] is not empty ? 'checked' : '' }} /> {{ option.name }} 
+														</label>
+													</td>
+												</tr>
+												{% set row = row + 1 %}
+												{% endfor %} 
+											</table>
+										</div>
+										<a href="javascript:;" onclick="$(this).parent().find(':checkbox').attr('checked', true);">{{ text_select_all }}</a> / <a href="javascript:;" onclick="$(this).parent().find(':checkbox').attr('checked', false);">{{ text_unselect_all }}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-byoneclick">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status-byoneclick">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<div class="toggle-group">
+										<input type="checkbox" name="oct_popup_purchase_byoneclick_status" {% if oct_popup_purchase_byoneclick_status %}checked="checked"{% endif %} id="input-status-byoneclick" tabindex="1">
+										<label for="input-status-byoneclick"></label>
+										<div class="onoffswitch pull-left" aria-hidden="true">
+											<div class="onoffswitch-label">
+												<div class="onoffswitch-inner"></div>
+												<div class="onoffswitch-switch"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="all_settings_byoneclick" {% if (oct_popup_purchase_byoneclick_status is not defined or (oct_popup_purchase_byoneclick_status is defined and not oct_popup_purchase_byoneclick_status)) %}style="display:none"{% endif %}>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-order-status-byoneclick"><span data-toggle="tooltip" title="{{ help_order_status }}">{{ entry_order_status }}</span></label>
+										<div class="col-sm-8">
+											<select name="oct_popup_purchase_byoneclick_data[order_status_id]" id="input-order-status-byoneclick" class="form-control">
+												{% for order_status in order_statuses %}
+													{% if order_status.order_status_id == oct_popup_purchase_byoneclick_data.order_status_id %}
+														<option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+													{% else %}
+														<option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-mask">{{ entry_mask }}</label>
+										<div class="col-sm-8">
+											<input type="text" name="oct_popup_purchase_byoneclick_data[mask]" value="{{ oct_popup_purchase_byoneclick_data.mask }}" placeholder="{{ entry_mask_info }}" id="input-mask" class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-notify_email"><span data-toggle="tooltip" title="{{ entry_email_helper }}">{{ entry_notify_email }}</span></label>
+									<div class="col-sm-10">
+										<input type="text" name="oct_popup_purchase_byoneclick_data[notify_email]" value="{{ oct_popup_purchase_byoneclick_data.notify_email is defined ? oct_popup_purchase_byoneclick_data.notify_email : '' }}" id="input-notify_email" class="form-control" />
+										{% if error_notify_byoneclick_email %} 
+										<div class="text-danger">
+											<script>
+												usNotify('warning', '{{ error_notify_byoneclick_email }}');
+											</script>
+										</div>
+										{% endif %} 
+									</div>
+								</div>
+								<legend>{{ entry_display_on_pages }}</legend>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-status-product">{{ entry_product_page }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_byoneclick_data[product]" {% if oct_popup_purchase_byoneclick_data.product %}checked="checked"{% endif %} id="input-status-product" tabindex="1">
+												<label for="input-status-product"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-status-product_view">{{ entry_product_view }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_byoneclick_data[product_view]" {% if oct_popup_purchase_byoneclick_data.product_view %}checked="checked"{% endif %} id="input-status-product_view" tabindex="1">
+												<label for="input-status-product_view"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-status-popup_cart">{{ entry_popup_cart }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_byoneclick_data[popup_cart]" {% if oct_popup_purchase_byoneclick_data.popup_cart %}checked="checked"{% endif %} id="input-status-popup_cart" tabindex="1">
+												<label for="input-status-popup_cart"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label" for="input-status-cart">{{ entry_cart_page }}</label>
+										<div class="col-sm-8">
+											<div class="toggle-group">
+												<input type="checkbox" name="oct_popup_purchase_byoneclick_data[cart]" {% if oct_popup_purchase_byoneclick_data.cart %}checked="checked"{% endif %} id="input-status-cart" tabindex="1">
+												<label for="input-status-cart"></label>
+												<div class="onoffswitch pull-left" aria-hidden="true">
+													<div class="onoffswitch-label">
+														<div class="onoffswitch-inner"></div>
+														<div class="onoffswitch-switch"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-template" style="display:none;">
+							<fieldset>
+								<legend>{{ tab_settings }}</legend>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-email_template">{{ entry_status }}</label>
+									<div class="col-sm-10">
+										<div class="toggle-group">
+											<input type="checkbox" name="oct_popup_purchase_data[template_status]" {% if oct_popup_purchase_data.template_status %}checked="checked"{% endif %} id="input-email_template" tabindex="1">
+											<label for="input-email_template"></label>
+											<div class="onoffswitch pull-left" aria-hidden="true">
+												<div class="onoffswitch-label">
+													<div class="onoffswitch-inner"></div>
+													<div class="onoffswitch-switch"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" id="email_templates" {% if (oct_popup_purchase_data.template_status is not defined or (oct_popup_purchase_data.template_status is defined and not oct_popup_purchase_data.template_status)) %}style="display:none"{% endif %}>
+									<legend class="col-sm-12">{{ tab_template }}</legend>
+									<div class="col-sm-4">
+										<span class="help-block"><strong>{{ entry_title_email_template }}</strong></span>
+										<div class="help-block">
+											<table class="table table-bordered table-hover table-striped">
+											  <tbody>
+												  <tr class="text-left">
+													<td>{order_id}</td>
+													<td>{{ entry_title_email_template_order_id }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{store_name}</td>
+													<td>{{ entry_title_email_template_store_name }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{logo}</td>
+													<td>{{ entry_title_email_template_logo }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{product}</td>
+													<td>{{ entry_title_email_template_product }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{total}</td>
+													<td>{{ entry_title_email_template_total }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{firstname}</td>
+													<td>{{ entry_title_email_template_firstname }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{comment}</td>
+													<td>{{ entry_title_email_template_comment }}</td>
+												  </tr>
+												  <tr class="text-left">
+													<td>{phone}</td>
+													<td>{{ entry_title_email_template_phone }}</td>
+												  </tr>
+											  </tbody>
+											</table>
+										</div>
+									</div>
+									<div class="col-sm-8">
+										<ul class="nav nav-tabs" id="email-template">
+											{% for language in languages %}						  
+											<li>
+												<a href="#tab-email_template{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+											</li>
+											{% endfor %}					  
+										</ul>
+										<div class="tab-content">
+											{% for language in languages %}	
+											<div class="tab-pane" id="tab-email_template{{ language.language_id }}">
+												<div class="input-group">
+													<span class="input-group-addon">{{ entry_subscribes_email }}</span> <input value="{{ oct_popup_purchase_template[language.language_id].subject is defined and oct_popup_purchase_template[language.language_id].subject is not empty ? oct_popup_purchase_template[language.language_id].subject : '' }}" type="text" name="oct_popup_purchase_template[{{ language.language_id }}][subject]" class="form-control" />
+												</div>
+												<br />
+												<label class="control-label" for="email_template{{ language.language_id }}">{{ entry_title_email_template_textarea }}</label>
+												<textarea id="email_template{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}" name="oct_popup_purchase_template[{{ language.language_id }}][text]">{{ oct_popup_purchase_template[language.language_id].text is defined and oct_popup_purchase_template[language.language_id].text is not empty ? oct_popup_purchase_template[language.language_id].text : '' }}</textarea>
+											</div>
+											{% endfor %}					  
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#email-template a:first').tab('show');
+$('#input-status').change(function() {
+	var $input = $(this);
+	
+	if ($input.is(":checked")) {
+       $("#all_settings").slideDown('slow');
+    } else {
+       $("#all_settings").slideUp('slow');
+	}
+});
+
+$('#input-status-byoneclick').change(function() {
+	var $input = $(this);
+	
+	if ($input.is(":checked")) {
+       $("#all_settings_byoneclick").slideDown('slow');
+    } else {
+       $("#all_settings_byoneclick").slideUp('slow');
+	}
+});
+
+$('#input-image').change(function() {
+	var $input = $(this);
+	
+	if ($input.is(":checked")) {
+       $("#image_sizes").slideDown('slow');
+    } else {
+       $("#image_sizes").slideUp('slow');
+	}
+});
+
+$('#input-email_template').change(function() {
+	var $input = $(this);
+	
+	if ($input.is(":checked")) {
+       $("#email_templates").slideDown('slow');
+    } else {
+       $("#email_templates").slideUp('slow');
+	}
+});
+</script>
+{{ footer }}

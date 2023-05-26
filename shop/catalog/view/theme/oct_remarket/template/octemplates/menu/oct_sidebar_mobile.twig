@@ -1,0 +1,21 @@
+<nav id="rm_mobile_nav" class="d-lg-none fixed-top d-flex align-items-center justify-content-between">
+    <button type="button" id="rm_mobile_menu_button" class="rm-btn primary rm_mobile_sidebar_toggle" onclick="rmSidebar('{{ oct_menu }}', 'menu');" aria-label="Menu">
+        <span class="rm-btn-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+    </button>
+    <div class="rm-mobile-nav-buttons d-flex">
+        {% if oct_remarket_data.contact_address[oct_lang_id] is defined and oct_remarket_data.contact_address[oct_lang_id] %}
+        <button type="button"  class="rm-mobile-nav-buttons-btn rm-mobile-locatons-btn" onclick="rmSidebar('{{ oct_our_address }}', 'locations');" aria-label="Locations">
+            <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--mobile-locations-icon" alt="" width="20" height="20">
+        </button>
+        {% endif %}
+        {% if (oct_contact_telephones is defined and oct_contact_telephones) or (oct_contact_opens is defined and oct_contact_opens) or (oct_remarket_data.contact_messenger is defined and oct_remarket_data.contact_messenger) or (oct_remarket_data.contact_viber is defined and oct_remarket_data.contact_viber) or (oct_remarket_data.contact_telegram is defined and oct_remarket_data.contact_telegram) or (oct_remarket_data.contact_skype is defined and oct_remarket_data.contact_skype) or (oct_remarket_data.contact_whatsapp is defined and oct_remarket_data.contact_whatsapp) or (socials is defined and socials is not empty) or (oct_remarket_data.mobile_menu.email is defined and oct_remarket_data.mobile_menu.email) and (oct_remarket_data.contact_email is defined and oct_remarket_data.contact_email is not empty) %}
+        <button type="button" class="rm-mobile-nav-buttons-btn rm-mobile-contacts-btn" onclick="rmSidebar('{{ oct_menu_contacts }}', 'contacts');" aria-label="Contacts">
+            <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--mobile-contacts-icon" alt="" width="21" height="21">
+        </button>
+        {% endif %}
+    </div>
+</nav>

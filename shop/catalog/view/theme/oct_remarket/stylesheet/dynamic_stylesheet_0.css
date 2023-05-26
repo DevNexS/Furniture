@@ -1,0 +1,28 @@
+#rm_fixed_contact_button, .rm-fixed-contact-pulsation, .rm-header-cart-quantity, .rm-news-item-date, .oct-fixed-bar-quantity-cart, .rm-slideshow-plus .slick-dots li.slick-active button, .rm-slideshow-plus .slick-dots li:hover button, .rm-day-discounts .slick-dots li.slick-active button, .rm-day-discounts .slick-dots li:hover button, .rm-product-tabs .nav-link.active:before, .radio-box::after, .rm-product-images-main .slick-dots li.slick-active button {background:rgb(251, 145, 48);}
+@media (min-width: 1200px){.rm-account-list-item:hover::before{background:rgb(251, 145, 48);}}
+.rm-product-top-button:hover, .oct-fixed-bar-item:hover {background:rgb(251, 145, 48);}
+.rm-module-header span, .rm-product-top-button:hover {border-color:rgb(251, 145, 48);}
+body {background-color:rgb(249, 249, 252);}
+.form-checkbox-group label a, .subcat-item:hover .subcat-item-title, .rm-content a, .blue-link, .blue-link:hover, .rm-category-wall-item:hover span, .rm-promotional-product-item:hover a, #oct-menu-ul .group-title a, .rm-last-reviews-item:hover .rm-last-reviews-item-title, .rm-module-item:hover .rm-module-title > a, .rm-module-item:hover .rm-module-title > a:visited, .rm-news-item:hover .rm-news-item-title, .rm-livesearch-list-item-name a, .rm-fixed-contact-item:hover, .category-landing-links-item-link span, .modal-content a, .rm-manufacturer-item a:hover span, .table td a, .rm-alert-text a, .rm-day-discounts-item:hover a, .rm-header-phones-list-item:hover, .rm-header-location-phones a .rm-footer-phones-link, .rm-footer-mail-link, .rm-footer-mail-link:hover, .collapse-value > button, .collapse-value > button:focus, .collapse-value > button:active, .collapse-value > button:active:focus, .rm-product-advantages-item:hover .rm-product-advantages-item-title, .rm-contact-location a, .rm-breadcrumb-item a, .rm-account-list-item:hover a, .rm-menu-list-item:hover > div:first-child .rm-menu-list-item-link, .rm-menu-list-item.active > div:first-child .rm-menu-list-item-link, .rm-footer-phones-link, .rm-footer-phones-link:hover {color:rgb(10, 120, 191);}
+.rm-btn.primary, button[data-target="#ocfilter-hidden-options"], #ocfilter .btn-primary, #ocfilter .btn-primary:active, #ocfilter .btn-primary:focus, .simplecheckout-cart-buttons .button:hover, .simplecheckout-button-right .button:hover, #simplecheckout_button_login:hover, .pagination li.active span, .pagination li:hover a, #rm_livesearch_close, .simplecheckout-cart-buttons .button, .rm-header-location.active .rm-btn, #rm_mobile_menu_button, .rm-sidebar #rm_mobile_menu_toggle_button:before, .rm-btn.secondary:hover, .rm-btn.dark:hover {background-color:rgb(251, 145, 48);}
+@media (min-width: 1200px){.rm-btn.secondary:hover, .rm-btn.dark:hover, .rm-module-item:hover .rm-cart-btn {background:rgb(251, 145, 48);}}
+.rm-btn.primary, .rm-btn.primary .rm-btn-text {color:rgb(255, 255, 255);}
+.rm-btn.dark {background-color:rgb(101, 108, 125);}
+.rm-btn.dark, .rm-btn.dark .rm-btn-text {color:rgb(255, 255, 255);}
+.rm-btn.secondary {background-color:rgb(233, 233, 233);}
+.rm-btn.secondary, .rm-btn.secondary .rm-btn-text {color:rgb(39, 35, 35);}
+#top {background:rgb(249, 249, 252);}
+.top-nav-info-list a, .top-nav-account-links-item a, .top-nav-account-links-item button, .top-nav-account-links-item > span {color:rgb(101, 108, 125)!important;}
+.top-nav-info-list a:hover, #top .top-nav-account-links-item button:focus, .top-nav-account-links-item:hover > a, .top-nav-account-links-item button:hover, .top-nav-account-links-item:hover form > button, .top-nav li:hover > a, .top-nav-account-links-item > span:hover {color:rgb(10, 120, 191) !important;}
+.top-nav .rm-dropdown-box:hover .rm-dropdown-toggle::after {background:rgb(10, 120, 191) !important;}
+.rm-footer {background-color:rgb(255, 255, 255);}
+.rm-footer-text, .rm-footer-credits {color:rgb(101, 108, 125);}
+.rm-footer-phones, .rm-footer-links-list a {color:rgb(101, 108, 125);}
+.rm-footer-phones a:hover, .rm-footer-links-list a:hover {color:rgb(10, 120, 191);}
+.rm-column-categories-item {background:rgb(252, 252, 252);}
+.rm-column-categories-item {color:rgb(39, 35, 35);}
+.rm-column-categories-item.active > span, .rm-column-categories-item .rm-categories-3 .active, .rm-column-categories-item a:hover {color:rgb(10, 120, 191);}
+.modal-header {background:rgba(255, 255, 255, 0);}
+.modal-title {color:rgb(39, 35, 35);}
+.modal-close-icon {background-color:rgb(119, 119, 119);}
+#rm_mobile_nav {background:rgb(253, 253, 253);}

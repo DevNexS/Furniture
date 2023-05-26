@@ -1,0 +1,62 @@
+<div class="modal" id="rm-popup-login" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered narrow" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="modal-title" id="loginModalTitle">{{ heading_title }}</div>
+				<button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+                    <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" enctype="multipart/form-data" id="popup-login-form">
+					<div class="form-group">
+						<label class="rm-control-label" for="emailLoginInput"><span class="required">* </span>{{ entry_email }}</label>
+						<input type="email" class="form-control" id="emailLoginInput" aria-describedby="emailHelp" placeholder="{{ entry_email }}" name="email" />
+					</div>
+					<div class="form-group">
+						<label class="rm-control-label" for="passwordLoginInput"><span class="required">* </span>{{ entry_password }}</label>
+						<input type="password" class="form-control" id="passwordLoginInput" placeholder="{{ entry_password }}" name="password" />
+						{% if redirect %}
+						<input type="hidden" name="redirect" value="{{ redirect }}" />
+						{% endif %}
+					</div>
+					<div class="login-popup-links d-flex align-items-center justify-content-between">
+						<a class="login-popup-forgotten" href="{{ forgotten_url }}">{{ button_forgotten }}</a>
+						<a class="login-popup-register" href="{{ register_url }}">{{ button_register }}</a>
+					</div>
+					<button id="popup-login-button" type="button" class="rm-btn dark">{{ button_login }}</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#popup-login-button').on('click', function() {
+    $.ajax({
+		type: 'post',
+		url:  'index.php?route=octemplates/module/oct_popup_login/login',
+		dataType: 'json',
+		cache: false,
+		data: $('#popup-login-form').serialize(),
+		beforeSend: function() {
+			masked('body', true);
+		},
+		complete: function() {
+			masked('body', false);
+		},
+		success: function(json) {
+	        if (json['warning']) {
+				rmNotify('danger', json['warning']);
+	        } else {
+
+				if (json['redirect']) {
+					location = json['redirect'];
+				} else {
+					location = '{{ account_url }}';
+				}
+	        }
+	    }
+    });
+});
+</script>

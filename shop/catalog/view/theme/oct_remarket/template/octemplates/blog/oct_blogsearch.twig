@@ -1,0 +1,66 @@
+{{ header }}
+<div class="container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-12 rm-page-title">
+			<h1>{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div id="content" class="row no-gutters">
+		{{ column_left }}
+		{% if column_left and column_right %}
+		{% set class = 'col-lg-6' %}
+		{% elseif column_left or column_right %}
+		{% set class = 'col-lg-9' %}
+		{% else %}
+		{% set class = 'col-lg-12' %}
+		{% endif %}
+		<div class="{{ class }}">
+			<div class="rm-content h-100">
+			{% if articles %}
+			<div class="row rm-blog-row">
+				{% for article in articles %}
+				<div class="col-12 col-md-6 rm-blog-row-item">
+					<div class="rm-blog-categories-item d-flex flex-column">
+						<div class="rm-blog-categories-item-image">
+							<a href="{{ article.href }}" title="{{ article.name }}">
+								<img src="{{ article.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ article.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="oct-lazy img-fluid"{% else %} class="img-fluid"{% endif %} alt="{{ article.name }}" width="{{ article.width }}" height="{{ article.height }}" />
+							</a>
+							<div class="rm-blog-categories-item-info d-flex align-items-center justify-content-between">
+								<div class="rm-blog-categories-item-info-date">
+									<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--blog-categories-date" alt="" width="14" height="16" />
+									<span>{{ article.date_added }}</span>
+								</div>
+								<div class="rm-blog-categories-item-info-views">
+									<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--blog-categories-views" alt="" width="18" height="13" />
+									<span>{{ text_viwed }}: {{ article.viewed }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="rm-blog-categories-item-text d-flex flex-column justify-content-between">
+							<a href="{{ article.href }}">{{ article.name }}</a>
+							<p>{{ article.description }}</p>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+				{% if pagination|striptags %}
+				<div class="rm-pagination-cont">
+					{{ pagination }}
+				</div>
+				{% endif %}
+			</div>
+			{% else %}
+				<div class="p-4">
+					<p class="mb-4">{{ text_empty }}</p>
+					<a href="{{ continue }}" class="rm-btn dark">{{ button_continue }}</a>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+		{{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+{{ footer }}

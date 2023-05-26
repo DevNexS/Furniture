@@ -1,0 +1,42 @@
+{% if reviews %}
+	{% for review in reviews %}
+	<div class="rm-store-reviews-item">
+		<div class="row align-items-start">
+			<div class="col-md-3 rm-store-reviews-item-info text-center py-md-4">
+				<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--user-icon" alt="{{ review.author }}" width="50" height="50" />
+				<div class="rm-store-reviews-item-info-name">{{ review.author }}</div>
+				<div class="rm-store-reviews-item-info-date">{{ review.date_added }}</div>
+				<div class="rm-store-reviews-item-info-rating">
+					<span class="rm-store-reviews-item-info-rating-title">{{ text_oct_review }}</span>
+					<div class="rm-module-rating-stars d-flex align-items-center justify-content-center">
+					{% for i in 1..5 %}
+				      {% if review.rating < i %}
+				      <span class="rm-module-rating-star"></span>
+				      {% else %}
+				      <span class="rm-module-rating-star rm-module-rating-star-is"></span>
+				      {% endif %}
+				    {% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9 py-lg-4">
+				<div class="rm-store-reviews-item-text">
+					<div>{{ review.text }}</div>
+					{% if review.reply %}
+					<div class="rm-store-reviews-item-text-admin mt-4">
+						<div class="rm-store-reviews-item-text-admin-title">{{ oct_product_answer_admin }}</div>
+						<p>{{ review.reply }}</p>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{{ pagination }}
+{% else %}
+	<div class="p-md-4">
+		<div class="my-3 my-md-0 mb-md-3 text-center text-sm-left"><b>{{ oct_text_no_reviews }}</b></div>
+		<img src="catalog/view/theme/oct_remarket/img/reviews-empty.svg" alt="" class="img-fluid d-md-none my-4">
+	</div>
+{% endif %}

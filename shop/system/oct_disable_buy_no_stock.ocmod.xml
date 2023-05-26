@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_disable_buy_no_stock</code>
+	<name>Octemplates - Disable buy no stock</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>http://octemplates.net/</link>
+	<file path="catalog/controller/extension/module/{featured,bestseller,latest,special}.php|catalog/controller/product/{category,manufacturer,special,search}.php">
+		<operation error="skip">
+			<search><![CDATA[$data['products'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			$result = (isset($product_info) && $product_info) ? $product_info : $result;
+
+			if ($result['quantity'] <= 0) {
+				$stock = $result['stock_status'];
+			} else {
+				$stock = false;
+			}
+
+			$can_buy = true;
+
+			if ($result['quantity'] <= 0 && !$this->config->get('config_stock_checkout')) {
+				$can_buy = false;
+			} elseif ($result['quantity'] <= 0 && $this->config->get('config_stock_checkout')) {
+				$can_buy = true;
+			}
+
+			$oct_grayscale = ($this->config->get('theme_oct_remarket_no_quantity_grayscale') && !$can_buy) ? true : false;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['special'     => $special,]]></search>
+			<add position="after"><![CDATA[
+			'stock'     => $stock,
+			'can_buy'   => $can_buy,
+			'oct_grayscale'  => $oct_grayscale,
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip">
+			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($this->request->get['product_id']);]]></search>
+			<add position="before"><![CDATA[
+			if ($product_info['quantity'] <= 0) {
+				$data['is_stock'] = $product_info['stock_status'];
+			} else {
+				$data['is_stock'] = false;
+			}
+
+			$data['can_buy'] = true;
+
+			if ($product_info['quantity'] <= 0 && !$this->config->get('config_stock_checkout')) {
+				$data['can_buy'] = false;
+			} elseif ($product_info['quantity'] <= 0 && $this->config->get('config_stock_checkout')) {
+				$data['can_buy'] = true;
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['products'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			if ($result['quantity'] <= 0) {
+				$stock = $result['stock_status'];
+			} else {
+				$stock = false;
+			}
+
+			$can_buy = true;
+
+			if ($result['quantity'] <= 0 && !$this->config->get('config_stock_checkout')) {
+				$can_buy = false;
+			} elseif ($result['quantity'] <= 0 && $this->config->get('config_stock_checkout')) {
+				$can_buy = true;
+			}
+
+			$oct_grayscale = ($this->config->get('theme_oct_remarket_no_quantity_grayscale') && !$can_buy) ? true : false;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['special'     => $special,]]></search>
+			<add position="after"><![CDATA[
+			'stock'     => $stock,
+			'can_buy'   => $can_buy,
+			'oct_grayscale'  => $oct_grayscale,
+			]]></add>
+		</operation>
+	</file>
+</modification>

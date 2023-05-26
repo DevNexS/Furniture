@@ -1,0 +1,62 @@
+{% if products %}
+<div class="rm-page-title h6 text-center my-4">{{ heading_title }}</div>
+<div class="row">
+	{% for product in products %}
+	<div class="ocs-article-box col-6 col-md-4 col-lg-3">
+		<div class="ocs-article-item rm-module-item d-flex flex-column h-100 border-0">
+			<ul class="rm-module-buttons list-unstyled d-flex justify-content-center flex-md-column">
+				<li class="rm-module-buttons-item">
+					<button type="button" class="rm-module-buttons-item compare d-flex align-items-center justify-content-center" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><span></span></button>
+				</li>
+				<li class="rm-module-buttons-item">
+					<button type="button" class="rm-module-buttons-item wishlist d-flex align-items-center justify-content-center" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><span></span></button>
+				</li>
+			</ul>
+			<div class="rm-module-img">
+				<a href="{{ product.href }}">
+				<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-fluid" />
+				</a>
+			</div>
+			{% if product.rating is not same as(false) %}
+			<div class="rm-module-rating d-flex align-items-center justify-content-center">
+				<div class="rm-module-rating-stars d-flex align-items-center">
+					{% for i in 1..5 %}
+					{% if product.rating < i %}
+					<span class="rm-module-rating-star"></span>
+					{% else %}
+					<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			{% endif %}
+			<div class="rm-module-title">
+				<a href="{{ product.href }}">{{ product.name }}</a>
+			</div>
+			{% if product.price %}
+			<div class="rm-module-price mt-auto">
+				{% if not product.special %}
+				<div class="rm-module-price-bottom">
+					<span class="rm-module-price-new">{{ product.price }}</span>
+				</div>
+				{% else %}
+				<div class="rm-module-price-top d-flex align-items-center justify-content-center">
+					<span class="rm-module-price-old">{{ product.price }}</span>
+					{% if product.you_save %}
+					<div class="rm-module-sticker-discount">{{ product.you_save }}</div>
+					{% endif %}
+				</div>
+				<div class="rm-module-price-bottom">
+					<span class="fm-module-price-new">{{ product.special }}</span>
+				</div>
+				{% endif %}
+				{% if product.tax %}
+				<div class="price-tax">{{ text_tax }} {{ product.tax }}</div>
+				{% endif %}
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+</div>
+  {% endif %}

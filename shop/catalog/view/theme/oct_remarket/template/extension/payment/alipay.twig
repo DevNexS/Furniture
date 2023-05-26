@@ -1,0 +1,13 @@
+<form id="alipaysubmit" name="alipaysubmit" action="{{ action }}" method="POST">
+    {% for key, value in form_params %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}"/>
+    {% endfor %}
+</form>
+<div class="buttons">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" class="rm-btn dark" />
+</div>
+<script>
+$('#button-confirm').bind('click', function() {
+    $('#alipaysubmit').submit();
+});
+</script>

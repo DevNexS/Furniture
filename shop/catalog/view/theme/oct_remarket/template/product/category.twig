@@ -1,0 +1,388 @@
+{{ header }}
+<div id="product-category" class="container">
+    {{ oct_breadcrumbs }}
+    <div class="content-top-box">{{ content_top }}</div>
+    <main>
+        <div class="row">
+            <div class="col-12 rm-page-title">
+                <h1>{{ heading_title }}</h1>
+            </div>
+        </div>
+        <div class="row no-gutters">
+        {{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-lg-6 is-cols' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-lg-9' %}
+        {% else %}
+            {% set class = 'col-lg-12 no-col' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">
+            <div class="rm-content rm-category h-100">
+                {% if oct_remarket_data.category_desc_position is defined and oct_remarket_data.category_desc_position == 'top' %}
+                    {% if thumb or description %}
+                        <div class="rm-category-description">
+                            <div class="d-md-flex">
+                                {% if thumb %}
+                                    <div class="rm-category-description-img text-center text-md-left mb-4 mb-md-0"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ cat_image_width }}" height="{{ cat_image_height }}" /></div>
+                                {% endif %}
+                                {% if description %}
+									<div id="rm-category-description">
+                                        <div class="rm-category-description-text">
+                                            {{ description }}
+                                            <!-- if button enabled -->
+                                            {% if description|length > 700 and (categories or products) and oct_remarket_data.category_desc_up is not defined %}
+                                            <div class="rm-category-description-text-opacity"></div>
+                                            {% endif %}
+                                            <!-- end if -->
+                                        </div>
+                                        <!-- CAT PAGES START -->
+                                        {% if categories_page is defined and categories_page is not empty %}
+                            			<div class="fm-category-categories_page-text">
+                            				<ul class="category-landing-links list-unstyled">
+                            				{% for oct_page in categories_page %}
+                            					{% if oct_page.page_links is not empty %}
+                            					<li class="category-landing-links-item">
+                            						<span class="category-landing-links-item-title">{{ oct_page.page_group[language_id] }}</span>
+                            						{% for link in oct_page.page_links %}
+                            						<a href="{{ link[language_id].link }}" class="category-landing-links-item-link d-flex-inline align-items-center" title="{{ link[language_id].title }}"><span>{{ link[language_id].title }}</span></a>
+                            						{% endfor %}
+                            					</li>
+                            					{% endif %}
+                            				{% endfor %}
+                            				</ul>
+                            			</div>
+                            			{% endif %}
+                                        <!-- CAT PAGES END -->
+                                        <!-- if button enabled -->
+                                        {% if description|length > 700 and (categories or products) and oct_remarket_data.category_desc_up is not defined %}
+                                        <button id="oct-rm-category-more" class="rm-btn secondary mt-3"><span class="rm-btn-text">{{ oct_expand }}</span></button>
+                                        {% endif %}
+                                        <!-- end if -->
+                                    </div>
+                                    <!-- if button enabled -->
+                                    {% if description|length > 700 and (categories or products) and oct_remarket_data.category_desc_up is not defined %}
+                                    <style>
+                                    .rm-category-description-text {
+                                        height: 220px;
+                                        display: block;
+                                        overflow: hidden;
+                                    }
+                                    </style>
+                                    <script>
+                                    const rmCategoryHeight = $('.rm-category-description-text')[0].scrollHeight;
+
+                                    $('#oct-rm-category-more').click(function(e) {
+                                        e.stopPropagation();
+                                        $('.rm-category-description-text').animate({
+                                            'height': rmCategoryHeight
+                                        });
+                                        $('.rm-category-description-text').addClass('expanded');
+                                        $(this).css('display', 'none');
+                                    });
+                                    </script>
+                                    {% endif %}
+                                    <!-- end if -->
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if products %}
+                    <div class="rm-category-buttons d-flex d-lg-none justify-content-between sticky-top">
+                        <button type="button" class="rm-btn rm-category-buttons-catalog" onclick="rmSidebar('{{ oct_menu }}', 'menu', 1);">
+                            <span class="rm-btn-icon">
+                                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--category-catalog-icon" alt="" width="15" height="14">
+                            </span>
+                            <span class="rm-btn-text">{{ oct_catalog }}</span>
+                        </button>
+                        <!-- filter button -->
+                    </div>
+                    {% if oct_remarket_data.category_view_sort_oder is defined and(oct_remarket_data.category_view_sort_oder or oct_remarket_data.category_view_sort_oder == 'on') %}
+                        <div class="rm-category-sort d-flex flex-column flex-md-row justify-content-between">
+                            <div class="rm-category-sort-limit d-flex align-items-center justify-content-between d-lg-block w-100 w-lg-auto">
+                                <select id="input-sort" class="rm-category-sort-select w-100 w-md-auto" onchange="location = this.value;">
+                                    {% for sorts in sorts %}
+                                        {% if sorts.value == '%s-%s'|format(sort, order) %}
+                                            <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+                                        {% else %}
+                                            <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <select id="input-limit" class="rm-category-limit-select d-none d-sm-inline-block" onchange="location = this.value;">
+                                    {% for limits in limits %}
+                                        {% if limits.value == limit %}
+                                            <option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+                                        {% else %}
+                                            <option value="{{ limits.href }}">{{ limits.text }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="rm-category-appearance btn-group d-none d-lg-flex">
+                                <button type="button" aria-label="List view" id="list-view" class="rm-category-appearance-btn" data-toggle="tooltip" data-placement="top" title="{{ button_list }}">
+                                    <span></span>
+                                </button>
+                                <button type="button" aria-label="Grid view" id="grid-view" class="rm-category-appearance-btn" data-toggle="tooltip" data-placement="top" title="{{ button_grid }}">
+                                    <span></span>
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if categories %}
+                    <div class="rm-subcategory">
+                    	<div class="row no-gutters rm-subcategory-row">
+                    		{% for category in categories %}
+                    	  	<div class="col-6 col-sm-4 col-lg-3 col-xl-2 rm-category-wall-item">
+                    			<a href="{{ category.href }}" class="d-flex flex-column justify-content-between align-items-center text-center">
+                    				<span class="rm-category-wall-item-image"><img src="{{ category.image }}" alt="{{ category.name }}" title="{{ category.name }}" width="{{ category.width }}" height="{{ category.height }}" /></span>
+                    				<span>{{ category.name }}</span>
+                    			</a>
+                    		</div>
+                    		{% endfor %}
+                    	</div>
+                    </div>
+                {% endif %}
+                {% if products %}
+                    <div class="row no-gutters rm-category-products">
+                        {% for product in products %}
+                      <div class="product-layout product-grid rm-module-col col-12 col-md-4 col-lg-4"{% if oct_remarket_data.category_show_type == 'width-100' %} data-width="width-100"{% endif %}{% if oct_remarket_data.category_show_type == 'width-50' %} data-width="width-50"{% endif %}{% if oct_remarket_data.category_show_more is defined and oct_remarket_data.category_show_more %} data-pid="{{ product.product_id }}"{% endif %}>
+                                <div class="rm-module-item d-flex flex-md-column h-100{% if product.oct_grayscale %} rm-no-stock{% endif %}">
+                                    <div class="rm-module-img d-flex flex-column d-md-block">
+                                        {% if product.oct_stickers is not empty %}
+                            			<div class="rm-module-stickers">
+                            				{% for key, oct_sticker in product.oct_stickers %}
+                            					{% if oct_sticker is not empty %}
+                            					<div class="rm-module-stickers-sticker rm-module-stickers-sticker-{{ key }}">
+                            						{{ oct_sticker }}
+                            					</div>
+                            					{% endif %}
+                            				{% endfor %}
+                            			</div>
+                            			{% endif %}
+                                        <div class="rm-module-buttons list-unstyled d-flex justify-content-center flex-md-column order-1">
+                                            {% if oct_popup_view_status %}
+                                			<button type="button" aria-label="Quick view" class="rm-module-buttons-item popup-view d-flex align-items-center justify-content-center" title="{{ oct_popup_view }}" onclick="octPopUpView('{{ product.product_id }}')">
+                                                <span></span>
+                                            </button>
+                                			{% endif %}
+                                            <button type="button" aria-label="Wishlist" onclick="wishlist.add('{{ product.product_id }}');" title="{{ button_wishlist }}" class="rm-module-buttons-item wishlist d-flex align-items-center justify-content-center">
+                                                <span></span>
+                                            </button>
+                                            <button type="button" aria-label="Compare" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');" class="rm-module-buttons-item compare d-flex align-items-center justify-content-center">
+                                                <span></span>
+                                            </button>
+                                        </div>
+                                        <a class="order-0" href="{{ product.href }}">
+                                            <img
+                                                src="{{ product.thumb }}"
+                                                {% if oct_lazyload is defined and oct_lazyload %}
+                                                data-srcset="{{ product.thumb }} 100w"
+                                                srcset="{{ oct_lazy_image }} 100w"
+                                                sizes="100vw"
+                                                class="img-fluid oct-lazy"
+                                                {% else %}
+                                                class="img-fluid"
+                                                {% endif %}
+                                                alt="{{ product.name }}"
+                                                title="{{ product.name }}"
+                                                width="{{ product.width }}"
+                                                height="{{ product.height }}"/>
+                                        </a>
+                                        {% if product.rating is not same as(false) %}
+                                            <div class="rm-module-rating d-flex align-items-center justify-content-center justify-content-md-start order-2">
+                                                <div class="rm-module-rating-stars d-flex align-items-center">
+                                                    {% for i in 1..5 %}
+                                                        {% if product.rating < i %}
+                                                            <span class="rm-module-rating-star"></span>
+                                                        {% else %}
+                                                            <span class="rm-module-rating-star rm-module-rating-star-is"></span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="rm-module-reviews">
+                                                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--comments-icon" alt=""       width="12" height="11" />
+                                                    <span>{{ product.reviews }}</span>
+												</div>
+                                            </div>
+                                        {% endif %}
+                                        {% if oct_remarket_data.category_view_quantity is defined and oct_remarket_data.category_view_quantity and product.can_buy is not empty %}
+                            			<div class="rm-module-quantity d-flex align-items-center justify-content-center">
+                            				<button type="button" aria-label="Minus" class="rm-module-quantity-btn d-flex align-items-center justify-content-center rm-minus"><span class="minus"></span></button>
+                            				<input type="text" class="form-control" name="quantity" value="{{ product.minimum }}" />
+                            				<button type="button" aria-label="Plus" class="rm-module-quantity-btn d-flex align-items-center justify-content-center rm-plus"><span class="plus"></span></button>
+                            				<input type="hidden" name="product_id" value="{{ product.product_id }}" />
+                            				<input class="min-qty" type="hidden" value="{{ product.minimum }}" name="min_quantity">
+                            			</div>
+                            			{% endif %}
+                                    </div>
+                                    <div class="rm-module-caption d-flex flex-column flex-grow-1">
+										<div class="rm-module-title">
+											<a href="{{ product.href }}">{{ product.name }}</a>
+										</div>
+                                        {% if not product.quantity %}
+                                        <div class="rm-module-stock mt-auto">{{ oct_product_stock }}</div>
+                                        {% else %}
+                                        <div class="rm-module-stock rm-out-of-stock mt-auto">{{ product.stock }}</div>
+                                        {% endif %}
+                                        {% if product.oct_model is not empty %}
+                                            <div class="rm-category-product-model"><span>{{ oct_view_model_cat }}</span>{{ product.oct_model }}</div>
+                                        {% endif %}
+                                        {% if product.oct_atributes is defined and product.oct_atributes %}
+                            	        <div class="rm-module-attr">
+                            			{% for attribute in product.oct_atributes %}
+                            				<span class="rm-module-attr-item">
+                            					<span>{{ attribute.name }}:</span> <span class="rm-module-attr-item-header">{{ attribute.text }}</span>
+                            				</span>
+                            			{% endfor %}
+                            			</div>
+                            			{% endif %}
+                                        {% if (product.description is defined and product.description | length > 3) %}
+                                            <div class="rm-module-description d-none d-md-block">{{ product.description }}</div>
+                                        {% endif %}
+                                        {% if product.price %}
+                                            <div class="rm-module-price-box d-flex flex-column">
+                                                {% if product.tax %}
+                                                    <div class="price-tax">{{ text_tax }}
+                                                        {{ product.tax }}
+                                                    </div>
+                                                {% endif %}
+	                                            {% if not product.special %}
+                                                    <div class="rm-module-price-bottom d-flex align-items-md-end justify-content-between flex-column flex-md-row mt-md-auto flex-grow-1">
+                                                        <span class="rm-module-price">{{ product.price }}</span>
+                                                        {% if product.can_buy is not empty and product.can_buy %}
+                                                    <button type="button" aria-label="To cart" class="rm-btn secondary rm-cart-btn d-flex align-items-center justify-content-center justify-content-md-start{% if oct_remarket_data.category_view_quantity is defined and oct_remarket_data.category_view_quantity and product.can_buy is not empty %} rm-cat-button-cart{% else %}" onclick="cart.add('{{ product.product_id }}');{% endif %}">
+															<span class="rm-cart-btn-icon"></span>
+			                                                <span class="rm-btn-text">{{ (product.stock and not product.can_buy) ? product.stock : button_cart }}</span>
+														</button>
+                                                        {% endif %}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="rm-module-price-top d-flex align-items-center mt-md-auto">
+                                                        <span class="rm-module-price-old">{{ product.price }}</span>
+                                                        {% if product.oct_stickers is not empty %}
+                                            				{% if oct_sticker_you_save and product.you_save %}
+                                            					<div class="rm-module-sticker-discount">{{ product.you_save }}</div>
+                                            				{% endif %}
+                                            			{% endif %}
+                                                    </div>
+													<div class="rm-module-price-bottom d-flex align-items-md-end justify-content-between flex-column flex-md-row flex-grow-1">
+                                                        <span class="rm-module-price">{{ product.special }}</span>
+                                                        {% if product.can_buy is not empty and product.can_buy %}
+														<button type="button" aria-label="To cart" class="rm-btn secondary rm-cart-btn d-flex align-items-center justify-content-center justify-content-md-start{% if oct_remarket_data.category_view_quantity is defined and oct_remarket_data.category_view_quantity and product.can_buy is not empty %} rm-cat-button-cart{% else %}" onclick="cart.add('{{ product.product_id }}');{% endif %}">
+															<span class="rm-cart-btn-icon"></span>
+			                                                <span class="rm-btn-text">{{ (product.stock and not product.can_buy) ? product.stock : button_cart }}</span>
+														</button>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if oct_remarket_data.category_show_more is defined and oct_remarket_data.category_show_more %}
+                	<div class="d-flex justify-content-center oct-load-more">
+                		<button class="rm-btn rm-btn-2x dark oct-load-more-button text-center d-none" onClick="octLoadMore({% if oct_lazyload is defined and oct_lazyload %}1{% endif %});">
+                            <span class="rm-btn-icon">
+                                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--show-more-icon" alt="" width="24" height="24">
+                            </span>
+                            <span class="rm-btn-text">{{ oct_show_more }}</span>
+                        </button>
+                	</div>
+                    {% endif %}
+                    {{ pagination }}
+                    {% if oct_remarket_data.category_show_more is defined and oct_remarket_data.category_show_more %}
+                    <script src="catalog/view/theme/oct_remarket/js/oct-show-more.js"></script>
+                	<script>
+                        octCheckPagination();
+                	</script>
+                    {% endif %}
+                {% endif %}
+                {% if oct_remarket_data.category_desc_position is defined and oct_remarket_data.category_desc_position == 'bottom' %}
+                    {% if thumb or description %}
+                        <div class="rm-category-description rm-category-description-bottom">
+                            <div class="d-md-flex">
+                                {% if thumb %}
+                                    <div class="rm-category-description-img text-center text-md-left mb-4 mb-md-0"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ cat_image_width }}" height="{{ cat_image_height }}" /></div>
+                                {% endif %}
+                                {% if description %}
+						            <div id="rm-category-description">
+                                        <div class="rm-category-description-text">
+                                            {{ description }}
+                                            <!-- if button enabled -->
+                                            {% if description|length > 700 and (categories or products) and oct_remarket_data.category_desc_up is not defined %}
+                                            <div class="rm-category-description-text-opacity"></div>
+                                            {% endif %}
+                                            <!-- end if -->
+                                        </div>
+                                        <!-- CAT PAGES START -->
+                                        {% if categories_page is defined and categories_page is not empty %}
+                            			<div class="fm-category-categories_page-text">
+                            				<ul class="category-landing-links list-unstyled">
+                            				{% for oct_page in categories_page %}
+                            					{% if oct_page.page_links is not empty %}
+                            					<li class="category-landing-links-item">
+                            						<span class="category-landing-links-item-title">{{ oct_page.page_group[language_id] }}</span>
+                            						{% for link in oct_page.page_links %}
+                            						<a href="{{ link[language_id].link }}" class="category-landing-links-item-link d-flex-inline align-items-center" title="{{ link[language_id].title }}"><span>{{ link[language_id].title }}</span></a>
+                            						{% endfor %}
+                            					</li>
+                            					{% endif %}
+                            				{% endfor %}
+                            				</ul>
+                            			</div>
+                            			{% endif %}
+                                        <!-- CAT PAGES END -->
+                                        <!-- if button enabled -->
+                                        {% if description|length > 700 and (categories or products) and oct_remarket_data.category_desc_up is not defined %}
+                                        <button id="oct-rm-category-more" class="rm-btn secondary mt-3"><span class="rm-btn-text">{{ oct_expand }}</span></button>
+                                        {% endif %}
+                                        <!-- end if -->
+                                    </div>
+                                    <!-- if button enabled -->
+                                    {% if description|length > 700 and (categories or products) and oct_remarket_data.category_desc_up is not defined %}
+                                    <style>
+                                    .rm-category-description-text {
+                                        height: 220px;
+                                        display: block;
+                                        overflow: hidden;
+                                    }
+                                    </style>
+                                    <script>
+                                    const rmCategoryHeight = $('.rm-category-description-text')[0].scrollHeight;
+
+                                    $('#oct-rm-category-more').click(function(e) {
+                                        e.stopPropagation();
+                                        $('.rm-category-description-text').animate({
+                                            'height': rmCategoryHeight
+                                        });
+                                        $('.rm-category-description-text').addClass('expanded');
+                                        $(this).css('display', 'none');
+                                    });
+                                    </script>
+                                    {% endif %}
+                                    <!-- end if -->
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if not categories and not products and(description | striptags is empty) %}
+                    <div class="p-4">
+                        <p>{{ text_empty }}</p>
+                        <a href="{{ continue }}" class="rm-btn dark mt-3 d-inline-block">{{ button_continue }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {{ column_right }}
+    </div>
+    </main>
+    {{ content_bottom }}
+</div>
+{{ footer }}

@@ -1,0 +1,35 @@
+#column-left .ocs-article-box,
+#column-right .ocs-article-box,
+#column-left .ocs-article-item,
+#column-right .ocs-article-item {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+#content.col-sm-9 .ocs-article-box,
+#content.col-md-9 .ocs-article-box {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+}
+.ocs-rating {
+    margin-top: 10px;
+}
+.ocs-blog-article-title {
+    color: #30363D;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 33px;
+    margin-bottom: 20px;
+}
+.fm-ocstore-content {
+    .fm-category-sort-block {
+        padding: 0 0 30px;
+    }
+
+    .fa-star,
+    .fa-stack {
+        font-size: 1em;
+        width: 1em;
+        padding-top: 0.3em;
+        color: #ffc701;
+    }
+}

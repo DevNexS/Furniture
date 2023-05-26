@@ -1,0 +1,880 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		{% if success %}
+	    <script>
+			usNotify('success', '{{ success }}');
+		</script>
+	    {% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab-settings" data-toggle="tab">{{ tab_settings }}</a></li>
+						<li><a href="#tab-stickers" data-toggle="tab">{{ tab_stickers }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-settings">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<div class="toggle-group">
+										<input type="checkbox" name="oct_stickers_status" {% if oct_stickers_status %}checked="checked"{% endif %} id="input-status" tabindex="1">
+										<label for="input-status"></label>
+										<div class="onoffswitch pull-left" aria-hidden="true">
+											<div class="onoffswitch-label">
+												<div class="onoffswitch-inner"></div>
+												<div class="onoffswitch-switch"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-stickers">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#tab-new" data-toggle="tab">{{ entry_sticker_new }}</a></li>
+								<li><a href="#tab-bestseller" data-toggle="tab">{{ entry_sticker_bestseller }}</a></li>
+								<li><a href="#tab-popular" data-toggle="tab">{{ entry_sticker_popular }}</a></li>
+								<li><a href="#tab-sold" data-toggle="tab">{{ entry_sticker_sold }}</a></li>
+								<li><a href="#tab-ends" data-toggle="tab">{{ entry_sticker_ends }}</a></li>
+								<li><a href="#tab-special" data-toggle="tab">{{ entry_sticker_special }}</a></li>
+								<li><a href="#tab-featured" data-toggle="tab">{{ entry_sticker_featured }}</a></li>
+								<li><a href="#tab-customer" data-toggle="tab">{{ entry_customer }}</a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="tab-new">
+									<fieldset>
+										<legend>{{ entry_sticker_new }}</legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-new_status">{{ entry_status }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][new][status]" {% if oct_stickers_data.stickers.new.status %}checked="checked"{% endif %} id="input-new_status" tabindex="1">
+														<label for="input-new_status"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-new_auto">{{ entry_auto }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][new][auto]" {% if oct_stickers_data.stickers.new.auto %}checked="checked"{% endif %} id="input-new_auto" tabindex="1">
+														<label for="input-new_auto"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-count_days">{{ entry_count_days }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-new_sort" name="oct_stickers_data[stickers][new][count]" value="{{ oct_stickers_data.stickers.new.count }}" class="form-control" placeholder="{{ entry_count_days }}" />
+												</div>
+											</div>
+											<div class="col-sm-6" style="display:none;">
+												<label class="col-sm-4 control-label" for="input-new_sort">{{ entry_sort }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-new_sort" name="oct_stickers_data[stickers][new][sort]" value="{{ oct_stickers_data.stickers.new.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][new][text_color]" value="{{ oct_stickers_data.stickers.new.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][new][fon_color]" value="{{ oct_stickers_data.stickers.new.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+												<ul class="nav nav-tabs" id="new-language">
+													{% for language in languages %}
+														<li><a href="#new-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+													{% endfor %}
+							                    </ul>
+											</div>
+						                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+						                    <div class="col-sm-10">
+							                    <div class="tab-content">
+						                        	{% for language in languages %}
+						                            <div class="tab-pane" id="new-language{{ language.language_id }}">
+														<input name="oct_stickers_data[stickers][new][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.new.title[language.language_id] }}" />
+						                            </div>
+													{% endfor %}
+							                    </div>
+						                    </div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-bestseller">
+									<fieldset>
+										<legend>{{ entry_sticker_bestseller }}</legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-bestseller_status">{{ entry_status }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][bestseller][status]" {% if oct_stickers_data.stickers.bestseller.status %}checked="checked"{% endif %} id="input-bestseller_status" tabindex="1">
+														<label for="input-bestseller_status"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-bestseller_auto">{{ entry_auto }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][bestseller][auto]" {% if oct_stickers_data.stickers.bestseller.auto %}checked="checked"{% endif %} id="input-bestseller_auto" tabindex="1">
+														<label for="input-bestseller_auto"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-count_order">{{ entry_count_order }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-bestseller_sort" name="oct_stickers_data[stickers][bestseller][count]" value="{{ oct_stickers_data.stickers.bestseller.count }}" class="form-control" placeholder="{{ entry_count_order }}" />
+												</div>
+											</div>
+											<div class="col-sm-6" style="display:none;">
+												<label class="col-sm-4 control-label" for="input-bestseller_sort">{{ entry_sort }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-bestseller_sort" name="oct_stickers_data[stickers][bestseller][sort]" value="{{ oct_stickers_data.stickers.bestseller.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][bestseller][text_color]" value="{{ oct_stickers_data.stickers.bestseller.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][bestseller][fon_color]" value="{{ oct_stickers_data.stickers.bestseller.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+												<ul class="nav nav-tabs" id="bestseller-language">
+													{% for language in languages %}
+														<li><a href="#bestseller-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+													{% endfor %}
+							                    </ul>
+											</div>
+						                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+						                    <div class="col-sm-10">
+							                    <div class="tab-content">
+						                        	{% for language in languages %}
+						                            <div class="tab-pane" id="bestseller-language{{ language.language_id }}">
+														<input name="oct_stickers_data[stickers][bestseller][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.bestseller.title[language.language_id] }}" />
+						                            </div>
+													{% endfor %}
+							                    </div>
+						                    </div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-popular">
+									<fieldset>
+										<legend>{{ entry_sticker_popular }}</legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-popular_status">{{ entry_status }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][popular][status]" {% if oct_stickers_data.stickers.popular.status %}checked="checked"{% endif %} id="input-popular_status" tabindex="1">
+														<label for="input-popular_status"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-popular_auto">{{ entry_auto }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][popular][auto]" {% if oct_stickers_data.stickers.popular.auto %}checked="checked"{% endif %} id="input-popular_auto" tabindex="1">
+														<label for="input-popular_auto"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-popular_count_views">{{ entry_count_views }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-popular_count_views" name="oct_stickers_data[stickers][popular][count]" value="{{ oct_stickers_data.stickers.popular.count }}" class="form-control" placeholder="{{ entry_count_views }}" />
+												</div>
+											</div>
+											<div class="col-sm-6" style="display:none;">
+												<label class="col-sm-4 control-label" for="input-popular_sort">{{ entry_sort }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-popular_sort" name="oct_stickers_data[stickers][popular][sort]" value="{{ oct_stickers_data.stickers.popular.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][popular][text_color]" value="{{ oct_stickers_data.stickers.popular.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][popular][fon_color]" value="{{ oct_stickers_data.stickers.popular.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+												<ul class="nav nav-tabs" id="popular-language">
+													{% for language in languages %}
+														<li><a href="#popular-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+													{% endfor %}
+							                    </ul>
+											</div>
+						                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+						                    <div class="col-sm-10">
+							                    <div class="tab-content">
+						                        	{% for language in languages %}
+						                            <div class="tab-pane" id="popular-language{{ language.language_id }}">
+														<input name="oct_stickers_data[stickers][popular][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.popular.title[language.language_id] }}" />
+						                            </div>
+													{% endfor %}
+							                    </div>
+						                    </div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-sold">
+									<fieldset>
+										<legend>{{ entry_sticker_sold }}</legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-sold_status">{{ entry_status }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][sold][status]" {% if oct_stickers_data.stickers.sold.status %}checked="checked"{% endif %} id="input-sold_status" tabindex="1">
+														<label for="input-sold_status"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-sold_auto">{{ entry_auto }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][sold][auto]" {% if oct_stickers_data.stickers.sold.auto %}checked="checked"{% endif %} id="input-sold_auto" tabindex="1">
+														<label for="input-sold_auto"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-count_sold">{{ entry_count_sold }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-count_sold" name="oct_stickers_data[stickers][sold][count]" value="{{ oct_stickers_data.stickers.sold.count }}" class="form-control" placeholder="{{ entry_count_sold }}" />
+												</div>
+											</div>
+											<div class="col-sm-6" style="display:none;">
+												<label class="col-sm-4 control-label" for="input-sold_sort">{{ entry_sort }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-sold_sort" name="oct_stickers_data[stickers][sold][sort]" value="{{ oct_stickers_data.stickers.sold.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][sold][text_color]" value="{{ oct_stickers_data.stickers.sold.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][sold][fon_color]" value="{{ oct_stickers_data.stickers.sold.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+												<ul class="nav nav-tabs" id="sold-language">
+													{% for language in languages %}
+														<li><a href="#sold-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+													{% endfor %}
+							                    </ul>
+											</div>
+						                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+						                    <div class="col-sm-10">
+							                    <div class="tab-content">
+						                        	{% for language in languages %}
+						                            <div class="tab-pane" id="sold-language{{ language.language_id }}">
+														<input name="oct_stickers_data[stickers][sold][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.sold.title[language.language_id] }}" />
+						                            </div>
+													{% endfor %}
+							                    </div>
+						                    </div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-ends">
+									<fieldset>
+										<legend>{{ entry_sticker_ends }}</legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-ends_status">{{ entry_status }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][ends][status]" {% if oct_stickers_data.stickers.ends.status %}checked="checked"{% endif %} id="input-ends_status" tabindex="1">
+														<label for="input-ends_status"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-ends_auto">{{ entry_auto }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][ends][auto]" {% if oct_stickers_data.stickers.ends.auto %}checked="checked"{% endif %} id="input-ends_auto" tabindex="1">
+														<label for="input-ends_auto"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-count_ends">{{ entry_count_ends }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-sold_sort" name="oct_stickers_data[stickers][ends][count]" value="{{ oct_stickers_data.stickers.ends.count }}" class="form-control" placeholder="{{ entry_count_ends }}" />
+												</div>
+											</div>
+											<div class="col-sm-6" style="display:none;">
+												<label class="col-sm-4 control-label" for="input-ends_sort">{{ entry_sort }}</label>
+												<div class="col-sm-8">
+													<input type="text" id="input-ends_sort" name="oct_stickers_data[stickers][ends][sort]" value="{{ oct_stickers_data.stickers.ends.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][ends][text_color]" value="{{ oct_stickers_data.stickers.ends.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][ends][fon_color]" value="{{ oct_stickers_data.stickers.ends.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+												<ul class="nav nav-tabs" id="ends-language">
+													{% for language in languages %}
+														<li><a href="#ends-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+													{% endfor %}
+							                    </ul>
+											</div>
+						                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+						                    <div class="col-sm-10">
+							                    <div class="tab-content">
+						                        	{% for language in languages %}
+						                            <div class="tab-pane" id="ends-language{{ language.language_id }}">
+														<input name="oct_stickers_data[stickers][ends][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.ends.title[language.language_id] }}" />
+						                            </div>
+													{% endfor %}
+							                    </div>
+						                    </div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-special">
+									<fieldset>
+										<legend>{{ entry_sticker_special }}</legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-special_status">{{ entry_status }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][special][status]" {% if oct_stickers_data.stickers.special.status %}checked="checked"{% endif %} id="input-special_status" tabindex="1">
+														<label for="input-special_status"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-special_auto">{{ entry_auto }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][special][auto]" {% if oct_stickers_data.stickers.special.auto %}checked="checked"{% endif %} id="input-special_auto" tabindex="1">
+														<label for="input-special_auto"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group" style="display:none;">
+											<label class="col-sm-2 control-label" for="input-special_sort">{{ entry_sort }}</label>
+											<div class="col-sm-10">
+												<input type="text" id="input-special_sort" name="oct_stickers_data[stickers][special][sort]" value="{{ oct_stickers_data.stickers.special.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][special][text_color]" value="{{ oct_stickers_data.stickers.special.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][special][fon_color]" value="{{ oct_stickers_data.stickers.special.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6" style="display:none;">
+												<label class="col-sm-4 control-label" for="input-special_persent">{{ entry_view_percent }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][special][persent]" {% if oct_stickers_data.stickers.special.persent %}checked="checked"{% endif %} id="input-special_persent" tabindex="1">
+														<label for="input-special_persent"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-special_title">{{ entry_view_title }}</label>
+												<div class="col-sm-8">
+													<div class="toggle-group">
+														<input type="checkbox" name="oct_stickers_data[stickers][special][view_title]" {% if oct_stickers_data.stickers.special.view_title %}checked="checked"{% endif %} id="input-special_title" tabindex="1">
+														<label for="input-special_title"></label>
+														<div class="onoffswitch pull-left" aria-hidden="true">
+															<div class="onoffswitch-label">
+																<div class="onoffswitch-inner"></div>
+																<div class="onoffswitch-switch"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div id="special-langs"{% if oct_stickers_data.stickers.special.view_title is not defined %} style="display:none;"{% endif %}>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<ul class="nav nav-tabs" id="special-language">
+														{% for language in languages %}
+															<li><a href="#special-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+														{% endfor %}
+								                    </ul>
+												</div>
+							                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+							                    <div class="col-sm-10">
+								                    <div class="tab-content">
+							                        	{% for language in languages %}
+							                            <div class="tab-pane" id="special-language{{ language.language_id }}">
+															<input name="oct_stickers_data[stickers][special][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.special.title[language.language_id] }}" />
+							                            </div>
+														{% endfor %}
+								                    </div>
+							                    </div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-featured">
+									<fieldset>
+										<legend>{{ entry_sticker_featured }}</legend>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-featured_status">{{ entry_status }}</label>
+											<div class="col-sm-10">
+												<div class="toggle-group">
+													<input type="checkbox" name="oct_stickers_data[stickers][featured][status]" {% if oct_stickers_data.stickers.featured.status %}checked="checked"{% endif %} id="input-featured_status" tabindex="1">
+													<label for="input-featured_status"></label>
+													<div class="onoffswitch pull-left" aria-hidden="true">
+														<div class="onoffswitch-label">
+															<div class="onoffswitch-inner"></div>
+															<div class="onoffswitch-switch"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group" style="display:none;">
+											<label class="col-sm-2 control-label" for="input-featured_sort">{{ entry_sort }}</label>
+											<div class="col-sm-10">
+												<input type="text" id="input-featured_sort" name="oct_stickers_data[stickers][featured][sort]" value="{{ oct_stickers_data.stickers.featured.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][featured][text_color]" value="{{ oct_stickers_data.stickers.featured.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_stickers_data[stickers][featured][fon_color]" value="{{ oct_stickers_data.stickers.featured.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+												<ul class="nav nav-tabs" id="featured-language">
+													{% for language in languages %}
+														<li><a href="#featured-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+													{% endfor %}
+							                    </ul>
+											</div>
+						                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+						                    <div class="col-sm-10">
+							                    <div class="tab-content">
+						                        	{% for language in languages %}
+						                            <div class="tab-pane" id="featured-language{{ language.language_id }}">
+														<input name="oct_stickers_data[stickers][featured][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ oct_stickers_data.stickers.featured.title[language.language_id] }}" />
+						                            </div>
+													{% endfor %}
+							                    </div>
+						                    </div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="tab-pane" id="tab-customer">
+									<fieldset>
+										<legend>{{ entry_customer }}</legend>
+										<div class="col-sm-2">
+											<ul class="nav nav-pills nav-stacked" id="settings">
+												{% set sticker_li_row = 0 %}
+												{% for customer_sticker in oct_stickers_data.customer %}
+												<li class="customer-li{{ sticker_li_row }}"><a href="#customer-row{{ sticker_li_row }}" data-toggle="tab"><span class="delete-block-in" onclick="removeSticker({{ sticker_li_row }});"><i class="fa fa-minus-circle"></i></span> {{ customer_sticker.title[language_id] }}</a></li>
+												{% set sticker_li_row = sticker_li_row + 1 %}
+												{% endfor %}
+											</ul>
+											<ul class="nav nav-pills nav-stacked">
+												<li><a href="javascript:;" onclick="addSticker();updateActive(); return false;" id="add_sticker"><i class="fa fa-plus-circle"></i> {{ entry_add_new_sticker }}</a></li>
+											</ul>
+										</div>
+										<div class="col-sm-10">
+											<div class="tab-content" id="customer-stickers-block">
+											{% set sticker_row = 0 %}
+											{% if oct_stickers_data.customer is not empty %}
+												{% for customer_sticker in oct_stickers_data.customer %}
+													<div class="tab-pane" id="customer-row{{ sticker_row }}">
+														<div class="form-group">
+															<label class="col-sm-2 control-label" for="input-customer_{{ sticker_row }}_status">{{ entry_status }}</label>
+															<div class="col-sm-10">
+																<div class="toggle-group">
+																	<input type="checkbox" name="oct_stickers_data[customer][{{ sticker_row }}][status]" {% if customer_sticker.status %}checked="checked"{% endif %} id="input-customer_{{ sticker_row }}_status" tabindex="1">
+																	<label for="input-customer_{{ sticker_row }}_status"></label>
+																	<div class="onoffswitch pull-left" aria-hidden="true">
+																		<div class="onoffswitch-label">
+																			<div class="onoffswitch-inner"></div>
+																			<div class="onoffswitch-switch"></div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="form-group" stule="display:none;">
+															<label class="col-sm-2 control-label" for="input-customer_{{ sticker_row }}_sort">{{ entry_sort }}</label>
+															<div class="col-sm-10">
+																<input type="text" id="input-customer_{{ sticker_row }}_sort" name="oct_stickers_data[customer][{{ sticker_row }}][sort]" value="{{ customer_sticker.sort }}" class="form-control" placeholder="{{ entry_sort }}" />
+															</div>
+														</div>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+																<div class="col-sm-8">
+																	<input type="text" name="oct_stickers_data[customer][{{ sticker_row }}][text_color]" value="{{ customer_sticker.text_color }}" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+																</div>
+															</div>
+															<div class="col-sm-6">
+																<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+																<div class="col-sm-8">
+																	<input type="text" name="oct_stickers_data[customer][{{ sticker_row }}][fon_color]" value="{{ customer_sticker.fon_color }}" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<ul class="nav nav-tabs" id="customer-language_{{ sticker_row }}">
+																	{% for language in languages %}
+																		<li><a href="#customer-language_{{ sticker_row }}{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+																	{% endfor %}
+											                    </ul>
+															</div>
+										                    <label class="col-sm-2 control-label">{{ entry_title }}</label>
+										                    <div class="col-sm-10">
+											                    <div class="tab-content">
+										                        	{% for language in languages %}
+										                            <div class="tab-pane" id="customer-language_{{ sticker_row }}{{ language.language_id }}">
+																		<input name="oct_stickers_data[customer][{{ sticker_row }}][title][{{ language.language_id }}]" rows="5" class="form-control" value="{{ customer_sticker.title[language.language_id] }}" />
+										                            </div>
+																	{% endfor %}
+											                    </div>
+										                    </div>
+														</div>
+													</div>
+													{% set sticker_row = sticker_row + 1 %}
+												{% endfor %}
+											{% else %}
+												<span class="no_sc">{{ entry_no_stickers }}</span>
+											{% endif %}
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#input-special_title').change(function() {
+    let $input = $(this);
+
+	console.log($input);
+
+    if ($input.is(":checked")) {
+        $("#special-langs").slideDown('slow');
+    } else {
+        $("#special-langs").slideUp('slow');
+    }
+});
+
+function initSpectrum() {
+	$(".spectrum").spectrum({
+		preferredFormat: "rgb",
+		showInitial: true,
+		showInput: true,
+		showAlpha: true,
+		showPalette: true,
+		palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
+	});
+}
+
+initSpectrum();
+
+$('#new-language a:first').tab('show');
+$('#bestseller-language a:first').tab('show');
+$('#popular-language a:first').tab('show');
+$('#sold-language a:first').tab('show');
+$('#ends-language a:first').tab('show');
+$('#special-language a:first').tab('show');
+$('#featured-language a:first').tab('show');
+$('#settings a:first').tab('show');
+
+$('#customer-stickers-block .tab-pane').each(function(){
+	$(this).find('a:first').tab('show');
+});
+
+let sticker_row = {{ sticker_row }};
+
+function addSticker() {
+	const html = `
+	<div class="tab-pane" id="customer-row${ sticker_row }">
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="input-customer_${ sticker_row }_status">{{ entry_status }}</label>
+			<div class="col-sm-10">
+				<div class="toggle-group">
+					<input type="checkbox" name="oct_stickers_data[customer][${ sticker_row }][status]" id="input-customer_${ sticker_row }_status" tabindex="1">
+					<label for="input-customer_${ sticker_row }_status"></label>
+					<div class="onoffswitch pull-left" aria-hidden="true">
+						<div class="onoffswitch-label">
+							<div class="onoffswitch-inner"></div>
+							<div class="onoffswitch-switch"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group" style="display:none;">
+			<label class="col-sm-2 control-label" for="input-customer_${ sticker_row }_sort">{{ entry_sort }}</label>
+			<div class="col-sm-10">
+				<input type="text" id="input-customer_${ sticker_row }_sort" name="oct_stickers_data[customer][${ sticker_row }][sort]" value="" class="form-control" placeholder="{{ entry_sort }}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-6">
+				<label class="col-sm-4 control-label" for="input-text_color">{{ entry_text_color }}</label>
+				<div class="col-sm-8">
+					<input type="text" name="oct_stickers_data[customer][${ sticker_row }][text_color]" value="" placeholder="{{ entry_text_color }}" id="input-text_color" class="form-control spectrum" />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<label class="col-sm-4 control-label" for="input-fon_color">{{ entry_fon_color }}</label>
+				<div class="col-sm-8">
+					<input type="text" name="oct_stickers_data[customer][${ sticker_row }][fon_color]" value="" placeholder="{{ entry_fon_color }}" id="input-fon_color" class="form-control spectrum" />
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-12">
+				<ul class="nav nav-tabs" id="customer-language_${ sticker_row }">
+					{% for language in languages %}
+						<li><a href="#customer-language_${ sticker_row }{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+					{% endfor %}
+                </ul>
+			</div>
+            <label class="col-sm-2 control-label">{{ entry_title }}</label>
+            <div class="col-sm-10">
+                <div class="tab-content">
+                		{% for language in languages %}
+                    <div class="tab-pane" id="customer-language_${ sticker_row }{{ language.language_id }}">
+						<input name="oct_stickers_data[customer][${ sticker_row }][title][{{ language.language_id }}]" rows="5" class="form-control" value="" />
+                    </div>
+					{% endfor %}
+                </div>
+            </div>
+		</div>
+	</div>
+	`;
+
+	const html2 = `<li class='customer-li${ sticker_row }'><a href='#customer-row${ sticker_row }' data-toggle='tab'><span class='delete-block-in' onclick='removeSticker(${ sticker_row });'><i class='fa fa-minus-circle'></i></span> {{ entry_new_sticker }}</a></li>`;
+
+	$('#customer-stickers-block').append(html);
+	$('#settings').append(html2);
+
+	$('#settings li').removeClass('active');
+
+	$("#settings .customer-li" + sticker_row + " a").tab('show');
+
+	sticker_row++;
+
+	initSpectrum();
+
+	$('.no_sc').hide();
+}
+
+function removeSticker(sticker_row) {
+	$("#customer-row" + sticker_row).remove();
+	$(".customer-li" + sticker_row).remove();
+
+	$('#settings a:first').tab('show');
+}
+
+function updateActive() {
+	$('#tab-customer .nav.nav-tabs').each(function () {
+		$(this).children().children().first().tab('show');
+	});
+}
+</script>
+{{ footer }}

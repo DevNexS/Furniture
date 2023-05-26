@@ -1,0 +1,74 @@
+{#<form id="search" class="rm-search">#}
+{#    <input id="input_search" type="text" name="search" value="{{ search }}" placeholder="{{ search_input_header_text }}" class="w-100 h-100">#}
+{#    <button type="button" aria-label="Search" id="rm-search-button" class="btn-search d-flex align-items-center justify-content-center"><img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--header-search-icon" alt="" width="20" height="20" /></button>#}
+{#	<div id="rm_livesearch_close" onclick="clearLiveSearch();" class="d-flex align-items-center justify-content-center"><img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--livesearch-close-icon" alt="" width="25" height="25" /></div>#}
+{#	<div id="rm_livesearch"></div>#}
+{#</form>#}
+
+{% if oct_live_search_status %}
+<script>
+function clearLiveSearch() {
+	$('#rm_livesearch_close').removeClass('visible');
+    $('#rm_overlay').removeClass('active');
+	$('#rm_livesearch').removeClass('expanded');
+	$('#rm_livesearch').html('');
+	$('#input_search').val('').removeClass('active');
+}
+
+$(document).ready(function() {
+	let timer, delay = {{ delay_setting }};
+
+    $('#input_search').keyup(function(event) {
+	    switch(event.keyCode) {
+			case 37:
+			case 39:
+			case 38:
+			case 40:
+				return;
+			case 27:
+				clearLiveSearch();
+				return;
+		  }
+
+	    clearTimeout(timer);
+
+	    timer = setTimeout(function() {
+	        let value = $('#search input[name=\'search\']').val();
+
+			if (value.length >= {{ count_symbol }}) {
+				let key = encodeURIComponent(value);
+				octsearch.search(key, 'desktop');
+			} else if (value.length === 0) {
+				clearLiveSearch();
+			}
+
+	    }, delay );
+	});
+});
+
+var octsearch = {
+	'search': function(key, type) {
+		$.ajax({
+			url: 'index.php?route=octemplates/module/oct_live_search',
+			type: 'post',
+			data: 'key=' + key,
+			dataType: 'html',
+			cache: false,
+			success: function(data) {
+				$('#rm_livesearch').html(data).addClass('expanded');
+
+				if(data = data.match(/livesearch/g)) {
+					$('#rm_livesearch_close').addClass('visible');
+	                $('#input_search, #rm_overlay').addClass('active');
+                    $('#rm_overlay').addClass('transparent');
+
+				} else {
+					$('#rm_livesearch_close').removeClass('visible');
+	                $('#input_search, #rm_overlay').removeClass('active');
+				}
+			}
+		});
+	}
+}
+</script>
+{% endif %}

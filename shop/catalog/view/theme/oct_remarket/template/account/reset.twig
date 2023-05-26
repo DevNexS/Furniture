@@ -1,0 +1,53 @@
+{{ header }}
+<div id="account-reset" class="container account-container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-titl">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div id="content" class="row">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content rm-account-content h-100">
+		      <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+		        <fieldset class="rm-account-form">
+		          <legend class="rm-content-title">{{ text_password }}</legend>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-password"><span class="required">*</span> {{ entry_password }}</label>
+		            {% if error_password %}
+		            <script>
+					rmNotify('warning', '{{ error_password }}');
+					</script>
+		            {% endif %}
+		            <input type="password" name="password" value="{{ password }}" id="input-password" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-confirm"><span class="required">*</span> {{ entry_confirm }}</label>
+		            {% if error_confirm %}
+		            <script>
+					rmNotify('warning', '{{ error_confirm }}');
+					</script>
+		            {% endif %}
+		            <input type="password" name="confirm" value="{{ confirm }}" id="input-confirm" class="form-control" />
+		          </div>
+		        </fieldset>
+		        <div class="btn-group">
+					<button type="submit" class="mt-4 rm-btn dark">{{ button_continue }}</button>
+		        </div>
+		      </form>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+{{ footer }}

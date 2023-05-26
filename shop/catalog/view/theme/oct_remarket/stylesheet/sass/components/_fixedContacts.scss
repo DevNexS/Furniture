@@ -1,0 +1,219 @@
+@keyframes pulsation {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+@keyframes iconOpacity {
+    0% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.96;
+    }
+    60% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 0.96;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+#rm_fixed_contact_button {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    width: 50px;
+    height: 50px;
+    background-color: $primaryColor;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 1001;
+    @media (min-width: $break-xs) {
+        right: 30px;
+        width: 70px;
+        height: 70px;
+    }
+    @media (min-width: $break-lg) {
+        bottom: 30px;
+    }
+
+    &.clicked {
+        z-index: 1041;
+    }
+}
+
+#rm_fixed_contact_substrate {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: transparent;
+    z-index: 0;
+    display: none;
+
+    &.active {
+        z-index: 1020;
+        display: block;
+    }
+}
+
+.rm-fixed-contact-pulsation {
+    width: 80px;
+    height: 80px;
+    background-color: $primaryColor;
+    border-radius: 50px;
+    position: absolute;
+    left: -15px;
+    top: -15px;
+    z-index: -1;
+    transform: scale(0);
+    animation: pulsation 2s infinite;
+    @media (min-width: $break-xs) {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.rm-fixed-contact-icon {
+    color: #ffffff;
+    width: 100%;
+    font-size: 20px;
+    overflow: hidden;
+    @media (min-width: $break-xs) {
+        font-size: 28px;
+    }
+
+    .fa-envelope {
+        animation: iconOpacity 3s infinite;
+        width: 20px;
+        height: 20px;
+        @media (min-width: $break-xs) {
+            width: 28px;
+            height: 28px;
+        }
+    }
+}
+
+.rm-fixed-contact-text {
+    font-size: 7px;
+    text-transform: uppercase;
+    line-height: 9px;
+    color: #FFFFFF;
+    @media (min-width: $break-xs) {
+        font-size: 8px;
+        line-height: 10px;
+    }
+}
+
+.rm-fixed-contact-dropdown {
+    position: absolute;
+    bottom: 60px;
+    right: 36px;
+    padding: 20px;
+    border-radius: 6px;
+    background: #fff;
+    display: block;
+    opacity: 0;
+    z-index: -1;
+    margin-bottom: 20px;
+    transition: margin-bottom 0.3s ease, opacity 0.3s ease;
+    box-shadow: 5px 12px 30px rgba(0, 0, 0, 0.35);
+    visibility: hidden;
+    min-width: 250px;
+    @media (min-width: $break-xs) {
+        right: 60px;
+    }
+
+    &.expanded {
+        margin-bottom: 0;
+        opacity: 0.98;
+        z-index: 1;
+        visibility: visible;
+    }
+}
+
+.rm-fixed-contact-item {
+    color: #333;
+
+    &:hover {
+        color: $linksColor;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 18px;
+    }
+
+    &-icon {
+        display: block;
+        flex: 0 0 40px;
+        max-width: 40px;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        margin-right: 10px;
+        color: #fff;
+
+        svg {
+            width: 20px !important;
+            height: 20px;
+        }
+    }
+}
+
+.rm-fixed-contact-messenger {
+    background: #0084ff;
+}
+
+.rm-fixed-contact-viber {
+    background: #7c529d;
+}
+
+.rm-fixed-contact-telegram {
+    background: #2ca5e0;
+}
+
+.rm-fixed-contact-skype {
+    background: #31c4ed;
+}
+
+.rm-fixed-contact-whatsapp {
+    background: #25D366;
+}
+
+.rm-fixed-contact-email {
+    background: #50a8ff;
+}
+
+.rm-fixed-contact-call {
+    background: #3CBA8B;
+}
+
+.rm-fixed-contact-contacts {
+    background: #141E1A;
+}
+
+.rm-fixed-contact-viber-mobile {
+    @media (min-width: $break-lg) {
+        display: none !important;
+    }
+}
+
+.rm-fixed-contact-viber-desktop {
+    @media (max-width: $break-md-max) {
+        display: none !important;
+    }
+}

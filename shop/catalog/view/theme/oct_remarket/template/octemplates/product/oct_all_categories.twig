@@ -1,0 +1,73 @@
+{{ header }}
+<div id="information-information" class="container">
+    {{ oct_breadcrumbs }}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="rm-page-title">{{ text_oct_all_categories }}</h1>
+        </div>
+    </div>
+    <div class="content-top-box">{{ content_top }}</div>
+    <div id="content" class="row no-gutters">
+        {{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-lg-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-lg-9' %}
+        {% else %}
+            {% set class = 'col-lg-12' %}
+        {% endif %}
+        <div class="{{ class }}">
+            <div class="rm-content h-100">
+                {% if categories is not empty %}
+                    <div class="rm-all-categories">
+                        {% for category in categories %}
+                            {% if category.children %}
+                                <div class="rm-all-categories-category-parent">
+                                    <div class="rm-all-categories-category-parent-title">
+                                        <a href="{{ category.href }}">{{ category.name }}</a>
+                                        {% if category.count_products %}
+                                            <span class="rm-all-categories-category-count">{{ category.count_products }}</span>
+										{% endif %}
+                                    </div>
+                                    <div class="row rm-all-categories-category-children">
+                                        {% for child in category.children %}
+                                            <div class="rm-all-categories-category-child col-lg-3">
+                                                <div class="rm-all-categories-category-child-title">
+                                                    <a href="{{ child.href }}">{{ child.name }}
+                                                        {% if child.count_products %}
+                                                            ({{ child.count_products }})
+														{% endif %}
+                                                    </a>
+                                                </div>
+                                                {% if child.children %}
+                                                    <ul class="list-unstyled">
+                                                        {% for ch in child.children %}
+                                                            <li>
+                                                                <a class="rm-all-categories-category-child-third" href="{{ ch.href }}">{{ ch.name }}
+                                                                    {% if ch.count_products %}
+                                                                        ({{ ch.count_products }})
+																	{% endif %}
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="rm-all-categories-category-parent">
+                                    <a class="rm-all-categories-category-parent-title" href="{{ category.href }}">{{ category.name }}</a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {{ column_right }}
+    </div>
+    {{ content_bottom }}
+</div>
+{{ footer }}

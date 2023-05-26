@@ -1,0 +1,75 @@
+{{ header }}
+<div id="common-success" class="container flex-container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div id="content" class="row">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content h-100">
+		      <div class="rm-inform-content-text">
+		      {{ text_message }}
+		      </div>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+{% if ((oct_analytics_yandex_ecommerce is defined and oct_analytics_yandex_ecommerce) and (oct_analytics_yandex_container is defined and oct_analytics_yandex_container) and (oct_analytics_order_id is defined and oct_analytics_order_id)) %}
+<script>
+window.{{ oct_analytics_yandex_container }} = window.{{ oct_analytics_yandex_container }} || [];
+if(typeof {{ oct_analytics_yandex_container }} != 'undefined') {
+{{ oct_analytics_yandex_container }}.push({
+"ecommerce": {
+	"purchase": {
+		"actionField": {
+			"id" : "{{ oct_analytics_order_id }}"
+		},
+		"products": [
+			{% for product in oct_analytics_order_products %}
+			{
+				"id": "{{ product.id }}",
+				"name": "{{ product.name }}",
+				"price": {{ product.price }},
+				"quantity": {{ product.quantity }},
+				{% if product.brand is defined and product.brand is not empty %}
+				"brand": "{{ product.brand }}",
+				{% endif %}
+				{% if product.category is defined and product.category is not empty %}
+				"category": "{{ product.category }}",
+				{% endif %}
+				{% if product.variant is defined and product.variant is not empty %}
+				"variant": "{{ product.variant }}"
+				{% endif %}
+			},
+			{% endfor %}
+		]
+	}
+}
+});
+}
+</script>
+{% endif %}
+
+{% if ((oct_analytics_google_ecommerce is defined and oct_analytics_google_ecommerce) and (oct_analytics_order_id is defined and oct_analytics_order_id)) %}
+<script>
+window.dataGoogleLayer = window.dataGoogleLayer || [];
+dataGoogleLayer = {{ toGoogle }};
+if(typeof dataGoogleLayer != 'undefined') {
+gtag('event', 'purchase', dataGoogleLayer);
+}
+</script>
+{% endif %}
+{{ footer }}

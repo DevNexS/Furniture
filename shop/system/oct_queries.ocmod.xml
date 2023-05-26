@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_queries</code>
+	<name>Octemplates - Queries</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>http://octemplates.net/</link>
+	<file path="admin/model/catalog/information.php">
+		<operation error="skip">
+			<search><![CDATA[$sort_data = array(]]></search>
+			<add position="before"><![CDATA[
+			if (!empty($data['filter_name'])) {
+				$sql .= " AND id.title LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
+			}
+
+			$sql .= " GROUP BY i.information_id";
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/model/catalog/category.php">
+    	<operation error="skip">
+			<search><![CDATA[public function getCategories]]></search>
+			<add position="before"><![CDATA[
+			public function getOCTCategories($parent_id = 0, $limit = 0, $data = []) {
+				if (empty($data)) {
+					$sql = "
+						SELECT * FROM `" . DB_PREFIX . "category` c
+						LEFT JOIN `" . DB_PREFIX . "category_description` cd
+							ON (c.category_id = cd.category_id)
+						LEFT JOIN `" . DB_PREFIX . "category_to_store` c2s
+							ON (c.category_id = c2s.category_id)
+						WHERE
+							c.parent_id = '" . (int)$parent_id . "'
+							AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "'
+					";
+
+					if ($parent_id == 0) {
+						$sql.= " AND c.top = 1 ";
+					}
+
+					$sql.= "AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
+							AND c.status = '1'
+						ORDER BY
+							c.sort_order,
+							LCASE(cd.name) ";
+
+					if (isset($limit) && !empty($limit)) {
+						$sql .= " LIMIT " . (int)$limit;
+					}
+
+					$query = $this->db->query($sql);
+				} else {
+					$sql = "
+						SELECT * FROM `" . DB_PREFIX . "category` c
+						LEFT JOIN `" . DB_PREFIX . "category_description` cd
+							ON (c.category_id = cd.category_id)
+						LEFT JOIN `" . DB_PREFIX . "category_to_store` c2s
+							ON (c.category_id = c2s.category_id)
+						WHERE ";
+
+					if (isset($data['categories_id']) && !empty($data['categories_id'])) {
+						$explode = [];
+
+						foreach ($data['categories_id'] as $category_id) {
+							$explode[] = (int)$category_id;
+						}
+
+						$sql .= " c.category_id IN (" . implode(',', $explode) . ") ";
+					} elseif (isset($data['category_id']) && !empty($data['category_id'])) {
+						$sql .= " c.parent_id = '" . (int)$data['category_id'] . "' ";
+					} else {
+						$sql .= " c.parent_id = '" . (int)$parent_id . "' ";
+					}
+
+					$sql .= "AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "'
+							AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
+							AND c.status = '1'";
+					if (isset($data['sort']) && !empty($data['sort'])) {
+						$sql .= " ORDER BY ". $this->db->escape($data['sort']) .", LCASE(cd.name)";
+					} else {
+						$sql .= " ORDER BY c.sort_order, LCASE(cd.name)";
+					}
+
+					if (isset($data['limit']) && !empty($data['limit'])) {
+						$sql .= " LIMIT " . (int)$data['limit'];
+					}
+
+					$query = $this->db->query($sql);
+				}
+
+				return $query->rows;
+			}
+
+			public function getOCTCategory($category_id) {
+				$query = $this->db->query("
+					SELECT
+						DISTINCT
+							c.category_id,
+							cd2.name,
+						(
+							SELECT
+								GROUP_CONCAT(cd1.category_id ORDER BY level SEPARATOR '_')
+							FROM " . DB_PREFIX . "category_path cp
+							LEFT JOIN " . DB_PREFIX . "category_description cd1
+							ON
+								(cp.path_id = cd1.category_id AND cp.category_id != cp.path_id)
+							WHERE
+								cp.category_id = c.category_id
+								AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "'
+							GROUP BY
+								cp.category_id
+						)
+						AS path
+					FROM " . DB_PREFIX . "category c
+					LEFT JOIN " . DB_PREFIX . "category_description cd2
+					ON
+						(c.category_id = cd2.category_id)
+					WHERE
+						c.category_id = '" . (int)$category_id . "'
+						AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "'
+						AND c.status = '1'
+				");
+
+				return $query->row;
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/model/catalog/product.php">
+    	<operation error="skip">
+			<search><![CDATA[public function getProducts($data = array()) {]]></search>
+			<add position="before"><![CDATA[
+			public function getOCTProductPrice($product_id, $quantity) {
+				$query = $this->db->query("
+					SELECT
+						p.price,
+						p.tax_class_id,
+						(
+							SELECT
+								price
+							FROM
+								" . DB_PREFIX . "product_discount pd2
+							WHERE
+								pd2.product_id = p.product_id
+								AND pd2.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "'
+								AND pd2.quantity <= '" . (int)$quantity . "'
+								AND ((pd2.date_start = '0000-00-00' OR pd2.date_start < NOW())
+								AND (pd2.date_end = '0000-00-00' OR pd2.date_end > NOW()))
+							ORDER BY
+								pd2.quantity DESC,
+								pd2.priority ASC,
+								pd2.price ASC
+							LIMIT 1
+						) AS discount,
+						(
+							SELECT
+								price
+							FROM
+								" . DB_PREFIX . "product_special ps
+							WHERE
+								ps.product_id = p.product_id
+								AND ps.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "'
+								AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW())
+								AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW()))
+							ORDER BY
+								ps.priority ASC,
+								ps.price ASC
+							LIMIT 1
+						) AS special
+					FROM
+						" . DB_PREFIX . "product p
+					LEFT JOIN
+						" . DB_PREFIX . "product_to_store p2s
+					ON
+						(p.product_id = p2s.product_id)
+					WHERE
+						p.product_id = '" . (int)$product_id . "'
+						AND p.status = '1'
+						AND p.date_available <= NOW()
+						AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
+					LIMIT 1
+				");
+
+				return $query->row;
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY LCASE(" . $data['sort'] . ")";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC, ";
+			}
+
+			$sql .= "LCASE(" . $data['sort'] . ")";
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC,";
+			}
+
+			$sql .= " (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY " . $data['sort'];]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC, ";
+			}
+
+			$sql .= $data['sort'];
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY p.sort_order";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC, ";
+			}
+
+			$sql .= "p.sort_order";
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {]]></search>
+			<add position="before"><![CDATA[
+			$sort_data = [
+				'p.sort_order',
+				'pd.name',
+				'p.model',
+				'p.price',
+				'p.quantity',
+				'p.viewed',
+				'p.date_added',
+				'p.date_added',
+				'rating',
+			];
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/model/catalog/review.php">
+		<operation error="skip">
+			<search><![CDATA[public function getReviewsByProductId($product_id, $start = 0, $limit = 20) {]]></search>
+			<add position="before"><![CDATA[
+			public function getOCTReviewsByProductId($product_id) {
+				$oct_reviews = [];
+				$query = $this->db->query("SELECT rating FROM " . DB_PREFIX . "review WHERE product_id ='". (int)$product_id ."' AND status = '1'");
+
+				if ($query->num_rows) {
+					$review_sum = 0;
+
+					foreach ($query->rows as $rating) {
+						$oct_reviews['rating'][(int)$rating['rating']][] = (int)$rating['rating'];
+
+						$review_sum += (int)$rating['rating'];
+					}
+
+					$oct_reviews['sum'] = $review_sum;
+				}
+
+				return $oct_reviews;
+			}
+			]]></add>
+    	</operation>
+		<operation error="skip">
+            <search><![CDATA[, r.text]]></search>
+            <add position="replace"><![CDATA[, r.text, r.reply]]></add>
+        </operation>
+	</file>
+	<file path="catalog/model/localisation/language.php">
+		<operation error="skip">
+			<search><![CDATA[$language_data = $this->cache->get('language');]]></search>
+			<add position="replace"><![CDATA[
+			$language_data = $this->cache->get('catalog.language');
+			]]></add>
+    	</operation>
+	</file>
+</modification>

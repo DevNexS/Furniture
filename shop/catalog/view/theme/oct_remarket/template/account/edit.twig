@@ -1,0 +1,328 @@
+{{ header }}
+<div id="account-edit" class="container account-container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	{% if error_warning %}
+	<script>
+	rmNotify('warning', '{{ error_warning }}');
+	</script>
+	{% endif %}
+	<div id="content" class="row">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content h-100">
+		      <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+		        <fieldset class="rm-account-form">
+		          <legend class="rm-content-title">{{ text_your_details }}</legend>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-firstname"><span class="required">*</span> {{ entry_firstname }} </label>
+		            {% if error_firstname %}
+		            <script>
+					rmNotify('warning', '{{ error_firstname }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ entry_firstname }}" id="input-firstname" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-lastname"><span class="required">*</span> {{ entry_lastname }}</label>
+		            {% if error_lastname %}
+		            <script>
+					rmNotify('warning', '{{ error_lastname }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ entry_lastname }}" id="input-lastname" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-email"><span class="required">*</span> {{ entry_email }}</label>
+		            {% if error_email %}
+		            <script>
+					rmNotify('warning', '{{ error_email }}');
+					</script>
+		            {% endif %}
+		            <input type="email" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-telephone"><span class="required">*</span> {{ entry_telephone }}</label>
+		            {% if error_telephone %}
+		            <script>
+					rmNotify('warning', '{{ error_telephone }}');
+					</script>
+		            {% endif %}
+		            <input type="tel" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="form-control" />
+		          </div>
+		          {% for custom_field in custom_fields %}
+		          {% if custom_field.type == 'select' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label" for="input-custom-field{{ custom_field.custom_field_id }}">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" id="input-custom-field{{ custom_field.custom_field_id }}" class="rm-select form-control">
+		                <option value="">{{ text_select }}</option>
+		                {% for custom_field_value in custom_field.custom_field_value %}
+		                {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}
+		                <option value="{{ custom_field_value.custom_field_value_id }}" selected="selected">{{ custom_field_value.name }}</option>
+		                {% else %}
+		                <option value="{{ custom_field_value.custom_field_value_id }}">{{ custom_field_value.name }}</option>
+		                {% endif %}
+		                {% endfor %}
+		            </select>
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'radio' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <div>
+		                {% for custom_field_value in custom_field.custom_field_value %}
+		                <div class="radio">
+			                {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}
+			                <label class="option">
+			                    <input type="radio" class="input-radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" checked="checked" />
+			                    <span class="radio-box"></span>
+			                    {{ custom_field_value.name }}
+			                </label>
+			                {% else %}
+			                <label class="option">
+			                    <input type="radio" class="input-radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" />
+			                    <span class="radio-box"></span>
+			                    {{ custom_field_value.name }}
+			                </label>
+			                {% endif %}
+		                </div>
+		                {% endfor %}
+		            </div>
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'checkbox' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <div class="form-checkbox-group">
+		                {% for custom_field_value in custom_field.custom_field_value %}
+		                <div class="checkbox">
+			                {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id in account_custom_field[custom_field.custom_field_id] %}
+			                <label>
+			                    <input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" checked="checked" class="rm-form-checkbox-input" />
+			                    <span class="check-box"></span>
+			                    {{ custom_field_value.name }}
+			                </label>
+			                {% else %}
+			                <label>
+			                    <input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" class="rm-form-checkbox-input" />
+			                    <span class="check-box"></span>
+			                    {{ custom_field_value.name }}
+			                </label>
+			                {% endif %}
+		                </div>
+		                {% endfor %}
+		            </div>
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'text' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label" for="input-custom-field{{ custom_field.custom_field_id }}">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'textarea' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label" for="input-custom-field{{ custom_field.custom_field_id }}">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <textarea name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" rows="5" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control">{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}</textarea>
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'file' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="rm-btn rm-btn-blue"><i class="fa fa-upload"></i> {{ button_upload }}</button>
+		            <input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }} {% endif %}" />
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'date' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label" for="input-custom-field{{ custom_field.custom_field_id }}">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <div class="input-group date">
+		                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="YYYY-MM-DD" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+		                <span class="input-group-btn">
+		                	<button type="button" class="rm-btn rm-input-with-btn"><i class="fa fa-calendar"></i></button>
+		                </span>
+		            </div>
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'time' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label" for="input-custom-field{{ custom_field.custom_field_id }}">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <div class="input-group time">
+		                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="HH:mm" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+		                <span class="input-group-btn">
+		                	<button type="button" class="rm-btn rm-input-with-btn"><i class="fa fa-clock"></i></button>
+		                </span>
+		            </div>
+		          </div>
+		          {% endif %}
+		          {% if custom_field.type == 'time' %}
+		          <div class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+		            <label class="rm-control-label" for="input-custom-field{{ custom_field.custom_field_id }}">{% if custom_field.required %}<span class="required">*</span> {% endif %}{{ custom_field.name }}</label>
+		            {% if error_custom_field[custom_field.custom_field_id] %}
+		            <script>
+					rmNotify('warning', '{{ error_custom_field[custom_field.custom_field_id] }}');
+					</script>
+		            {% endif %}
+		            <div class="input-group datetime">
+		                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="YYYY-MM-DD HH:mm" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+		                <span class="input-group-btn">
+		                	<button type="button" class="rm-btn rm-input-with-btn"><i class="fa fa-calendar"></i></button>
+		                </span>
+		            </div>
+		          </div>
+		          {% endif %}
+		          {% endfor %}
+		        </fieldset>
+		        <div class="btn-group mt-4">
+				  <button type="submit" class="rm-btn dark"><span class="rm-btn-text">{{ button_continue }}</span></button>
+		        </div>
+		      </form>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+<script type="text/javascript"><!--
+// Sort the custom fields
+$('.form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('.form-group').length) {
+		$('.form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('.form-group').length) {
+		$('.form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') == $('.form-group').length) {
+		$('.form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('.form-group').length) {
+		$('.form-group:first').before(this);
+	}
+});
+//--></script>
+<script type="text/javascript"><!--
+$('button[id^=\'button-custom-field\']').on('click', function() {
+	var element = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(element).button('loading');
+				},
+				complete: function() {
+					$(element).button('reset');
+				},
+				success: function(json) {
+					$(element).parent().find('.text-danger').remove();
+
+					if (json['error']) {
+						$(element).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(element).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+//--></script>
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+	language: '{{ datepicker }}',
+	pickTime: false
+});
+
+$('.datetime').datetimepicker({
+	language: '{{ datepicker }}',
+	pickDate: true,
+	pickTime: true
+});
+
+$('.time').datetimepicker({
+	language: '{{ datepicker }}',
+	pickDate: false
+});
+//--></script>
+{{ footer }}

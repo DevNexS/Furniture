@@ -1,0 +1,1435 @@
+{{ header }}
+<div class="container">
+	{{ oct_breadcrumbs }}
+	{{ content_top }}
+	{% if error_warning %}
+	<div class="alert alert-danger d-none"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	<script>
+		$(function () {
+			$('#button-go').attr('disabled', 'disabled');
+			$('#button-go').addClass('disabled');
+		});
+	</script>
+	{% endif %}
+	<div class="row">
+		<div class="col-12">
+			<h1 class="rm-main-shop-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<main class="oct-checkout row g-3 g-md-4 mt-3">
+		<div class="col-lg-8">
+			<div class="row">
+				<div class="col-12">
+					<div class="oct-checkout-block">
+						<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+							<div class="oct-checkout-block-title d-flex align-items-center mb-3 mb-md-0">
+								<img src="catalog/view/theme/oct_remarket/img/sprite-fastorder.svg#include--user-icon"
+									alt="" width="24" height="24">
+								<span class="text-uppercase">{{ heading_user_block }}</span>
+							</div>
+							{% if not user_logged %}
+							<a onclick="octPopupLogin();" class="blue-link">{{ heading_login_block }}</a>
+							{% endif %}
+						</div>
+						<div class="row mt-3 gx-3 gx-md-4 gy-3 register_block">
+							{% if oct_fastorder_data.customer_groups == 1 and customer_groups and not user_logged and oct_fastorder_data.registration == 1 %}
+							<div class="col-lg-12 mb-3">
+								<label class="control-label">{{ entry_customer_group }}</label>
+								{% for customer_group in customer_groups %}
+								<div class="radio">
+									<label class="d-flex align-items-center ml-0 mb-2"><input type="radio"
+											name="customer_group_id" value="{{ customer_group.customer_group_id }}"
+											{% if customer_group.customer_group_id == customer_group_id %}
+											checked="checked" {% endif %} />{{ customer_group.name }}</label>
+								</div>
+								{% endfor %}
+							</div>
+							{% else %}
+							<input type="hidden" name="customer_group_id" value="{{ customer_group_id }}" />
+							{% endif %}
+							<div class="form-group col-lg-6">
+								<label class="control-label" for="input-payment-firstname"><span
+										class="required">*</span>{{ entry_firstname }}</label>
+								<input type="text" name="firstname"
+									value="{{ address.firstname ? address.firstname : firstname }}"
+									placeholder="{{ entry_firstname }}" id="input-payment-firstname"
+									class="form-control" />
+							</div>
+							{% if oct_fastorder_data.lastname and oct_fastorder_data.lastname == 1 %}
+							<div class="form-group col-lg-6">
+								<label class="control-label" for="input-payment-lastname"><span
+										class="required">*</span>{{ entry_lastname }}</label>
+								<input type="text" name="lastname"
+									value="{{ address.lastname ? address.lastname : lastname }}"
+									placeholder="{{ entry_lastname }}" id="input-payment-lastname"
+									class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="lastname" value="" />
+							{% endif %}
+							{% if oct_fastorder_data.email and oct_fastorder_data.email == 2 %}
+							<div class="form-group col-lg-6">
+								<label class="control-label" for="input-payment-email"><span
+										class="required">*</span>{{ entry_email }}</label>
+								<input type="text" name="email" value="{{ email_user ? email_user : email }}"
+									placeholder="{{ entry_email }}" id="input-payment-email" class="form-control" />
+							</div>
+							{% elseif oct_fastorder_data.email and oct_fastorder_data.email == 1 %}
+							<div class="form-group col-lg-6">
+								<label class="control-label" for="input-payment-email">{{ entry_email }}</label>
+								<input type="text" name="email" value="{{ email_user ? email_user : email }}"
+									placeholder="{{ entry_email }}" id="input-payment-email" class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="email" value="{{ oct_fastorder_data.notify_email }}" />
+							{% endif %}
+							<div class="form-group col-lg-6" {% if customer_id %}style="display:none;" {% endif %}>
+								<label class="control-label" for="input-payment-telephone"><span
+										class="required">*</span>{{ entry_telephone }}</label>
+								<input type="tel" name="telephone"
+									value="{{ telephone_user ? telephone_user : telephone }}"
+									placeholder="{{ entry_telephone }}" id="input-payment-telephone"
+									class="form-control" />
+							</div>
+							{% if oct_fastorder_data.fax and oct_fastorder_data.fax == 1 %}
+							<div class="form-group col-lg-6">
+								<label class="control-label" for="input-payment-fax">{{ entry_fax }}</label>
+								<input type="text" name="fax"
+									value="{% if fax is defined and fax %}{{ fax }}{% endif %}"
+									placeholder="{{ entry_fax }}" id="input-payment-fax" class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="fax" value="" />
+							{% endif %}
+							{% if custom_fields %}
+							{% for custom_field in custom_fields %}
+							{% if custom_field.location == 'account' %}
+							{% if custom_field.type == 'select' %}
+							<div class="form-group custom-field col-lg-6">
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<select
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										id="input-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control rm-select">
+										<option value="">{{ text_select }}</option>
+										{% for custom_field_value in custom_field['custom_field_value'] %}
+										{% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}
+										<option value="{{ custom_field_value.custom_field_value_id }}"
+											selected="selected">{{ custom_field_value.name }}</option>
+										{% else %}
+										<option value="{{ custom_field_value.custom_field_value_id }}">
+											{{ custom_field_value.name }}</option>
+										{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'radio' %}
+							<div class="form-group custom-field col-lg-6">
+								<label
+									class="control-label">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<div id="input-payment-custom-field{{ custom_field.custom_field_id }}">
+										{% for custom_field_value in custom_field['custom_field_value'] %}
+										<div class="radio">
+											{% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}
+											<label>
+												<input type="radio"
+													name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+													value="{{ custom_field_value.custom_field_value_id }}"
+													checked="checked" />
+												{{ custom_field_value.name }}</label>
+											{% else %}
+											<label>
+												<input type="radio"
+													name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+													value="{{ custom_field_value.custom_field_value_id }}" />
+												{{ custom_field_value.name }}</label>
+											{% endif %}
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'checkbox' %}
+							<div class="form-group custom-field col-lg-6">
+								<label
+									class="control-label">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<div id="input-payment-custom-field{{ custom_field.custom_field_id }}">
+										{% for custom_field_value in custom_field['custom_field_value'] %}
+										<div class="checkbox">
+											{% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id in account_custom_field[custom_field.custom_field_id]%}
+											<label>
+												<input type="checkbox"
+													name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+													value="{{ custom_field_value.custom_field_value_id }}"
+													checked="checked" />
+												{{ custom_field_value.name }}</label>
+											{% else %}
+											<label>
+												<input type="checkbox"
+													name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+													value="{{ custom_field_value.custom_field_value_id }}" />
+												{{ custom_field_value.name }}</label>
+											{% endif %}
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'text' %}
+							<div class="form-group custom-field col-lg-6">
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="text"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ account_custom_field[custom_field.custom_field_id] ? account_custom_field[custom_field.custom_field_id] : custom_field.value }}"
+										placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'textarea' %}
+							<div class="form-group custom-field col-lg-6">
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<textarea
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										rows="5" placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control">{{ account_custom_field[custom_field.custom_field_id] ? account_custom_field[custom_field.custom_field_id] : custom_field.value }}</textarea>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'file' %}
+							<div class="form-group custom-field col-lg-6">
+								<label
+									class="control-label">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<button type="button"
+										id="button-shipping-custom-field{{ custom_field.custom_field_id }}"
+										class="btn btn-default"><i class="fa fa-upload"></i>
+										{{ button_upload }}</button>
+									<input type="hidden"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ custom_field.value }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'date' %}
+							<div class="form-group custom-field col-lg-6">
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="date"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ account_custom_field[custom_field.custom_field_id] ? account_custom_field[custom_field.custom_field_id] : custom_field.value }}"
+										placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'datetime' %}
+							<div class="form-group custom-field col-lg-6">
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="datetime-local"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ account_custom_field[custom_field.custom_field_id] ? account_custom_field[custom_field.custom_field_id] : custom_field.value }}"
+										placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'time' %}
+							<div class="form-group custom-field col-lg-6">
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '<span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="time"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ account_custom_field[custom_field.custom_field_id] ? account_custom_field[custom_field.custom_field_id] : custom_field.value }}"
+										placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% endif %}
+							{% endfor %}
+							{% endif %}
+							{% if addresses %}
+							{% if customer_id %}
+							<div class="col-md-12">
+								<div class="radio"><label class="ml-0 mb-2"><input type="radio" name="payment_address"
+											value="existing" checked="checked"
+											onclick="$('#payment-address-new').hide()" />{{ text_address_existing_payment }}</label>
+								</div>
+								<div id="payment-existing">
+									<select name="payment_address_id" class="form-control rm-select">
+										{% for address in addresses %}
+										{% if payment_address_id and address.address_id == payment_address_id %}
+										<option value="{{ address.address_id }}" selected="selected">
+											{{ address.firstname }}{{ address.lastname }}, {{ address.address_1 }},
+											{{ address.city }}, {{ address.zone }}, {{ address.country }}</option>
+										{% else %}
+										<option value="{{ address.address_id }}">
+											{{ address.firstname }}{{ address.lastname }}, {{ address.address_1 }},
+											{{ address.city }}, {{ address.zone }}, {{ address.country }}</option>
+										{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+								<div class="radio" style="display:none;"><label><input type="radio"
+											name="payment_address" value="new"
+											onclick="$('#payment-address-new').show();" />{{ text_address_new }}</label>
+
+								</div>
+							</div>
+							{% endif %}
+							{% endif %}
+							{% if oct_fastorder_data.company == 1 %}
+							<div class="form-group col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label" for="input-payment-company">{{ entry_company }}</label>
+								<input type="text" name="company"
+									value="{% if company is defined and company %}{{ company }}{% endif %}"
+									placeholder="{{ entry_company }}" id="input-payment-company"
+									class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="company" value="" />
+							{% endif %}
+							<input type="hidden" name="company_id" value="" />
+							<input type="hidden" name="tax_id" value="" />
+							{% if oct_fastorder_data.country_and_region == 1 or oct_fastorder_data.country_and_region == 2 %}
+							<div class="form-group  col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label"
+									for="input-payment-country">{% if oct_fastorder_data.country_and_region == 2 %}<span
+										class="required">*</span>{% endif %}{{ entry_country }}</label>
+								<select name="country_id" id="input-payment-country"
+									class="form-control rm-select">
+									<option value="">{{ text_select }}</option>
+									{% for country in countries %}
+									{% if country.country_id == country_id %}
+									<option value="{{ country.country_id }}" selected="selected">{{ country.name }}
+									</option>
+									{% else %}
+									<option value="{{ country.country_id }}">{{ country.name }}</option>
+									{% endif %}
+									{% endfor %}
+								</select>
+							</div>
+							<div class="form-group col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label" for="input-payment-zone"><span
+										class="required">*</span>{{ entry_zone }}</label>
+								<select name="zone_id" id="input-payment-zone"
+									class="form-control rm-select"></select>
+							</div>
+							{% else %}
+							<select name="country_id" style="display: none;">
+								<option value="{{ oct_fastorder_data.default_country }}" selected="selected">
+								</option>
+							</select>
+							<select name="zone_id" style="display: none;"></select>
+							{% endif %}
+							{% if oct_fastorder_data.city == 1 or oct_fastorder_data.city == 2 %}
+							<div class="form-group col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label"
+									for="input-payment-city">{% if oct_fastorder_data.city == 2 %}<span
+										class="required">*</span>{% endif %}{{ entry_city }}</label>
+								<input type="text" name="city"
+									value="{% if city is defined and city %}{{ city }}{% elseif oct_fastorder_data.default_city is defined and oct_fastorder_data.default_city %}{{ oct_fastorder_data.default_city }}{% endif %}"
+									placeholder="{{ entry_city }}" id="input-payment-city" class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="city" value="{{ oct_fastorder_data.default_city }}" />
+							{% endif %}
+							{% if oct_fastorder_data.address_1 == 1 or oct_fastorder_data.address_1 == 2 %}
+							<div class="form-group col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label"
+									for="input-payment-address-1">{% if oct_fastorder_data.address_1 == 2 %}<span
+										class="required">*</span>{% endif %}{{ entry_address_1 }}</label>
+								<input type="text" name="address_1"
+									value="{% if address_1 is defined and address_1 %}{{ address_1 }}{% endif %}"
+									placeholder="{{ entry_address_1 }}" id="input-payment-address-1"
+									class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="address_1" value="" />
+							{% endif %}
+							{% if oct_fastorder_data.address_2 == 1 or oct_fastorder_data.address_2 == 2 %}
+							<div class="form-group col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label"
+									for="input-payment-address-2">{% if oct_fastorder_data.address_2 == 2 %}<span
+										class="required">*</span>{% endif %}{{ entry_address_2 }}</label>
+								<input type="text" name="address_2"
+									value="{% if address_2 is defined and address_2 %}{{ address_2 }}{% endif %}"
+									placeholder="{{ entry_address_2 }}" id="input-payment-address-2"
+									class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="address_2" value="" />
+							{% endif %}
+							{% if oct_fastorder_data.postcode == 1 or oct_fastorder_data.postcode == 2 %}
+							<div class="form-group col-lg-6" {% if customer_id and addresses %}style="display:none"
+								{% endif %}>
+								<label class="control-label"
+									for="input-payment-postcode">{% if oct_fastorder_data.postcode == 2 %}<span
+										class="required">*</span>{% endif %}{{ entry_postcode }}</label>
+								<input type="text" name="postcode"
+									value="{% if postcode is defined and postcode %}{{ postcode }}{% endif %}"
+									placeholder="{{ entry_postcode }}" id="input-payment-postcode"
+									class="form-control" />
+							</div>
+							{% else %}
+							<input type="hidden" name="postcode" value="" />
+							{% endif %}
+							{% if custom_fields %}
+							{% for custom_field in custom_fields %}
+							{% if custom_field.location == 'address' %}
+							{% if custom_field.type == 'select' %}
+							<div class="form-groupcustom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<select
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control rm-select">
+										<option value="">{{ text_select }}</option>
+										{% for custom_field_value in custom_field['custom_field_value'] %}
+										<option value="{{ custom_field_value.custom_field_value_id }}">
+											{{ custom_field_value.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'radio' %}
+							<div class="form-group custom-field col-md-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label
+									class="control-label">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<div id="input-payment-custom-field{{ custom_field.custom_field_id }}">
+										{% for custom_field_value in custom_field['custom_field_value'] %}
+										<div class="radio">
+											<label>
+												<input type="radio"
+													name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+													value="{{ custom_field_value.custom_field_value_id }}" />
+												{{ custom_field_value.name }}</label>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'checkbox' %}
+							<div class="form-group custom-field col-md-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label
+									class="control-label">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<div id="input-payment-custom-field{{ custom_field.custom_field_id }}">
+										{% for custom_field_value in custom_field['custom_field_value'] %}
+										<div class="checkbox">
+											<label>
+												<input type="checkbox"
+													name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+													value="{{ custom_field_value.custom_field_value_id }}" />
+												{{ custom_field_value.name }}</label>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'text' %}
+							<div class="form-group custom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="text"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ custom_field.value }}" placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'textarea' %}
+							<div class="form-group custom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<textarea
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										rows="5" placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control">{{ custom_field.value }}</textarea>
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'file' %}
+							<div class="form-group custom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label
+									class="control-label">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<button type="button"
+										id="button-shipping-custom-field{{ custom_field.custom_field_id }}"
+										class="btn btn-default"><i class="fa fa-upload"></i>
+										{{ button_upload }}</button>
+									<input type="hidden"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ custom_field.value }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'date' %}
+							<div class="form-group custom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="date"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ custom_field.value }}" placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'datetime' %}
+							<div class="form-group custom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="datetime-local"
+										name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+										value="{{ custom_field.value }}" placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% if custom_field.type == 'time' %}
+							<div class="form-group custom-field col-lg-6"
+								{% if customer_id and addresses %}style="display:none" {% endif %}>
+								<label class="control-label"
+									for="input-payment-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? ' <span class="required">*</span>' : '' }}{{ custom_field.name }}</label>
+								<div class="">
+									<input type="time" name="custom_field[{{ custom_field.custom_field_id }}]"
+										value="{{ custom_field.value }}" placeholder="{{ custom_field.name }}"
+										id="input-payment-custom-field{{ custom_field.custom_field_id }}"
+										class="form-control" />
+								</div>
+							</div>
+							{% endif %}
+							{% endif %}
+							{% endfor %}
+							{% endif %}
+							{% if shipping_required %}
+							<div class="col-sm-12">
+								{% if not customer_id %}
+								<div class="form-group" style="display:none;">
+									<label class="ml-0"><input type="checkbox" name="shipping_address" value="new"
+											{% if address_id is defined and address_id %}checked="checked"
+											{% endif %} onclick="$('.shipping-address').toggle()">
+										{{ text_address_new }}</label>
+								</div>
+								{% endif %}
+								<div class="shipping-address mt-3"
+									{% if (shipping_address_id is defined and shipping_address_id) or customer_id is defined %}style="display:block"
+									{% else %}style="display:none" {% endif %}>
+									{% if addresses %}
+									{% if customer_id %}
+									<div class="radio"><label class="ml-0 mb-2"><input type="radio" name="shipping_address"
+												value="existing" checked="checked"
+												onclick="$('#shipping-new').hide()" />{{ text_address_existing_shipping }}</label>
+									</div>
+									<div id="shipping-existing">
+										<select name="shipping_address_id" class="form-control rm-select">
+											{% for address in addresses %}
+											{% if shipping_address_id and address.address_id == shipping_address_id %}
+											<option value="{{ address.address_id }}" selected="selected">
+												{{ address.firstname }}{{ address.lastname }},
+												{{ address.address_1 }}, {{ address.city }}, {{ address.zone }},
+												{{ address.country }}</option>
+											{% else %}
+											<option value="{{ address.address_id }}">
+												{{ address.firstname }}{{ address.lastname }},
+												{{ address.address_1 }}, {{ address.city }}, {{ address.zone }},
+												{{ address.country }}</option>
+											{% endif %}
+											{% endfor %}
+										</select>
+									</div>
+									{% endif %}
+									{% if customer_id %}
+									<div class="radio" style="display:none;"><label><input type="radio"
+												name="shipping_address" value="new"
+												onclick="$('#shipping-new').show();" />{{ text_address_new }}</label>
+									</div>
+									{% endif %}
+									{% endif %}
+									<div id="shipping-new"
+										style="display: {{ addresses and customer_id ? 'none' : 'block' }};">
+										<div class="oct-fastorder-header">{{ text_shipping_address }}</div>
+										<div class="form-group required">
+											<label class="control-label"
+												for="input-shipping-firstname">{{ entry_firstname }}</label>
+											<div class="">
+												<input type="text" name="shipping_firstname" value=""
+													placeholder="{{ entry_firstname }}"
+													id="input-shipping-firstname" class="form-control" />
+											</div>
+										</div>
+										{% if oct_fastorder_data.lastname == 1 %}
+										<div class="form-group required">
+											<label class="control-label"
+												for="input-shipping-lastname">{{ entry_lastname }}</label>
+											<div class="">
+												<input type="text" name="shipping_lastname" value=""
+													placeholder="{{ entry_lastname }}" id="input-shipping-lastname"
+													class="form-control" />
+											</div>
+										</div>
+										{% else %}
+										<input type="hidden" name="shipping_lastname" value="" />
+										{% endif %}
+										{% if oct_fastorder_data.company == 1 %}
+										<div class="form-group">
+											<label class="control-label"
+												for="input-shipping-company">{{ entry_company }}</label>
+											<div class="">
+												<input type="text" name="shipping_company" value=""
+													placeholder="{{ entry_company }}" id="input-shipping-company"
+													class="form-control" />
+											</div>
+										</div>
+										{% else %}
+										<input type="hidden" name="shipping_company" value="" />
+										{% endif %}
+										{% if oct_fastorder_data.postcode == 1 %}
+										<div class="form-group">
+											<label class="control-label"
+												for="input-shipping-postcode">{{ entry_postcode }}</label>
+											<div class="">
+												<input type="text" name="shipping_postcode" value="{{ postcode }}"
+													placeholder="{{ entry_postcode }}" id="input-shipping-postcode"
+													class="form-control" />
+											</div>
+										</div>
+										{% else %}
+										<input type="hidden" name="shipping_postcode" value="" />
+										{% endif %}
+										{% if oct_fastorder_data.country_and_region == 1 or oct_fastorder_data.country_and_region == 2 %}
+										<div
+											class="form-group {% if oct_fastorder_data.country_and_region == 2 %}required{% endif %}">
+											<label class="control-label"
+												for="input-shipping-country">{{ entry_country }}</label>
+											<div class="">
+												<select name="shipping_country_id" id="input-shipping-country"
+													class="form-control rm-select">
+													<option value="">{{ text_select }}</option>
+													{% for country in countries %}
+													{% if country.country_id == country_id %}
+													<option value="{{ country.country_id }}" selected="selected">
+														{{ country.name }}</option>
+													{% else %}
+													<option value="{{ country.country_id }}">{{ country.name }}
+													</option>
+													{% endif %}
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label"
+												for="input-shipping-zone">{{ entry_zone }}</label>
+											<div class="">
+												<select name="shipping_zone_id" id="input-shipping-zone"
+													class="form-control rm-select"></select>
+											</div>
+										</div>
+										{% else %}
+										<select name="shipping_country_id" style="display: none;">
+											<option value="{{ oct_fastorder_data.default_country }}"
+												selected="selected"></option>
+										</select>
+										<select name="shipping_zone_id" style="display: none;"></select>
+										{% endif %}
+										{% if oct_fastorder_data.city == 1 or oct_fastorder_data.city == 2 %}
+										<div
+											class="form-group {% if oct_fastorder_data.city == 2 %}required{% endif %}">
+											<label class="control-label"
+												for="input-shipping-city">{{ entry_city }}</label>
+											<div class="">
+												<input type="text" name="shipping_city" value=""
+													placeholder="{{ entry_city }}" id="input-shipping-city"
+													class="form-control" />
+											</div>
+										</div>
+										{% else %}
+										<input type="hidden" name="shipping_city"
+											value="{{ oct_fastorder_data.default_city }}" />
+										{% endif %}
+
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% if customer_id %}
+							<div class="col-12 mt-4">
+								<a href="{{ oct_address_new }}" class="rm-btn dark"><span class="rm-btn-text">+ {{ text_address_new }}</span></a>
+							</div>
+							{% endif %}
+							{% if oct_fastorder_data.comment == 1 %}
+							<div class="form-group col-lg-12 mt-3">
+								<label class="control-label">{{ text_comments }}</label>
+								<textarea name="comment" rows="8" class="form-control">{{ comment }}</textarea>
+							</div>
+							{% else %}
+							<textarea name="comment" style="display:none;"></textarea>
+							{% endif %}
+							{% if not customer_id and oct_fastorder_data.email and oct_fastorder_data.email and not approve %}
+							<div class="form-group col-lg-12 mb-0"
+								{% if oct_fastorder_data.registration != 1 %}style="display: none;" {% endif %}>
+								<div class="form-check mb-0 d-flex align-items-center">
+									<input class="form-check-input" type="checkbox" name="register"
+										onclick="$('.register-form').toggle()" id="registerCheckbox">
+									<label class="form-check-label"
+										for="registerCheckbox">{{ text_register }}</label>
+								</div>
+							</div>
+							{% endif %}
+							<div class="form-group col-md-6 register-form" style="display: none;">
+								<label class="control-label" for="input-payment-password"><span
+										class="required">*</span>{{ entry_password }}</label>
+								<input type="password" name="password" value="" placeholder="{{ entry_password }}"
+									id="input-payment-password" class="form-control" />
+							</div>
+							<div class="form-group col-md-6 register-form" style="display: none;">
+								<label class="control-label" for="input-payment-confirm"><span
+										class="required">*</span>{{ entry_confirm }}</label>
+								<input type="password" name="confirm" value="" placeholder="{{ entry_confirm }}"
+									id="input-payment-confirm" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-4">
+				<div class="col-lg-6">
+					<div class="oct-checkout-block h-100 shipping-method">
+						<div class="oct-checkout-block-title d-flex align-items-center mb-3">
+							<img src="catalog/view/theme/oct_remarket/img/sprite-fastorder.svg#include--delivery-icon"
+								alt="" width="24" height="24">
+							<span class="text-uppercase ps-3">{{ heading_shipping_block }}</span>
+						</div>
+						{% if error_warning %}
+						<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i>
+							{{ error_warning }}</div>
+						{% endif %}
+						{% if shipping_methods %}
+						<p class="mb-3">{{ text_shipping_method }}</p>
+						<div class="shipping-method-box">
+							{% for shipping_method in shipping_methods %}
+							<p class="mb-2"><strong>{{ shipping_method.title }}</strong></p>
+							{% if not shipping_method.error %}
+							{% for quote in shipping_method['quote'] %}
+							<div class="mb-3 radio">
+								<label class="ml-0">
+									{% if quote.code == code or  not code %}
+									{% set code = quote.code %}
+									<input type="radio" name="shipping_method" value="{{ quote.code }}"
+										title="{{ quote.title }}" checked="checked" />
+									{% else %}
+									<input type="radio" name="shipping_method" value="{{ quote.code }}"
+										title="{{ quote.title }}" />
+									{% endif %}
+									{{ quote.title }} - {{ quote.text }}</label>
+							</div>
+							{% endfor %}
+							{% else %}
+							<div class="alert alert-danger">{{ shipping_method.error }}</div>
+							{% endif %}
+							{% endfor %}
+						</div>
+						{% endif %}
+					</div>
+				</div>
+				<div class="col-lg-6 mt-4 mt-md-0">
+					<div class="oct-checkout-block h-100 payment-method">
+						<div class="oct-checkout-block-title d-flex align-items-center mb-3">
+							<img src="catalog/view/theme/oct_remarket/img/sprite-fastorder.svg#include--payment-icon"
+								alt="" width="24" height="24">
+							<span class="text-uppercase ps-3">{{ heading_payment_block }}</span>
+						</div>
+						{% if error_warning %}
+						<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i>
+							{{ error_warning }}</div>
+						{% endif %}
+						{% if payment_methods %}
+						<p class="mb-3">{{ text_payment_method }}</p>
+						{% for payment_method in payment_methods %}
+						<div class="payment-method-item">
+							<label class="d-flex align-items-center">
+								{% if payment_method.code == code or  not code %}
+								{% set code = payment_method.code %}
+								<input type="radio" name="payment_method" value="{{ payment_method.code }}"
+									title="{{ payment_method.title }}" checked="checked" />
+								{% else %}
+								<input type="radio" name="payment_method" value="{{ payment_method.code }}"
+									title="{{ payment_method.title }}" />
+								{% endif %}
+								{{ payment_method.title }}
+							</label>
+						</div>
+						{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% if oct_fastorder_data.cart_view_is and oct_fastorder_data.cart_view_is == 1 %}
+			{% if attention %}
+			<div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ attention }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			{% endif %}
+			{% if error_warning %}
+			<div class="alert alert-danger mt-4"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			{% endif %}
+			<div id="cart-table">
+				{% for product in products %}
+				<div class="row mt-4">
+					<div class="col-lg-12">
+						<div class="oct-checkout-block oct-checkout-cart d-flex flex-column flex-md-row justify-content-between p-3">
+							<div class="oct-checkout-cart-product-info d-flex align-items-md-center">
+								{% if product.thumb %}
+								<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}"
+										title="{{ product.name }}" width="60" height="60" /></a>
+								{% endif %}
+								<div class="pl-3">
+									<a href="{{ product.href }}"
+										class="blue-link d-block mb-2">{{ product.name }}</a>
+									{% if not product.stock %}
+									<span class="required">***</span>
+									{% endif %}
+
+									{% if product.option %}
+									{% for option in product['option'] %}
+									<div class="oct-checkout-cart-product-option">
+										{{ option.name }}: <span class="light-text">{{ option.value }}</span>
+										{% if oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.quantity_status and option.oct_quantity_value and option.oct_quantity_value %}
+										x{{ option.oct_quantity_value }}
+										{% endif %}
+										{% if oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.allow_sku and option.sku or oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.allow_model and option.model %}({% if oct_advanced_options_settings_data.allow_sku and option.sku %}{{ text_option_sku }}:
+										{{ option.sku }},
+										{% endif %}{% if oct_advanced_options_settings_data.allow_model and option.model %}{{ text_option_model }}:
+										{{ option.model }}{% endif %})
+										{% endif %}
+										</small>
+									</div>
+									{% endfor %}
+									{% endif %}
+									{% if product.reward %}
+									<br />
+									<small>{{ product.reward }}</small>
+									{% endif %}
+									{% if product.recurring %}
+									<br />
+									<small>{{ text_recurring_item }}{{ product.recurring }}</small>
+									{% endif %}
+								</div>
+							</div>
+							<div class="oct-checkout-cart-actions">
+								<div class="oct-checkout-cart-buttons d-flex align-items-stretch justify-content-end">
+									<div class="oct-checkout-cart-quantity d-flex align-items-center justify-content-center">
+										<input name="product_id_q" value="{{ product.product_id }}"
+											style="display: none;" type="hidden" />
+										<input name="product_id" value="{{ product.key }}" style="display: none;"
+											type="hidden" />
+										<input id="quantity-{{ product.quantity }}" type="text" name="quantity"
+											value="{{ product.quantity }}" class="form-control"
+											onchange="update_manual(this, '{{ product.key }}');"
+											aria-label="Quantity" />
+									</div>
+									<button type="button" aria-label="Delete"
+										class="oct-checkout-cart-delete-btn d-flex align-items-center justify-content-center"
+										onclick="update(this, 'remove');">
+										<span class="oct-checkout-cart-delete-btn-icon"></span>
+									</button>
+								</div>
+								<div class="oct-checkout-cart-total">{{ column_total }} {{ product.total }}</div>
+								<div class="oct-checkout-cart-price">{{ column_price }} {{ product.price }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			{% endif %}
+		</div>
+		<div class="col-lg-4">
+			<div class="oct-checkout-column mt-4 mt-md-0">
+				<div class="oct-checkout-block oct-checkout-actions">
+					<div class="oct-checkout-actions-title">{{ text_next }}</div>
+					{% if modules %}
+					<p class="my-3 pb-3">{{ text_next_choice }}</p>
+					{% set key_step = key_step + 1 %}
+					<div class="panel-group fastorder-panel-group" id="accordion">
+						{% for module in modules %}
+						{{ module }}
+						{% endfor %}
+					</div>
+					<script>
+						$(document).ready(function () {
+							$('.rm-cart-block-title').on('click', function () {
+								$(this).toggleClass('clicked');
+								$(this).next().toggleClass('opened').removeClass('d-md-flex');
+							});
+						});
+					</script>
+					{% endif %}
+					<div class="oct-checkout-actions-total">
+						{% for total in totals %}
+						<div class="oct-checkout-actions-total-item d-flex justify-content-between">
+							<span class="light-text">{{ total.title }}</span>
+							<span>{{ total.text }}</span>
+						</div>
+						{% endfor %}
+						{% if weight %}
+						<div class="oct-checkout-actions-total-item d-flex justify-content-between">
+							<span class="light-text">{{ text_weight }}</span>
+							<span>{{ weight }}</span>
+						</div>
+						{% endif %}
+					</div>
+					{% if text_agree %}
+					<div id="agree-block" class="form-check d-flex">
+						{% if agree %}
+						<input id="checkoutCheckbox" class="form-check-input" type="checkbox" name="agree" value="1"
+							checked="checked" />
+						{% else %}
+						<input id="checkoutCheckbox" class="form-check-input" type="checkbox" name="agree"
+							value="1" />
+						{% endif %}
+						<label class="form-check-label" for="checkoutCheckbox">{{ text_agree }}</label>
+					</div>
+					{% endif %}
+					{% if text_payment_agree %}
+					<div id="payment_agree-block" class="form-check mt-3 d-flex">
+						{% if payment_agree %}
+						<input id="checkoutCheckboxPAyment" class="form-check-input" type="checkbox"
+							name="payment_agree" value="1" checked="checked" />
+						{% else %}
+						<input id="checkoutCheckboxPAyment" class="form-check-input" type="checkbox"
+							name="payment_agree" value="1" />
+						{% endif %}
+						<label class="form-check-label"
+							for="checkoutCheckboxPAyment">{{ text_payment_agree }}</label>
+					</div>
+					{% endif %}
+					<div class="oct-fastorder-payment">
+						{% if payment and payment %}
+						<p>{{ payment }}</p>
+						{% else %}
+						<button type="button" class="rm-btn primary mt-3 w-100" id="button-go"><span class="rm-btn-text">{{ button_checkout }}</span></button>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</div>
+
+{% if mask %}
+<script src="catalog/view/theme/oct_remarket/js/jquery.inputmask.bundle.min.js"></script>
+<script>
+	rmInputMask('#input-payment-telephone', '{{ mask }}');
+</script>
+{% endif %}
+<script>
+	<!--
+	var error = true;
+	$(".oct-checkout .form-control, .oct-checkout .form-check-input").on("change paste keyup", function () {
+		$(this).removeClass('error_style');
+	});
+
+	// Register
+	document.getElementById('button-go').addEventListener('click', function () {
+		var data = $(
+			'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'tel\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'
+			).serialize();
+		data += '&_shipping_method=' + $('.oct-checkout input[name=\'shipping_method\']:checked').prop('title') +
+			'&_payment_method=' + $('.oct-checkout input[name=\'payment_method\']:checked').prop('title');
+
+		$.ajax({
+			url: 'index.php?route=checkout/oct_fastorder/validate_form',
+			type: 'post',
+			data: data,
+			dataType: 'json',
+			beforeSend: function () {
+				$('#button-go').button('loading');
+				masked('body', true);
+			},
+			complete: function () {
+				$('#button-go').button('reset');
+				masked('body', false);
+			},
+			success: function (json) {
+				$('.alert, .text-danger').remove();
+				$('.register_block input, .register_block select').css({
+					'background': '#ffffff'
+				});
+				$('.register_block input, .register_block select').parent().removeClass('error_style');
+				masked('body', false);
+
+				if (json['redirect']) {
+					location = json['redirect'];
+				} else if (json['error']) {
+
+					if ((!json['error']['agree']) && (!json['error']['warning_agree'])) {
+						scrollToElement('.oct-checkout-block');
+					}
+
+					error = true;
+
+					if (json['error']['warning_agree']) {
+						rmNotify('warning', json['error']['warning_agree']);
+						$('#checkoutCheckbox').addClass('error_style');
+					}
+
+					if (json['error']['agree']) {
+						rmNotify('warning', json['error']['agree']);
+						$('#checkoutCheckbox').addClass('error_style');
+					}
+
+					if (json['error']['warning_user_exist']) {
+						scrollToElement('.oct-checkout-block');
+						rmNotify('warning', json['error']['warning_user_exist']);
+						$('#input-payment-email').addClass('error_style');
+					}
+
+					if (json['error']['warning_payment_agree']) {
+						rmNotify('warning', json['error']['warning_payment_agree']);
+						$('#checkoutCheckbox').addClass('error_style');
+					}
+
+					for (i in json['error']) {
+						// $('[name="' + i + '"]').after('<div class="text-danger">' + json['error'][i] + '</div>');
+						$('.oct-checkout .form-control[name="' + i + '"]').addClass('error_style');
+					}
+
+					if (json['error']['custom_field']) {
+						for (i in json['error']['custom_field']) {
+							// $('[name="' + i + '"]').after('<div class="text-danger">' + json['error'][i] + '</div>');
+							$('.oct-checkout .form-control#input-payment-custom-field' + i +
+								', .oct-checkout .form-control#input-custom-field' + i +
+								', .oct-checkout #input-payment-custom-field' + i + ' label').addClass(
+								'error_style');
+						}
+					}
+				} else {
+					error = false;
+					$('[name=\'payment_method\']:checked').click();
+
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				// alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});
+
+	$('select[name=\'country_id\']').on('change', function () {
+		$.ajax({
+			url: 'index.php?route=checkout/oct_fastorder/country&country_id=' + this.value,
+			dataType: 'json',
+			beforeSend: function () {
+				$('select[name=\'country_id\']').after(' <i class="fa fa-spinner fa-spin"></i>');
+			},
+			complete: function () {
+				$('.fa-spinner').remove();
+			},
+			success: function (json) {
+
+				{% if oct_fastorder_data.postcode == 1 %}
+				if (json['postcode_required'] == '1') {
+					$('input[name=\'postcode\']').parent().addClass('required');
+				} else {
+					$('input[name=\'postcode\']').parent().removeClass('required');
+				} 
+				{% endif %}
+
+				html = '<option value="">{{ text_select }}</option>';
+
+				if (json['zone'] && json['zone'] != '') {
+					for (i = 0; i < json['zone'].length; i++) {
+						html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+						if (json['zone'][i]['zone_id'] ==
+							'{{ oct_fastorder_data.country_and_region == 1 ? zone_id : oct_fastorder_data.default_region }}'
+							) {
+							html += ' selected="selected"';
+						}
+
+						html += '>' + json['zone'][i]['name'] + '</option>';
+					}
+				} else {
+					html += '<option value="0" selected="selected">{{ text_none }}</option>';
+				}
+
+				{% if oct_fastorder_data.country_and_region == 1 %}
+				$('select[name=\'zone_id\']').html(html).val(''); 
+				{% else %}
+				$('select[name=\'zone_id\']').html(html);
+				$('select[name=\'zone_id\']').trigger('change'); 
+				{% endif %}
+				$('select[name=\'shipping_country_id\']').val('');
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});
+
+	$('select[name=\'country_id\']').trigger('change');
+
+	$('select[name=\'shipping_country_id\']').on('change', function () {
+		$.ajax({
+			url: 'index.php?route=checkout/oct_fastorder/country&country_id=' + this.value,
+			dataType: 'json',
+			beforeSend: function () {
+				$('select[name=\'country_id\']').after(' <i class="fa fa-spinner fa-spin"></i>');
+			},
+			complete: function () {
+				$('.fa-spinner').remove();
+			},
+			success: function (json) {
+
+				{% if oct_fastorder_data.postcode == 1 %}
+				if (json['postcode_required'] == '1') {
+					$('input[name=\'postcode\']').parent().addClass('required');
+				} else {
+					$('input[name=\'postcode\']').parent().removeClass('required');
+				} 
+				{% endif %}
+
+				html = '<option value="">{{ text_select }}</option>';
+
+				if (json['zone'] && json['zone'] != '') {
+					for (i = 0; i < json['zone'].length; i++) {
+						html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+						if (json['zone'][i]['zone_id'] ==
+							'{{ oct_fastorder_data.country_and_region == 1 ? zone_id : oct_fastorder_data.default_region }}'
+							) {
+							html += ' selected="selected"';
+						}
+
+						html += '>' + json['zone'][i]['name'] + '</option>';
+					}
+				} else {
+					html += '<option value="0" selected="selected">{{ text_none }}</option>';
+				}
+
+				{% if oct_fastorder_data.country_and_region == 1 %}
+				$('select[name=\'shipping_zone_id\']').html(html).val(''); 
+				{% else %}
+				$('select[name=\'shipping_zone_id\']').html(html); 
+				{% endif %}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});
+
+	$('select[name=\'shipping_country_id\']').trigger('change');
+
+	$('select[name=\'country_id\'], select[name=\'zone_id\'], select[name=\'shipping_country_id\'], select[name=\'shipping_zone_id\'], input[type=\'radio\'][name=\'payment_address\'], input[type=\'radio\'][name=\'shipping_address\']')
+		.on('change', function () {
+
+			if ($(this).attr("name") == 'country_id') {
+				$("select[name=\'zone_id\']").val('');
+			}
+
+			if ($(this).attr("name") == 'shipping_country_id') {
+				$("select[name=\'shipping_zone_id\']").val('');
+			}
+
+			$(".shipping-method").load('index.php?route=checkout/oct_fastorder/shipping_method', $(
+				'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'
+				), function () {
+				if ($("input[name=\'shipping_method\']:first").length) {
+					$("input[name=\'shipping_method\']:first").attr('checked', 'checked').prop('checked', true)
+						.click();
+				} else {
+					$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $(
+						'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'
+						));
+				}
+			});
+
+			$(".payment-method").load('index.php?route=checkout/oct_fastorder/payment_method', $(
+				'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'
+				), function () {
+				$('input[name=\'payment_method\']:first').attr('checked', 'checked').prop('checked', true)
+					.click();
+			});
+		});
+
+	{% if customer_id %}
+	$(function () {
+		$('select[name=\'shipping_address_id\']').trigger('change');
+	});
+
+	$('select[name=\'shipping_address_id\']').on('change', function () {
+		$(".shipping-method").load('index.php?route=checkout/oct_fastorder/shipping_method', $(
+			'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'
+			), function () {
+			if ($("input[name=\'shipping_method\']:first").length) {
+				$("input[name=\'shipping_method\']:first").attr('checked', 'checked').prop('checked', true)
+					.click();
+			} else {
+				$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $(
+					'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'
+					));
+			}
+		});
+	}); 
+	{% endif %}
+
+	$('input[name=\'city\'], input[name=\'shipping_city\']').on('change', function () {
+		$(".shipping-method").load('index.php?route=checkout/oct_fastorder/shipping_method', $(
+			'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'
+			), function () {
+			if ($("input[name=\'shipping_method\']:first").length) {
+				$("input[name=\'shipping_method\']:first").attr('checked', 'checked').prop('checked', true)
+					.click();
+			} else {
+				$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $(
+					'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'
+					));
+			}
+		});
+	});
+
+	$(document).delegate('input[name=\'shipping_method\']', 'click', function () {
+		$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $(
+			'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'
+			));
+	});
+
+	$('body').delegate('input[name=\'payment_method\']', 'click', function () {
+		var data = $(
+			'.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'tel\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'
+			).serialize();
+		data += '&_shipping_method=' + $('.oct-checkout input[name=\'shipping_method\']:checked').prop('title') +
+			'&_payment_method=' + $('.oct-checkout input[name=\'payment_method\']:checked').prop('title');
+
+		if (!error) {
+			$.ajax({
+				url: 'index.php?route=checkout/oct_fastorder/confirm',
+				type: 'post',
+				data: data,
+				success: function (html) {
+					$(".oct-fastorder-payment").html(html).addClass('d-none');
+					if ($(".oct-fastorder-payment input[type=button]").length > 0) {
+						$(".oct-fastorder-payment input[type=button]").click();
+					}
+					if ($(".oct-fastorder-payment input[type=submit]").length > 0) {
+						$(".oct-fastorder-payment input[type=submit]").click();
+					}
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	});
+	$(document).ready(function () {
+		$('input:radio[name=\'payment_method\']:first').attr('checked', true).prop('checked', true);
+	});
+	//
+	-->
+</script>
+<script><!--
+function update(target, status) {
+	let input_val  = $(target).parent().parent().children('input[name=quantity]').val(),
+		quantity   = parseInt(input_val),
+		product_id  = $(target).parent().parent().parent().children('input[name=product_id]').val(),
+		product_id_q = $(target).parent().parent().parent().children('input[name=product_id_q]').val(),
+		product_key = $(target).parent().parent().find('input[name=product_id]').val(),
+		urls     = null;
+
+	if (quantity <= 0) {
+		quantity = $(target).parent().parent().children('input[name=quantity]').val(1);
+		return;
+	}
+
+	if (status == 'update') {
+		urls = 'index.php?route=checkout/oct_fastorder/cart&update=' + product_id + '&quantity=' + quantity;
+	} else if (status == 'add') {
+		urls = 'index.php?route=checkout/oct_fastorder/cart&add=' + target + '&quantity=1';
+	} else {
+		urls = 'index.php?route=checkout/oct_fastorder/cart&remove=' + product_key;
+	}
+
+	$.ajax({
+		url: urls,
+		type: 'get',
+		dataType: 'html',
+		beforeSend: function() {
+			masked('body', true);
+		},
+		success: function(data) {
+		$.ajax({
+			url: 'index.php?route=checkout/oct_fastorder/status_cart',
+			type: 'get',
+			dataType: 'json',
+			success: function(json) {
+			if (json['total']) {
+				setTimeout(function () {
+					$('#oct-cart-quantity, .header-cart-index, #mobile_cart_index').html(json['total']);
+					$('.rm-cart-text').html(json['total_amount']);
+				}, 100);
+			}
+			if (!json['redirect']) {
+				masked('body', false);
+				$(".shipping-method").load('index.php?route=checkout/oct_fastorder/shipping_method', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'), function() {
+								if ($("input[name=\'shipping_method\']:first").length) {
+									$("input[name=\'shipping_method\']:first").attr('checked', 'checked').prop('checked', true).click();
+								} else {
+									$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'));
+								}
+						});
+
+			} else {
+				location = json['redirect'];
+			}
+			}
+		});
+		}
+	});
+}
+function update_manual(target, product_id) {
+ var input_val = $(target).val(),
+	 quantity = parseInt(input_val);
+
+ if (quantity <= 0 || isNaN(quantity)) {
+	quantity = $(target).val(1);
+	return;
+ }
+
+ $.ajax({
+	url: 'index.php?route=checkout/oct_fastorder/cart&update=' + product_id + '&quantity=' + quantity,
+	type: 'get',
+	dataType: 'html',
+	beforeSend: function() {
+		$('[data-dismiss="alert"]').click();
+		masked('body', true);
+	},
+	success: function(data) {
+	 $.ajax({
+		url: 'index.php?route=checkout/oct_fastorder/status_cart',
+		type: 'get',
+		dataType: 'json',
+		success: function(json) {
+		 if (json['total']) {
+			setTimeout(function () {
+				$('#oct-cart-quantity, .header-cart-index, #mobile_cart_index').html(json['total']);
+				$('.rm-cart-text').html(json['total_amount']);
+			}, 100);
+		 }
+		 if (!json['redirect']) {
+			masked('body', false);
+			$(".shipping-method").load('index.php?route=checkout/oct_fastorder/shipping_method', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'), function() {
+							if ($("input[name=\'shipping_method\']:first").length) {
+								$("input[name=\'shipping_method\']:first").attr('checked', 'checked').prop('checked', true).click();
+							} else {
+								$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'));
+							}
+					 });
+			$(".payment-method").load('index.php?route=checkout/oct_fastorder/payment_method', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'), function() {
+				$('input[name=\'payment_method\']:first').attr('checked', 'checked').prop('checked', true).click();
+			});
+
+		 } else {
+			location = json['redirect'];
+		 }
+		}
+	 });
+	}
+ });
+}
+
+function voucher_remove(voucher_key) {
+ $.ajax({
+	url: 'index.php?route=checkout/oct_fastorder/cart&remove=' + voucher_key,
+	type: 'get',
+	dataType: 'html',
+	success: function(data) {
+	 $.ajax({
+		url: 'index.php?route=checkout/oct_fastorder/status_cart',
+		type: 'get',
+		dataType: 'json',
+		success: function(json) {
+		 if (json['total']) {
+			setTimeout(function () {
+				$('#oct-cart-quantity, .header-cart-index, #mobile_cart_index').html(json['total']);
+				$('.rm-cart-text').html(json['total_amount']);
+			}, 100);
+		 }
+		 if (!json['redirect']) {
+
+			$(".shipping-method").load('index.php?route=checkout/oct_fastorder/shipping_method', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, input[name=\'shipping_method\']:first, .oct-checkout textarea, .oct-checkout select'), function() {
+				if ($("input[name=\'shipping_method\']:first").length) {
+					$("input[name=\'shipping_method\']:first").attr('checked', 'checked').prop('checked', true).click();
+				} else {
+					$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'));
+				}
+			});
+
+		 } else {
+			location = json['redirect'];
+		 }
+		}
+	 });
+	}
+ });
+}
+</script>
+{{ footer }}

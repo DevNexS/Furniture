@@ -1,0 +1,87 @@
+.rm-advantages {
+    @media (max-width: $break-xs-max) {
+        .row-padding-top {
+            flex-wrap: nowrap;
+            overflow-y: auto;
+
+            > * {
+                flex: 0 0 75%;
+                max-width: 75%;
+            }
+        }
+    }
+    @media (max-width: $break-sm-max) {
+        .row-padding-top {
+            padding-top: 0;
+
+            > * {
+                margin-top: 30px;
+            }
+        }
+    }
+
+    &-item {
+        padding: 20px;
+        height: 100%;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, .06);
+        transition: background $mainTransition, box-shadow $mainTransition;
+        @media (min-width: $break-sm) {
+            padding: 20px 5px;
+        }
+        @media (min-width: $break-md) {
+            background: transparent;
+            padding: 20px 30px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0);
+            border-radius: 2px;
+        }
+
+        &-icon {
+            margin-right: 20px;
+            flex: 0 0 40px;
+            max-width: 40px;
+            @media (min-width: $break-sm) {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+
+            i {
+                color: $linksColor;
+                font-size: 30px;
+                transition: color $mainTransition;
+            }
+        }
+
+        span {
+            font-weight: 500;
+            transition: color $mainTransition;
+
+            &:hover {
+                text-decoration: none !important;
+            }
+        }
+
+        &-title {
+            margin-bottom: 10px;
+        }
+
+        &-text {
+            color: $lightTextColor;
+            font-size: 12px;
+            line-height: 18px;
+        }
+
+        &:hover {
+            background: #FFFFFF;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.06);
+
+            .rm-advantages-item-title {
+                color: $linksColor;
+                text-decoration: underline;
+            }
+        }
+    }
+}

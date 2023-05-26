@@ -1,0 +1,330 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<div class="toggle-group">
+							    <input type="checkbox" name="status" {% if status %}checked="checked"{% endif %} id="input-status" tabindex="1">
+							    <label for="input-status"></label>
+							    <div class="onoffswitch pull-left" aria-hidden="true">
+							        <div class="onoffswitch-label">
+							            <div class="onoffswitch-inner"></div>
+							            <div class="onoffswitch-switch"></div>
+							        </div>
+							    </div>
+							</div>
+						</div>
+					</div>
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                            {% if (error_name) %}
+                            <div class="text-danger">
+                                <script>
+                                    usNotify('warning', '{{ error_name }}');
+                                </script>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+							<ul class="nav nav-pills nav-stacked" id="settings">
+								{% set block_row = 0 %}
+								{% for oct_benegit_data in oct_benegits_data %}
+								<li class="block-li{{ block_row }}"><a href="#block-row{{ block_row }}" data-toggle="tab"><span class="delete-block-in" onclick="removeBlock({{ block_row }});"><i class="fa fa-minus-circle"></i></span> {{ oct_benegit_data.title[language_id] }}</a></li>
+								{% set block_row = block_row + 1 %}
+								{% endfor %}
+							</ul>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="javascript:;" onclick="addBlock(); updateActive(); return false;" id="addblock"><i class="fa fa-plus-circle"></i> {{ entry_add_new_block }}</a></li>
+							</ul>
+						</div>
+                        <div class="col-sm-10">
+							<div class="tab-content" id="block-setting">
+                                {% set block_row = 0 %}
+								{% for oct_benegit_data in oct_benegits_data %}
+                                <div class="tab-pane" id="block-row{{ block_row }}">
+                                    <div class="col-sm-12">
+                                        <legend style="padding-bottom:10px;" class="clearfix"><div class="pull-left">{{ entry_settings }}</div></legend>
+										<div class="form-group required">
+											<label class="col-sm-2 control-label" for="input-tab_icon_input_block{{ block_row }}">{{ entry_icon }}</label>
+											<div class="col-sm-10">
+												<span data-toggle="tooltip" title="{{ entry_icon_title }}" class="btn btn-default" onclick="fontIcons('tab_icon_block{{ block_row }}', 'tab_icon_input_block{{ block_row }}');"><i class="{{ oct_benegit_data.icon }}" id="tab_icon_block{{ block_row }}"></i></span>
+												<input id="tab_icon_input_block{{ block_row }}" type="hidden" name="oct_benegits_data[{{ block_row }}][icon]" value="{{ oct_benegit_data.icon }}" />
+												{% if error_oct_benegits_data[block_row].icon %}
+												<div class="text-danger">
+													<script>
+														usNotify('warning', '{{ error_oct_benegits_data[block_row].icon }}');
+													</script>
+												</div>
+												{% endif %}
+											</div>
+										</div>
+                                        <ul class="nav nav-tabs" id="language_block{{ block_row }}">
+											{% for language in languages %}
+											<li><a href="#block_language{{ language.language_id }}-{{ block_row }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />  {{ language.name }}</a></li>
+											{% endfor %}
+										</ul>
+                                        <div class="tab-content">
+											{% for language in languages %}
+											<div class="tab-pane" id="block_language{{ language.language_id }}-{{ block_row }}">
+                                                <div class="form-group required">
+													<label class="col-sm-2 control-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="oct_benegits_data[{{ block_row }}][title][{{ language.language_id }}]" value="{{ oct_benegit_data.title[language.language_id] is defined ? oct_benegit_data.title[language.language_id] : '' }}" placeholder="{{ entry_title }}" class="form-control"/>
+														{% if (error_oct_benegits_data[block_row].title[language.language_id] is defined) %}
+														<div class="text-danger">
+															<script>
+																usNotify('warning', '{{ error_oct_benegits_data[block_row].title[language.language_id] }}');
+															</script>
+														</div>
+														{% endif %}
+													</div>
+												</div>
+                                                <div class="form-group required">
+													<label class="col-sm-2 control-label" for="input-text{{ language.language_id }}">{{ entry_text }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="oct_benegits_data[{{ block_row }}][text][{{ language.language_id }}]" value="{{ oct_benegit_data.text[language.language_id] is defined ? oct_benegit_data.text[language.language_id] : '' }}" placeholder="{{ entry_text }}" class="form-control"/>
+														{% if (error_oct_benegits_data[block_row].text[language.language_id] is defined) %}
+														<div class="text-danger">
+															<script>
+																usNotify('warning', '{{ error_oct_benegits_data[block_row].text[language.language_id] }}');
+															</script>
+														</div>
+														{% endif %}
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-link{{ language.language_id }}">{{ entry_link }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="oct_benegits_data[{{ block_row }}][link][{{ language.language_id }}]" value="{{ oct_benegit_data.link[language.language_id] is defined ? oct_benegit_data.link[language.language_id] : '' }}" placeholder="{{ entry_link }}" class="form-control"/>
+													</div>
+												</div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+										<legend style="padding-bottom:10px;" class="clearfix"><div class="pull-left">{{ entry_colors }}</div></legend>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-color-icon">{{ entry_icon_color }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_benegits_data[{{ block_row }}][color_icon]" value="{{ oct_benegit_data.color_icon }}" placeholder="{{ entry_icon_color }}" class="form-control spectrum"/>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-color-title">{{ entry_color_fon_hover }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_benegits_data[{{ block_row }}][color_fon_hover]" value="{{ oct_benegit_data.color_fon_hover }}" placeholder="{{ entry_color_fon_hover }}" class="form-control spectrum"/>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-color-title">{{ entry_color_title }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_benegits_data[{{ block_row }}][color_title]" value="{{ oct_benegit_data.color_title }}" placeholder="{{ entry_color_title }}" class="form-control spectrum"/>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label" for="input-color-title">{{ entry_color_text }}</label>
+												<div class="col-sm-8">
+													<input type="text" name="oct_benegits_data[{{ block_row }}][color_text]" value="{{ oct_benegit_data.color_text }}" placeholder="{{ entry_color_text }}" class="form-control spectrum"/>
+												</div>
+											</div>
+										</div>
+                                    </div>
+                                </div>
+								{% set block_row = block_row + 1 %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+var block_row = {{ block_row }};
+
+function addBlock() {
+	const html = `
+	<div class="tab-pane" id="block-row${ block_row }">
+		<div class="col-sm-12">
+			<legend style="padding-bottom:10px;" class="clearfix"><div class="pull-left">{{ entry_settings }}</div></legend>
+			<div class="form-group required">
+				<label class="col-sm-2 control-label" for="input-tab_icon_input_block${ block_row }">{{ entry_icon }}</label>
+				<div class="col-sm-10">
+					<span data-toggle="tooltip" title="{{ entry_icon_title }}" class="btn btn-default" onclick="fontIcons('tab_icon_block${ block_row }', 'tab_icon_input_block${ block_row }');"><i class="far fa-thumbs-up" id="tab_icon_block${ block_row }"></i></span>
+					<input id="tab_icon_input_block${ block_row }" type="hidden" name="oct_benegits_data[${ block_row }][icon]" value="far fa-thumbs-up" />
+				</div>
+			</div>
+			<ul class="nav nav-tabs" id="language_block${ block_row }">
+				{% for language in languages %}
+				<li><a href="#block_language{{ language.language_id }}-${ block_row }" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />  {{ language.name }}</a></li>
+				{% endfor %}
+			</ul>
+			<div class="tab-content">
+				{% for language in languages %}
+				<div class="tab-pane" id="block_language{{ language.language_id }}-${ block_row }">
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="oct_benegits_data[${ block_row }][title][{{ language.language_id }}]" value="" placeholder="{{ entry_title }}" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-text{{ language.language_id }}">{{ entry_text }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="oct_benegits_data[${ block_row }][text][{{ language.language_id }}]" value="" placeholder="{{ entry_text }}" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-link{{ language.language_id }}">{{ entry_link }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="oct_benegits_data[${ block_row }][link][{{ language.language_id }}]" value="" placeholder="{{ entry_link }}" class="form-control"/>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<legend style="padding-bottom:10px;" class="clearfix"><div class="pull-left">{{ entry_colors }}</div></legend>
+			<div class="form-group">
+				<div class="col-sm-6">
+					<label class="col-sm-4 control-label" for="input-color-icon">{{ entry_icon_color }}</label>
+					<div class="col-sm-8">
+						<input type="text" name="oct_benegits_data[${ block_row }][color_icon]" value="rgb(10, 120, 191)" placeholder="{{ entry_icon_color }}" class="form-control spectrum"/>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="col-sm-4 control-label" for="input-color-title">{{ entry_color_fon_hover }}</label>
+					<div class="col-sm-8">
+						<input type="text" name="oct_benegits_data[${ block_row }][color_fon_hover]" value="rgb(10, 120, 191)" placeholder="{{ entry_color_fon_hover }}" class="form-control spectrum"/>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					<label class="col-sm-4 control-label" for="input-color-title">{{ entry_color_title }}</label>
+					<div class="col-sm-8">
+						<input type="text" name="oct_benegits_data[${ block_row }][color_title]" value="rgb(39, 35, 35)" placeholder="{{ entry_color_title }}" class="form-control spectrum"/>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="col-sm-4 control-label" for="input-color-title">{{ entry_color_text }}</label>
+					<div class="col-sm-8">
+						<input type="text" name="oct_benegits_data[${ block_row }][color_text]" value="rgb(119, 119, 119)" placeholder="{{ entry_color_text }}" class="form-control spectrum"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	`;
+
+	html2 = "<li class='block-li" + block_row + "'><a href='#block-row" + block_row + "' data-toggle='tab'><span class='delete-block-in' onclick='removeBlock(" + block_row + ")'><i class='fa fa-minus-circle'></i></span> {{ entry_new_block }}</a></li>";
+
+	$('#block-setting').append(html);
+	$('#settings').append(html2);
+
+	$('#settings li').removeClass('active');
+
+	$("#settings .block-li" + block_row + " a").tab('show');
+
+	($('.delete-block-in').length == 6) ? ($('#addblock').hide()) : ($('#addblock').show());
+
+	block_row++;
+
+	initSpectrum();
+}
+
+function removeBlock(block_row) {
+	$("#block-row" + block_row).remove();
+	$(".block-li" + block_row).remove();
+
+	($('.delete-block-in').length == 6) ? ($('#addblock').hide()) : ($('#addblock').show());
+
+	$('#settings a:first').tab('show');
+}
+
+function fontIcons(icone_id, input_id) {
+	$.ajax({
+		url: 'index.php?route=extension/theme/oct_remarket/getIcons&user_token={{ user_token }}&icone_id=' + icone_id + '&input_id=' + input_id,
+		type: 'get',
+		dataType: 'html',
+		cache: false,
+		success: function(data) {
+			html  = '<div id="modal-icons" class="modal">';
+			html += '  <div class="modal-dialog" style="width:55%;">';
+			html += '    <div class="modal-content">';
+			html += '      <div class="modal-header">';
+			html += '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+			html += '        <h4 class="modal-title">Font Awesome Icons</h4>';
+			html += '      </div>';
+			html += '      <div class="modal-body">' + data + '</div>';
+			html += '    </div>';
+			html += '  </div>';
+			html += '</div>';
+
+			$('body').append(html);
+
+			$('#modal-icons').modal('show');
+		}
+	});
+}
+
+function updateActive() {
+	$('.nav.nav-tabs').each(function () {
+		$(this).children().children().first().tab('show');
+	});
+}
+
+($('.delete-block-in').length == 6) ? ($('#addblock').hide()) : ($('#addblock').show());
+
+function initSpectrum() {
+	$(".spectrum").spectrum({
+		preferredFormat: "rgb",
+		showInitial: true,
+		showInput: true,
+		showAlpha: true,
+		showPalette: true,
+		palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
+	});
+}
+
+initSpectrum();
+
+$('#settings a:first').tab('show');
+
+$('.nav.nav-tabs').each(function () {
+	$(this).children().children().first().tab('show');
+});
+</script>
+{{ footer }}

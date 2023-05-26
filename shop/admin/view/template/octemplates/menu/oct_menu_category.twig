@@ -1,0 +1,145 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="megamenu-{{ menu_id }}-status">{{ entry_status }}</label>
+    <div class="col-sm-10">
+        <div class="toggle-group">
+            <input type="checkbox" name="oct_megamenu[{{ menu_id }}][status]" {% if oct_menu.status is defined and oct_menu.status %}checked="checked"{% endif %} id="megamenu-{{ menu_id }}-status" tabindex="1">
+            <label for="megamenu-{{ menu_id }}-status"></label>
+            <div class="onoffswitch pull-left" aria-hidden="true">
+                <div class="onoffswitch-label">
+                    <div class="onoffswitch-inner"></div>
+                    <div class="onoffswitch-switch"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+	<label class="col-sm-2 control-label">{{ entry_menu_image }}</label>
+	<div class="col-sm-10">
+        <a href="" id="thumb-menuimage{{ menu_id }}" data-toggle="image" class="img-thumbnail">
+            <img src="{{ thumb }}" style="min-width:50px;min-height:50px;" alt="" title="" data-placeholder="{{ placeholder }}" />
+        </a>
+		<input type="hidden" name="oct_megamenu[{{ menu_id }}][settings][image]" value="{{ oct_menu.settings.image }}" id="input-menuimage{{ menu_id }}" />
+	</div>
+</div>
+{% if elements is defined %}
+<div class="form-group">
+	<label class="col-sm-2 control-label">{{ text_menu_category }}</label>
+	<div class="col-sm-10">
+		<div class="well well-sm" style="min-height: 150px;max-height:300px;overflow: auto;">
+			<table class="table table-striped">
+				{% for category in elements %}
+				<tr>
+					<td class="checkbox">
+						<label>
+						{% if category.category_id in oct_menu.settings.id %}
+						<input type="checkbox" name="oct_megamenu[{{ menu_id }}][settings][id][]" value="{{ category.category_id }}" checked="checked" />
+						{{ category['name'] }}
+						{% else %}
+						<input type="checkbox" name="oct_megamenu[{{ menu_id }}][settings][id][]" value="{{ category.category_id }}" />
+						{{ category['name'] }}
+						{% endif %}
+						</label>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+	</div>
+</div>
+{% endif %}
+<div class="form-group">
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="sub_categories{{ menu_id }}">{{ entry_menu_sub_categories }}</label>
+        <div class="col-sm-8">
+            <div class="toggle-group">
+                <input type="checkbox" name="oct_megamenu[{{ menu_id }}][settings][sub]" {% if oct_menu.settings.sub %}checked="checked"{% endif %} id="sub_categories{{ menu_id }}" tabindex="1">
+                <label for="sub_categories{{ menu_id }}"></label>
+                <div class="onoffswitch pull-left" aria-hidden="true">
+                    <div class="onoffswitch-label">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="show_image_categories{{ menu_id }}">{{ entry_menu_show_image }}</label>
+        <div class="col-sm-8">
+            <div class="toggle-group">
+                <input type="checkbox" name="oct_megamenu[{{ menu_id }}][settings][show_image]" {% if oct_menu.settings.show_image %}checked="checked"{% endif %} id="show_image_categories{{ menu_id }}" tabindex="1">
+                <label for="show_image_categories{{ menu_id }}"></label>
+                <div class="onoffswitch pull-left" aria-hidden="true">
+                    <div class="onoffswitch-label">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="megamenu-{{ menu_id }}-width">{{ entry_menu_width }}</label>
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text" name="oct_megamenu[{{ menu_id }}][settings][width]" value="{{ oct_menu.settings.width is defined ? oct_menu.settings.width : '100' }}" placeholder="{{ entry_menu_width }}" id="megamenu-{{ menu_id }}-width" class="form-control" />
+                <span class="input-group-addon">px</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="megamenu-{{ menu_id }}-height">{{ entry_menu_height }}</label>
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text" name="oct_megamenu[{{ menu_id }}][settings][height]" value="{{ oct_menu.settings.height is defined ? oct_menu.settings.height : '100' }}" placeholder="{{ entry_menu_height }}" id="megamenu-{{ menu_id }}-height" class="form-control" />
+                <span class="input-group-addon">px</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="megamenu-{{ menu_id }}-limit">{{ entry_menu_limit }}</label>
+        <div class="col-sm-8">
+            <input type="text" name="oct_megamenu[{{ menu_id }}][settings][limit]" value="{{ oct_menu.settings.limit is defined ? oct_menu.settings.limit : '5' }}" placeholder="{{ entry_menu_limit }}" id="megamenu-{{ menu_id }}-limit" class="form-control" />
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="megamenu-{{ menu_id }}-sort_order">{{ entry_menu_sort }}</label>
+        <div class="col-sm-8">
+            <input type="text" name="oct_megamenu[{{ menu_id }}][sort_order]" value="{{ oct_menu.sort_order is defined ? oct_menu.sort_order : '' }}" placeholder="{{ entry_menu_sort }}" id="megamenu-{{ menu_id }}-sort_order" class="form-control" />
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ entry_menu_cat_view }}</label>
+            <div class="col-sm-8">
+                <select name="oct_megamenu[{{ menu_id }}][settings][view]" class="form-control">
+                    <option value="1" {{ oct_menu.settings.view == '1' ? 'selected="selected"' : '' }}>{{ entry_menu_cat_view_1 }}</option>
+                    <option value="2" {{ oct_menu.settings.view == "2" ? 'selected="selected"' : '' }}>{{ entry_menu_cat_view_2 }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <label class="col-sm-4 control-label" for="target{{ menu_id }}">{{ entry_menu_target }}</label>
+        <div class="col-sm-8">
+            <div class="toggle-group">
+                <input type="checkbox" name="oct_megamenu[{{ menu_id }}][settings][target]" {% if oct_menu.settings.target %}checked="checked"{% endif %} id="target{{ menu_id }}" tabindex="1">
+                <label for="target{{ menu_id }}"></label>
+                <div class="onoffswitch pull-left" aria-hidden="true">
+                    <div class="onoffswitch-label">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

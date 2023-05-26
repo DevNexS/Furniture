@@ -1,0 +1,166 @@
+{{ header }}
+<div id="product-compare" class="container">
+    {{ oct_breadcrumbs }}
+    <div class="row">
+        <div class="col-12 rm-page-title">
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="content-top-box">{{ content_top }}</div>
+    {% if success %}
+        <script>
+            rmNotify('success', '{{ success }}');
+        </script>
+    {% endif %}
+    <div id="content" class="row no-gutters">
+        {{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-lg-6 is-cols' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-lg-9' %}
+        {% else %}
+            {% set class = 'col-lg-12 no-col' %}
+        {% endif %}
+        <div class="{{ class }}">
+            <div class="rm-content h-100">
+                {% if products %}
+                    <div class="rm-content-title">{{ text_product }}</div>
+                    <table class="table rm-table-compare table-responsive-lg">
+                        <tbody>
+                            <tr class="rm-table-compare-product">
+                                <td>{{ text_name }}</td>
+                                {% for product in products %}
+                                    <td class="rm-table-product-name text-center">
+                                        <a href="{{ product.href }}">{{ product.name }}</a>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="rm-table-compare-img">
+                                <td class="align-middle">{{ text_image }}</td>
+                                {% for product in products %}
+                                    <td class="text-center">
+                                        {% if product.thumb %}
+                                            <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}"/>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="rm-table-compare-price">
+                                <td>{{ text_price }}</td>
+                                {% for product in products %}
+                                    <td class="rm-module-price text-center">
+                                        {% if product.price %}
+                                            {% if not product.special %}
+                                                <span class="rm-module-price-actual">{{ product.price }}</span>
+                                            {% else %}
+                                                <span class="rm-module-price-old">{{ product.price }}</span><span class="rm-module-price-actual">{{ product.special }}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="rm-table-compare-model">
+                                <td>{{ text_model }}</td>
+                                {% for product in products %}
+                                    <td class="text-center">{{ product.model }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="rm-table-compare-producer">
+                                <td>{{ text_manufacturer }}</td>
+                                {% for product in products %}
+                                    <td class="text-center">{{ product.manufacturer }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="rm-table-compare-available">
+                                <td>{{ text_availability }}</td>
+                                {% for product in products %}
+                                    <td class="text-center">{{ product.availability }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% if review_status %}
+                                <tr class="rm-table-compare-rating">
+                                    <td class="align-middle">{{ text_rating }}</td>
+                                    {% for product in products %}
+                                        <td class="text-center">
+                                            <div class="rm-module-rating-stars d-flex align-items-center justify-content-center">
+                                                {% for i in 1..5 %}
+                                                    {% if product.rating < i %}
+                                                        <span class="rm-module-rating-star"></span>
+                                                    {% else %}
+                                                        <span class="rm-module-rating-star rm-module-rating-star-is"></span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="rm-table-compare-review">{{ product.reviews }}</div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endif %}
+                            <tr class="rm-table-compare-weight">
+                                <td>{{ text_weight }}</td>
+                                {% for product in products %}
+                                    <td class="text-center">{{ product.weight }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="rm-table-compare-sizes">
+                                <td>{{ text_dimension }}</td>
+                                {% for product in products %}
+                                    <td class="text-center">{{ product.length }}
+                                        x
+                                        {{ product.width }}
+                                        x
+                                        {{ product.height }}</td>
+                                {% endfor %}
+                            </tr>
+
+                            {% for attribute_group in attribute_groups %}
+                                <tr>
+                                    <td class="rm-table-compare-title" colspan="{{ products|length + 1 }}">
+                                        <strong>{{ attribute_group.name }}</strong>
+                                    </td>
+                                </tr>
+                                {% for key, attribute in attribute_group.attribute %}
+                                    <tr>
+                                        <td>{{ attribute.name }}</td>
+                                        {% for product in products %}
+                                            {% if product.attribute[key] %}
+                                                <td class="text-center">
+                                                    {{ product.attribute[key] }}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                            <tr class="rm-table-compare-btn">
+                                <td></td>
+                                {% for product in products %}
+                                    <td class="text-center">
+                                        <div>
+											<button type="button" aria-label="To cart" class="rm-btn rm-cart-btn secondary d-inline-flex align-items-center" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');"/>
+												<span class="rm-cart-btn-icon"></span>
+	                                            <span class="rm-btn-text">{{ button_cart }}</span>
+											</button>
+	                                    </div>
+                                    <div>
+                                        <a href="{{ product.remove }}" class="rm-btn red"><span class="rm-btn-text">{{ button_remove }}</span></a>
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <p>{{ text_empty }}</p>
+                <div class="buttons">
+                    <a href="{{ continue }}" class="rm-btn dark mt-3 d-inline-block">{{ button_continue }}</a>
+                </div>
+            {% endif %}
+            {{ column_right }}
+        </div>
+    </div>
+</div>
+{{ content_bottom }}
+</div>
+{{ footer }}

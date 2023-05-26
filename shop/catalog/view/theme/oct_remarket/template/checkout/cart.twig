@@ -1,0 +1,125 @@
+{{ header }}
+<div id="checkout-cart" class="container flex-container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	{% if attention %}
+	<script>
+	rmNotify('warning', '{{ attention }}');
+	</script>
+	{% endif %}
+	{% if success %}
+	<script>
+	rmNotify('success', '{{ success }}');
+	</script>
+	{% endif %}
+	<div id="content" class="row no-gutters">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content rm-cart h-100">
+		    	<div class="rm-content-title rm-cart-title">{{ heading_title }}{% if weight %} &nbsp;({{ weight }}) {% endif %}</div>
+				<form action="{{ action }}" method="post" enctype="multipart/form-data">
+					<div class="rm-cart-products">
+						{% for product in products %}
+					    <div class="rm-cart-products-item d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center">
+							<div class="rm-cart-products-item-left flex-column flex-lg-row d-flex align-items-center">
+								<button type="button" class="rm-btn-del" onclick="cart.remove('{{ product.cart_id }}');"><span class="rm-btn-icon"></span></button>
+								{% if product.thumb %}
+								<a href="{{ product.href }}" class="rm-cart-products-item-img"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+								{% endif %}
+								<div class="rm-cart-products-item-info">
+									<div class="rm-cart-products-item-info-title"><a href="{{ product.href }}">{{ product.name }}</a>{% if not product.stock %}<span class="required"> ***</span>{% endif %}</div>
+									{% if product.option %}
+									{% for option in product.option %}
+									<div class="rm-cart-products-item-info-option">{{ option.name }}: <span>{{ option.value }}</span></div>
+									{% endfor %}
+									{% endif %}
+									<div class="rm-cart-products-item-info-option">{{ column_model }}: <span>{{ product.model }}</span></div>
+									{% if product.reward %}
+									<div class="rm-cart-products-item-info-option">{{ product.reward }}</div>
+									{% endif %}
+									{% if product.recurring %}
+									<div class="rm-cart-products-item-info-option">{{ text_recurring_item }} <span>{{ product.recurring }}</span></div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="rm-cart-products-item-right flex-row d-flex align-items-start align-items-lg-center">
+								<div class="btn-group rm-product-quantity" role="group">
+									<input type="text" id="input-quantity-{{ product.cart_id }}" class="form-control"  name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}">
+									<div class="d-flex flex-column">
+										<button type="button" class="rm-product-quantity-btn-plus d-flex align-items-center justify-content-center" onclick="$('#input-quantity-{{ product.cart_id }}').val(~~$('#input-quantity-{{ product.cart_id }}').val()+1);"><span></span></button>
+										<div class="rm-product-quantity-btn-border"></div>
+										<button type="button" class="rm-product-quantity-btn-minus d-flex align-items-center justify-content-center" onclick="$('#input-quantity-{{ product.cart_id }}').val(~~$('#input-quantity-{{ product.cart_id }}').val()-1);"><span></span></button>
+									</div>
+								</div>
+								<button type="submit" class="rm-btn secondary rm-cart-products-item-update" title="{{ button_update }}"><i class="fas fa-sync-alt"></i></button>
+								<div class="rm-cart-products-item-price text-lg-right">
+									<div class="rm-cart-products-item-price-all">{{ column_total }}: {{ product.total }}</div>
+									<div class="rm-cart-products-item-price-one">{{ column_price }}: {{ product.price }}</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					{% for voucher in vouchers %}
+					<div class="rm-cart-block d-flex align-items-center">
+						<button type="button" class="rm-btn-del mr-2" onclick="voucher.remove('{{ voucher.key }}');"><span class="rm-btn-icon"></span></button>	
+						<div class="rm-cart-text">{{ voucher.description }}</div>
+					</div>
+					{% endfor %}
+					{% if error_warning %}
+					<div class="required">{{ error_warning }}</div>
+					{% endif %}
+					{% if modules %}
+					<div class="rm-cart-block">
+						<div class="rm-content-title rm-cart-title-bold">{{ text_next }}</div>
+						<div class="rm-cart-text">{{ text_next_choice }}</div>
+					</div>
+					{% for module in modules %}
+					{{ module }}
+					{% endfor %}
+					<script>
+						$( document ).ready(function() {
+							$('.rm-cart-block-title').on('click', function() {
+								$(this).toggleClass('clicked');
+								$(this).next().toggleClass('opened');
+							});
+						});
+					</script>
+					{% endif %}
+				</form>
+				<div class="row align-items-center">
+					{% if oct_byoneclick is defined and oct_byoneclick %}
+					<div class="col-md-6 buy-one-click-box">
+						{{ oct_byoneclick }}
+					</div>
+					{% endif %}
+					<div class="col-md-12 text-md-right my-4 my-md-0">
+						{% for total in totals %}
+						<div class="rm-cart-block-total-price">
+							{{ total.title }}: <span>{{ total.text }}</span>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			    <div class="rm-cart-buttons d-flex flex-column flex-md-row align-items-center justify-content-between mt-0 mt-md-4">
+			        <a href="{{ checkout }}" class="rm-btn dark">{{ button_checkout }}</a>
+			    </div>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+{{ footer }}

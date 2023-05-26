@@ -1,0 +1,48 @@
+.rm-carousel {
+    position: relative;
+    z-index: 1;
+    height: 329px;
+    overflow: hidden;
+
+    &-item {
+        transition: box-shadow $mainTransition;
+        position: relative;
+        z-index: 1;
+
+        &:hover {
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+            z-index: 20;
+
+            span {
+                color: $linksColor;
+                text-decoration: underline;
+            }
+
+            img {
+                opacity: 0.95;
+            }
+        }
+
+        &-wrap {
+            background-color: #FFFFFF;
+            position: relative;
+            z-index: 2;
+            padding: 25px;
+            box-shadow: -0.5px -0.5px 0 0.5px #F9F9FC, inset -1px -1px 0 0 #F9F9FC;
+            overflow: hidden;
+        }
+
+        img {
+            margin-bottom: 25px;
+            transition: opacity $mainTransition;
+        }
+
+        span {
+            font-weight: 500;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}

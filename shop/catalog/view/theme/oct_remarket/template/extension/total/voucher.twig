@@ -1,0 +1,47 @@
+<div class="rm-cart-block">
+    <div class="rm-content-title rm-cart-block-title d-flex align-items-center justify-content-between justify-content-md-start">{{ heading_title }}</div>
+    <div class="row rm-cart-block-row">
+        <div class="col-lg-8">
+			<div id="collapse-voucher" class="form-group rm-cart-block-group">
+		    	<label for="input-voucher" class="rm-control-label">{{ entry_voucher }}</label>
+		    	<div class="input-group">
+			    	<input type="text" name="voucher" value="{{ voucher }}" placeholder="{{ entry_voucher }}" id="input-voucher" class="form-control" />
+			    	<span class="input-group-btn">
+			        	<button type="button" id="button-voucher" data-loading-text="{{ text_loading }}"  class="rm-btn rm-input-with-btn dark" />{{ text_apply }}</button>
+			    	</span>
+		    	</div>
+				<script>
+				$('#button-voucher').on('click', function() {
+					$.ajax({
+						url: 'index.php?route=extension/total/voucher/voucher',
+						type: 'post',
+						data: 'voucher=' + encodeURIComponent($('input[name=\'voucher\']').val()),
+						dataType: 'json',
+						cache: false,
+						beforeSend: function() {
+							$('#button-voucher').button('loading');
+						},
+						complete: function() {
+							$('#button-voucher').button('reset');
+						},
+						success: function(json) {
+							$('.alert-dismissible').remove();
+
+							if (json['error']) {
+								rmNotify('danger', json['error']);
+							}
+
+							if (json['redirect']) {
+								location = json['redirect'];
+							}
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});
+				});
+				</script>
+			</div>
+        </div>
+    </div>
+</div>

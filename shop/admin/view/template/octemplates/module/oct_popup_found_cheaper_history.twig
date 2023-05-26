@@ -1,0 +1,92 @@
+{% if histories %}
+<div class="btn-group">
+	<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	<i class="fa fa-trash-o"></i> {{ button_delete_menu }} <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu" role="menu">
+		<li><a onclick="delete_all();">{{ button_delete_all }}</a></li>
+		<li><a onclick="delete_all_selected();">{{ button_delete_selected }}</a></li>
+	</ul>
+</div>
+<br/><br/>
+{% endif %}
+<div class="table-responsive">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+				<td class="text-left" >{{ column_info }}</td>
+				<td class="text-left">{{ column_date_added }}</td>
+				<td class="text-left">{{ column_processed }}</td>
+				<td class="text-center" >{{ column_action }}</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% if histories %}
+			{% for history in histories %}
+			<tr>
+				<td style="text-align: center;"><input type="checkbox" name="selected[]" value="{{ history.request_id }}" /></td>
+				<td class="text-left">
+					{% if history.info %}
+					{% for info in history.info %}
+					<p><strong>{{ info.name }}:</strong> {{ info.value }}</p>
+					{% endfor %}
+					{% endif %}
+				</td>
+				<td class="text-left">{{ history.date_added }}</td>
+				<td class="text-left processing_color_{% if history.processed %}0{% else %}1{% endif %}">
+					<div class="toggle-group processed_in">
+						<input class="processed" id="processed_{{ history.request_id }}" type="checkbox" data-requestid="{{ history.request_id }}" name="processed_{{ history.request_id }}" {% if history.processed %}checked="checked"{% endif %} value="{% if history.processed %}0{% else %}1{% endif %}"  tabindex="1" />
+						<label for="processed_{{ history.request_id }}"></label>
+						<div class="onoffswitch pull-left" aria-hidden="true">
+							<div class="onoffswitch-label">
+								<div class="onoffswitch-inner"></div>
+								<div class="onoffswitch-switch"></div>
+							</div>
+						</div>
+					</div>
+				</td>
+				<td class="text-center">
+					<a onclick="delete_selected({{ history.request_id }});" data-toggle="tooltip" title="" class="btn btn-warning" data-original-title="{{ button_delete }}"><i class="fa fa-trash-o"></i></a>
+				</td>
+			</tr>
+			{% endfor %}
+			{% else %}
+			<tr>
+				<td class="text-center" colspan="5">{{ text_no_results }}</td>
+			</tr>
+			{% endif %}
+		</tbody>
+	</table>
+</div>
+<div class="row">
+	<div class="col-sm-6 text-left">{{ pagination }}</div>
+	<div class="col-sm-6 text-right">{{ results }}</div>
+</div>
+<script>
+$('input.processed').on('change', function() {
+	let request_id = $(this).attr("data-requestid");
+	let processed_status = this.value;
+	
+	$.ajax({
+		url: 'index.php?route=octemplates/module/oct_popup_found_cheaper/history_add_processed&user_token={{ user_token }}&request_id=' + request_id + '&processed_status=' + processed_status,
+		dataType: 'json',
+		cache: false,
+		success: function(json) {
+			if(json['output']) {
+				let new_value = (processed_status == 1) ? 0 : 1;
+				
+				$('[data-requestid="' + request_id + '"]').val(new_value);
+				
+				usNotify('success', '{{ error_add_processed }}');
+				
+				if(processed_status == 1) {
+					$('#processed_' + request_id).parent().parent().addClass('processing_color_0').removeClass('processing_color_1');
+				} else {
+					$('#processed_' + request_id).parent().parent().addClass('processing_color_1').removeClass('processing_color_0');
+				}
+			}
+		}
+	});
+});
+</script>

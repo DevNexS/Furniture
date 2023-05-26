@@ -1,0 +1,62 @@
+{% if articles %}
+{% if position == 'column_left' or position == 'column_right' %}
+<div  class="rm-module-column-box">
+	<div class="rm-column-title">{{ heading_title }}</div>
+	<div id="rm-blog-column-article{{ module }}" class="rm-module-column-box-content">
+		{% for article in articles %}
+		<div class="rm-item h-100">
+			<div class="rm-news-col">
+				<div class="rm-news-item d-flex flex-column justify-content-between h-100">
+					<div class="rm-news-item-top">
+						<div class="rm-news-item-date">{{ article.date_added }}</div>
+						<a href="{{ article.href }}" class="rm-news-item-photo">
+							<img src="{{ article.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ article.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="img-fluid oct-lazy"{% else %} class="img-fluid"{% endif %} alt="{{ article.name }}" title="{{ article.name }}" width="{{ article.width }}" height="{{ article.height }}" />
+	                    </a>
+					</div>
+					<div class="rm-news-item-bottom d-flex flex-column justify-content-between">
+						<a href="{{ article.href }}" class="rm-news-item-title">{{ article.name }}</a>
+						<div class="rm-news-item-text">
+							{{ article.description }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<button type="button" id="rm-blog-button-prev{{ module }}" class="rm-column-module-btn rm-column-module-btn-prev"><span>&lt;</span></button>
+	<button type="button" id="rm-blog-button-next{{ module }}" class="rm-column-module-btn rm-column-module-btn-next"><span>&gt;</span></button>
+	<script>
+		octColumnProducts("rm-blog-button-prev{{ module }}", "rm-blog-button-next{{ module }}", "rm-blog-column-article{{ module }}");
+	</script>
+</div>
+{% else %}
+<div class="rm-news">
+	<div class="row row-padding-top">
+		<div class="col-12 rm-module-header">
+			<span>{{ heading_title }}</span>
+		</div>
+	</div>
+	<div id="rm-blog-article_{{ module }}" class="row no-gutters">
+		{% for article in articles %}
+		<div class="col-12 col-md-6 col-xl-3 rm-news-col">
+			<div class="rm-news-item d-flex flex-column justify-content-between h-100">
+				<div class="rm-news-item-top">
+					<div class="rm-news-item-date">{{ article.date_added }}</div>
+					<a href="{{ article.href }}" class="rm-news-item-photo">
+						<img src="{{ article.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ article.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="img-fluid oct-lazy"{% else %} class="img-fluid"{% endif %} alt="{{ article.name }}" title="{{ article.name }}" width="{{ article.width }}" height="{{ article.height }}" />
+                    </a>
+				</div>
+				<div class="rm-news-item-bottom d-flex flex-column justify-content-between h-100">
+					<a href="{{ article.href }}" class="rm-news-item-title">{{ article.name }}</a>
+					<div class="rm-news-item-text">
+						{{ article.description }}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
+{% endif %}

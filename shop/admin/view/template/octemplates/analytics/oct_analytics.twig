@@ -1,0 +1,368 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-oct-analytics" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <script>
+		usNotify('warning', '{{ error_warning }}');
+	</script>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-oct-analytics" class="form-horizontal">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+                <li><a href="#tab-google" data-toggle="tab">{{ tab_google }}</a></li>
+                <li><a href="#tab-yandex" data-toggle="tab">{{ tab_yandex }}</a></li>
+                {% if ((analytics_oct_analytics_google_status is defined and analytics_oct_analytics_google_status) or (analytics_oct_analytics_yandex_status is defined and analytics_oct_analytics_yandex_status)) %}
+                <li><a href="#tab-targets" data-toggle="tab">{{ tab_targets }}</a></li>
+                {% endif %}
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-general">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                      <div class="col-sm-10">
+                      	<div class="toggle-group">
+						    <input type="checkbox" name="analytics_oct_analytics_status" {% if analytics_oct_analytics_status %}checked="checked"{% endif %} id="analytics_oct_analytics_status" tabindex="1">
+						    <label for="analytics_oct_analytics_status"></label>
+						    <div class="onoffswitch pull-left" aria-hidden="true">
+						        <div class="onoffswitch-label">
+						            <div class="onoffswitch-inner"></div>
+						            <div class="onoffswitch-switch"></div>
+						        </div>
+						    </div>
+						</div>
+                      </div>
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <label class="col-sm-2 control-label" for="input-status">{{ entry_position }}</label>
+                        <div class="col-sm-10">
+                          <select name="analytics_oct_analytics_position" id="input-status" class="form-control">
+                            <option value="1" selected="selected">{{ text_footer }}</option>
+                          </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-google">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-google-status">{{ entry_status }}</label>
+                      <div class="col-sm-10">
+                      	<div class="toggle-group">
+						    <input type="checkbox" name="analytics_oct_analytics_google_status" {% if analytics_oct_analytics_google_status %}checked="checked"{% endif %} id="analytics_oct_analytics_google_status" tabindex="1">
+						    <label for="analytics_oct_analytics_google_status"></label>
+						    <div class="onoffswitch pull-left" aria-hidden="true">
+						        <div class="onoffswitch-label">
+						            <div class="onoffswitch-inner"></div>
+						            <div class="onoffswitch-switch"></div>
+						        </div>
+						    </div>
+						</div>
+                      </div>
+                    </div>
+                    <div id="google_block" {% if (analytics_oct_analytics_google_status is not defined or (analytics_oct_analytics_google_status is defined and not analytics_oct_analytics_google_status)) %}style="display:none"{% endif %}>
+                        <div class="form-group {% if (analytics_oct_analytics_google_status) %}required{% endif %}">
+                          <div class="col-sm-12">
+                              <div class="alert2 alert-info2"><i class="fa fa-info-circle"></i> {{ text_signup_google }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                              </div>
+                          </div>
+                          <label class="col-sm-2 control-label" for="input-google-code">{{ entry_google_code }}</label>
+                          <div class="col-sm-10">
+                              <input type="text" name="analytics_oct_analytics_google_code" placeholder="UA-100995184-2" id="input-google-code" value="{{ analytics_oct_analytics_google_code }}" class="form-control" />
+                              {% if (error_google_code) %}
+                                  <div class="text-danger">
+                                  	<script>
+										usNotify('warning', '{{ error_google_code }}');
+									</script>
+                                  </div>
+                              {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="alert2 alert-info2"><i class="fa fa-info-circle"></i> {{ text_signup_google_tm }}
+                                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                </div>
+                            </div>
+                            <label class="col-sm-2 control-label" for="input-googletm-code">{{ entry_googletm_code }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="analytics_oct_analytics_googletm_code" placeholder="GTM-P68PXVZ" id="input-googletm-code" value="{{ analytics_oct_analytics_googletm_code }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="alert2 alert-info2"><i class="fa fa-info-circle"></i> {{ text_signup_google_ads }}
+                                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                </div>
+                            </div>
+                            <label class="col-sm-2 control-label" for="input-googleads-code">{{ entry_googleads_code }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="analytics_oct_analytics_googleads_code" placeholder="AW-100995184-2" id="input-googleads-code" value="{{ analytics_oct_analytics_googleads_code }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-addon code">&lt;meta name='google-site-verification' content='</div>
+                                    <input type="text" name="analytics_oct_analytics_google_webmaster_code" value="{{ analytics_oct_analytics_google_webmaster_code }}" placeholder="XXXXXXXXXXX-XXXXX_XXXXXXXXXXXXXXXXXXXXX-XXXX" id="input-analytics_oct_analytics_google_webmaster_code" class="form-control code">
+                                    <div class="input-group-addon code">'&gt;</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label" for="input-analytics_oct_analytics_google_ecommerce">{{ text_google_ecommerce }}</label>
+                          <div class="col-sm-10">
+                          	<div class="toggle-group">
+							    <input type="checkbox" name="analytics_oct_analytics_google_ecommerce" {% if analytics_oct_analytics_google_ecommerce %}checked="checked"{% endif %} id="input-analytics_oct_analytics_google_ecommerce" tabindex="1">
+							    <label for="input-analytics_oct_analytics_google_ecommerce"></label>
+							    <div class="onoffswitch pull-left" aria-hidden="true">
+							        <div class="onoffswitch-label">
+							            <div class="onoffswitch-inner"></div>
+							            <div class="onoffswitch-switch"></div>
+							        </div>
+							    </div>
+							</div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-yandex">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-yandex-status">{{ entry_status }}</label>
+                      <div class="col-sm-10">
+                      	<div class="toggle-group">
+						    <input type="checkbox" name="analytics_oct_analytics_yandex_status" {% if analytics_oct_analytics_yandex_status %}checked="checked"{% endif %} id="analytics_oct_analytics_yandex_status" tabindex="1">
+						    <label for="analytics_oct_analytics_yandex_status"></label>
+						    <div class="onoffswitch pull-left" aria-hidden="true">
+						        <div class="onoffswitch-label">
+						            <div class="onoffswitch-inner"></div>
+						            <div class="onoffswitch-switch"></div>
+						        </div>
+						    </div>
+						</div>
+                      </div>
+                    </div>
+                    <div id="yandex_block" {% if (analytics_oct_analytics_yandex_status is not defined or (analytics_oct_analytics_yandex_status is defined and not analytics_oct_analytics_yandex_status)) %}style="display:none" {% endif %}>
+                        <div class="form-group {% if (analytics_oct_analytics_yandex_status) %}required{% endif %}">
+                          <div class="col-sm-12">
+                              <div class="alert2 alert-info2"><i class="fa fa-info-circle"></i> {{ text_signup_yandex }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                              </div>
+                          </div>
+                          <label class="col-sm-2 control-label" for="input-yandex-code">{{ entry_yandex_code }}</label>
+                          <div class="col-sm-10">
+                              <input type="text" name="analytics_oct_analytics_yandex_code" placeholder="36790405" id="input-yandex-code" value="{{ analytics_oct_analytics_yandex_code }}" class="form-control" />
+                              {% if (error_yandex_code) %}
+                                  <div class="text-danger">
+                                  	<script>
+										usNotify('warning', '{{ error_yandex_code }}');
+									</script>
+                                  </div>
+                              {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-addon code">&lt;meta name='yandex-verification' content='</div>
+                                    <input type="text" name="analytics_oct_analytics_yandex_webmaster_code" value="{{ analytics_oct_analytics_yandex_webmaster_code }}" placeholder="XXXXXXXXXXXXXX" id="input-analytics_oct_analytics_yandex_webmaster_code" class="form-control code">
+                                    <div class="input-group-addon code">'&gt;</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label" for="input-analytics_oct_analytics_yandex_ecommerce">{{ text_yandex_ecommerce }}</label>
+                          <div class="col-sm-10">
+                          	<div class="toggle-group">
+							    <input type="checkbox" name="analytics_oct_analytics_yandex_ecommerce" {% if analytics_oct_analytics_yandex_ecommerce %}checked="checked"{% endif %} id="input-analytics_oct_analytics_yandex_ecommerce" tabindex="1">
+							    <label for="input-analytics_oct_analytics_yandex_ecommerce"></label>
+							    <div class="onoffswitch pull-left" aria-hidden="true">
+							        <div class="onoffswitch-label">
+							            <div class="onoffswitch-inner"></div>
+							            <div class="onoffswitch-switch"></div>
+							        </div>
+							    </div>
+							</div>
+                          </div>
+                        </div>
+                        <div class="form-group {% if (analytics_oct_analytics_yandex_ecommerce) %}required{% endif %}">
+                          <label class="col-sm-2 control-label" for="input-yandex-code">{{ entry_yandex_data_container }}</label>
+                          <div class="col-sm-10">
+                              <input type="text" name="analytics_oct_analytics_yandex_container" placeholder="dataYandexLayer" id="input-yandex-data-container" value="{{ analytics_oct_analytics_yandex_container is defined and analytics_oct_analytics_yandex_container is not empty ? analytics_oct_analytics_yandex_container : "dataYandexLayer" }}" class="form-control" />
+                              {% if (error_yandex_container) %}
+                                  <div class="text-danger">
+                                  	<script>
+										usNotify('warning', '{{ error_yandex_container }}');
+									</script>
+                                  </div>
+                              {% endif %}
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                {% if ((analytics_oct_analytics_google_status is defined and analytics_oct_analytics_google_status) or (analytics_oct_analytics_yandex_status is defined and analytics_oct_analytics_yandex_status)) %}
+                <div class="tab-pane" id="tab-targets">
+                    <fieldset>
+                        <legend>{{ tab_targets }}</legend>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="oct_targets">
+                              <thead>
+                                <tr>
+                                  <td class="text-left">{{ column_atribute }}</td>
+                                  <td class="text-left">{{ column_category }}</td>
+                                  <td class="text-left">{{ column_action }}</td>
+                                  {% if (analytics_oct_analytics_google_status is defined and analytics_oct_analytics_google_status) %}
+                                  <td class="text-left">{{ column_google }}</td>
+                                  {% endif %}
+                                  {% if (analytics_oct_analytics_yandex_status is defined and analytics_oct_analytics_yandex_status) %}
+                                  <td class="text-left">{{ column_yandex }}</td>
+                                  {% endif %}
+                                  <td></td>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% set targets_field_row = 0 %}
+                                {% if (analytics_oct_analytics_targets) %}
+	                                {% for target in analytics_oct_analytics_targets %}
+	                                <tr id="target_field-{{ targets_field_row }}">
+	                                  <td class="text-left"><input type="text" name="analytics_oct_analytics_targets[{{ targets_field_row}}][atribute]" placeholder=".button-cart, #button-cart" value="{{ target.atribute }}" class="form-control" /></td>
+	                                  <td class="text-left"><input type="text" name="analytics_oct_analytics_targets[{{ targets_field_row}}][category]" placeholder=".button-cart, #button-cart" value="{{ target.category }}" class="form-control" /></td>
+	                                  <td class="text-left"><input type="text" name="analytics_oct_analytics_targets[{{ targets_field_row}}][action]" placeholder=".button-cart, #button-cart" value="{{ target.action }}" class="form-control" /></td>
+	                                  {% if (analytics_oct_analytics_google_status is defined and analytics_oct_analytics_google_status) %}
+	                                  <td class="text-left">
+	                                      <select name="analytics_oct_analytics_targets[{{ targets_field_row}}][google]" class="form-control">
+	                                        {% if (target.google) %}
+	                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+	                                            <option value="0">{{ text_disabled }}</option>
+	                                        {% else %}
+	                                            <option value="1">{{ text_enabled }}</option>
+	                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+	                                        {% endif %}
+	                                      </select>
+	                                  </td>
+	                                  {% endif %}
+	                                  {% if (analytics_oct_analytics_yandex_status is defined and analytics_oct_analytics_yandex_status) %}
+	                                  <td class="text-left">
+	                                      <select name="analytics_oct_analytics_targets[{{ targets_field_row}}][yandex]" class="form-control">
+	                                        {% if (target.yandex) %}
+	                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+	                                            <option value="0">{{ text_disabled }}</option>
+	                                        {% else %}
+	                                            <option value="1">{{ text_enabled }}</option>
+	                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+	                                        {% endif %}
+	                                      </select>
+	                                  </td>
+	                                  {% endif %}
+	                                  <td class="text-right"><button type="button" onclick="$('#target_field-{{ targets_field_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+	                                </tr>
+	                                {% set targets_field_row = targets_field_row + 1 %}
+	                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    {% set i = 0 %}
+
+									{% if (analytics_oct_analytics_google_status is defined and analytics_oct_analytics_google_status) %}
+										{% set i = i + 1 %}
+									{% endif %}
+
+									{% if (analytics_oct_analytics_yandex_status is defined and analytics_oct_analytics_yandex_status) %}
+										{% set i = i + 1 %}
+									{% endif %}
+
+									{% set k = i + 3 %}
+
+                                    <td colspan="{{ k }}"></td>
+                                    <td class="text-right">
+                                        <a href="javascript:;" onclick="addTargetField();" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(function() {
+    $('#analytics_oct_analytics_google_status').change(function() {
+        var $input = $(this);
+
+        if ($input.is(":checked")) {
+            $("#google_block").slideDown('slow');
+        } else {
+            $("#google_block").slideUp('slow');
+        }
+    });
+
+    $('#analytics_oct_analytics_yandex_status').change(function() {
+        var $input = $(this);
+
+        if ($input.is(":checked")) {
+            $("#yandex_block").slideDown('slow');
+        } else {
+            $("#yandex_block").slideUp('slow');
+        }
+    });
+});
+</script>
+
+<script>
+let targets_field_row = {{ targets_field_row is defined ? targets_field_row : 0 }};
+
+function addTargetField() {
+	const html = `
+	<tr id="target_field-${ targets_field_row }">
+		<td class="text-left"><input type="text" name="analytics_oct_analytics_targets[${ targets_field_row }][atribute]" placeholder=".button-cart, #button-cart" value="" class="form-control" /></td>
+		<td class="text-left"><input type="text" name="analytics_oct_analytics_targets[${ targets_field_row }][category]" placeholder="cart" value="" class="form-control" /></td>
+		<td class="text-left"><input type="text" name="analytics_oct_analytics_targets[${ targets_field_row }][action]" placeholder="AddProduct" value="" class="form-control" /></td>
+		{% if (analytics_oct_analytics_google_status is defined and analytics_oct_analytics_google_status) %}
+		<td class="text-left">
+			<select name="analytics_oct_analytics_targets[${ targets_field_row }][google]" class="form-control">
+				<option value="1">{{ text_enabled }}</option>
+				<option value="0" selected="selected">{{ text_disabled }}</option>
+			</select>
+		</td>
+		{% endif %}
+		{% if (analytics_oct_analytics_yandex_status is defined and analytics_oct_analytics_yandex_status) %}
+		<td class="text-left">
+			<select name="analytics_oct_analytics_targets[${ targets_field_row }][yandex]" class="form-control">
+				<option value="1">{{ text_enabled }}</option>
+				<option value="0" selected="selected">{{ text_disabled }}</option>
+			</select>
+		</td>
+		{% endif %}
+		<td class="text-right"><button type="button" onclick="$('#target_field-${ targets_field_row }').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+	</tr>
+	`;
+
+    $('#oct_targets tbody').append(html);
+
+    targets_field_row++;
+}
+</script>
+{{ footer }}

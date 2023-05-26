@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<modification>
+	<name>Octemplates - Cool Email Template</name>
+	<code>oct_cool_email_template</code>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>http://octemplates.net</link>
+	<file path="catalog/controller/mail/order.php">
+		<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="after"><![CDATA[
+			$this->load->model('tool/image');
+			$this->load->model('catalog/product');
+
+			$data['oct_remarket_data'] = $oct_remarket_data = $this->config->get('theme_oct_remarket_data');
+
+			$oct_remarket_contact_address = $oct_remarket_data['contact_address'];
+
+			$results = $this->model_localisation_language->getLanguages();
+
+			if(isset($results[$this->session->data['language']])) {
+				$lang_id = $results[$this->session->data['language']]['language_id'];
+			}
+
+			$data['oct_remarket_contact_address'] = (isset($oct_remarket_contact_address[$lang_id]) && !empty($oct_remarket_contact_address[$lang_id])) ? html_entity_decode($oct_remarket_contact_address[$lang_id], ENT_QUOTES, 'UTF-8') : false;
+
+			$data['oct_remarket_contact_telephone'] = (isset($oct_remarket_data['contact_telephone']) && !empty($oct_remarket_data['contact_telephone'])) ? array_values(array_filter(explode(PHP_EOL, $oct_remarket_data['contact_telephone']))) : false;
+
+			$data['oct_remarket_contact_open'] = (isset($oct_remarket_data['contact_open'][$lang_id]) && !empty($oct_remarket_data['contact_open'][$lang_id])) ? array_values(array_filter(explode(PHP_EOL, $oct_remarket_data['contact_open'][$lang_id]))) : false;
+
+			$data['oct_remarket_socials'] = (isset($oct_remarket_data['socials']) && !empty($oct_remarket_data['socials'])) ? $oct_remarket_data['socials'] : false;
+			]]></add>
+		</operation>
+ 		<operation error="skip">
+			<search><![CDATA[$data['products'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			$product_info = $this->model_catalog_product->getProduct($order_product['product_id']);
+			]]></add>
+		</operation>
+ 		<operation error="skip">
+			<search><![CDATA[$data['products'][] = array(]]></search>
+			<add position="after"><![CDATA[
+			'image' => ($product_info['image']) ? $this->model_tool_image->resize($product_info['image'], 100, 100) : '',
+			'href'  => $this->url->link('product/product', 'product_id=' . $order_product['product_id']),
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->load->language('mail/order_alert');]]></search>
+			<add position="after"><![CDATA[
+			$download_status = false;
+
+			$order_products = $this->model_checkout_order->getOrderProducts($order_info['order_id']);
+
+			foreach ($order_products as $order_product) {
+				$product_download_query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "product_to_download` WHERE product_id = '" . (int)$order_product['product_id'] . "'");
+
+				if ($product_download_query->row['total']) {
+					$download_status = true;
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$order_status_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");]]></search>
+			<add position="before"><![CDATA[
+			$this->load->language('mail/order_add');
+			// HTML Mail
+			$data['title'] = sprintf($this->language->get('text_subject'), $order_info['store_name'], $order_info['order_id']);
+
+			$data['text_greeting'] = sprintf($this->language->get('text_greeting'), $order_info['store_name']);
+
+			$data['logo'] = $order_info['store_url'] . 'image/' . $this->config->get('config_logo');
+			$data['store_name'] = $order_info['store_name'];
+			$data['store_url'] = $order_info['store_url'];
+			$data['customer_id'] = $order_info['customer_id'];
+			$data['link'] = $order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_info['order_id'];
+
+			if ($download_status) {
+				$data['download'] = $order_info['store_url'] . 'index.php?route=account/download';
+			} else {
+				$data['download'] = '';
+			}
+
+			$data['order_id'] = $order_info['order_id'];
+			$data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
+			$data['payment_method'] = $order_info['payment_method'];
+			$data['shipping_method'] = $order_info['shipping_method'];
+			$data['email'] = $order_info['email'];
+			$data['telephone'] = $order_info['telephone'];
+			$data['ip'] = $order_info['ip'];
+
+			if (file_exists(DIR_APPLICATION."model/tool/simplecustom.php")) {
+                $this->load->model('tool/simplecustom');
+                $customInfo = $this->model_tool_simplecustom->getCustomFields('order', $order_info['order_id'], $order_info['language_code']);
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$order_status_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");]]></search>
+			<add position="after"><![CDATA[
+			if ($comment && $notify) {
+				$data['comment'] = nl2br($comment);
+			} else {
+				$data['comment'] = '';
+			}
+
+			if ($order_info['payment_address_format']) {
+				$format = $order_info['payment_address_format'];
+			} else {
+				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
+			}
+
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{address_2}',
+				'{city}',
+				'{postcode}',
+				'{zone}',
+				'{zone_code}',
+				'{country}'
+			);
+
+			$replace = array(
+				'firstname' => $order_info['payment_firstname'],
+				'lastname'  => $order_info['payment_lastname'],
+				'company'   => $order_info['payment_company'],
+				'address_1' => $order_info['payment_address_1'],
+				'address_2' => $order_info['payment_address_2'],
+				'city'      => $order_info['payment_city'],
+				'postcode'  => $order_info['payment_postcode'],
+				'zone'      => $order_info['payment_zone'],
+				'zone_code' => $order_info['payment_zone_code'],
+				'country'   => $order_info['payment_country']
+			);
+
+			$data['payment_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+
+			if ($order_info['shipping_address_format']) {
+				$format = $order_info['shipping_address_format'];
+			} else {
+				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
+			}
+
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{address_2}',
+				'{city}',
+				'{postcode}',
+				'{zone}',
+				'{zone_code}',
+				'{country}'
+			);
+
+			$replace = array(
+				'firstname' => $order_info['shipping_firstname'],
+				'lastname'  => $order_info['shipping_lastname'],
+				'company'   => $order_info['shipping_company'],
+				'address_1' => $order_info['shipping_address_1'],
+				'address_2' => $order_info['shipping_address_2'],
+				'city'      => $order_info['shipping_city'],
+				'postcode'  => $order_info['shipping_postcode'],
+				'zone'      => $order_info['shipping_zone'],
+				'zone_code' => $order_info['shipping_zone_code'],
+				'country'   => $order_info['shipping_country']
+			);
+
+			$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['total'    => html_entity_decode($this->currency->format($order_product['total'] + ($this->config->get('config_tax') ? ($order_product['tax'] * $order_product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']), ENT_NOQUOTES, 'UTF-8')]]></search>
+			<add position="before"><![CDATA[
+			'price'    => html_entity_decode($this->currency->format($order_product['price'] + ($this->config->get('config_tax') ? $order_product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value'])),
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$mail->setText($this->load->view('mail/order_alert', $data));]]></search>
+			<add position="replace"><![CDATA[
+			$mail->setHtml($this->load->view('mail/order_alert', $data));
+			]]></add>
+		</operation>
+	</file>
+</modification>

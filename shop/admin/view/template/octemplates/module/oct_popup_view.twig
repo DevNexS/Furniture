@@ -1,0 +1,242 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+	<script>
+		usNotify('warning', '{{ error_warning }}');
+	</script>
+	{% endif %}
+	{% if success %}
+    <script>
+		usNotify('success', '{{ success }}');
+	</script>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+          <div class="tab-content">
+            <div class="tab-pane active" id="setting-tab">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <div class="toggle-group">
+				    <input type="checkbox" name="oct_popup_view_status" {% if oct_popup_view_status %}checked="checked"{% endif %} id="oct_popup_view_status" tabindex="1">
+				    <label for="oct_popup_view_status"></label>
+				    <div class="onoffswitch pull-left" aria-hidden="true">
+				        <div class="onoffswitch-label">
+				            <div class="onoffswitch-inner"></div>
+				            <div class="onoffswitch-switch"></div>
+				        </div>
+				    </div>
+				  </div>
+                </div>
+              </div>
+              <div id="all_settings" {% if (oct_popup_view_status is not defined or (oct_popup_view_status is defined and not oct_popup_view_status)) %}style="display:none"{% endif %}>
+	              <div class="form-group">
+	                <label class="col-sm-2 control-label" for="input-quantity">{{ entry_quantity }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[quantity]" {% if oct_popup_view_data.quantity %}checked="checked"{% endif %} id="input-quantity" tabindex="1">
+					    <label for="input-quantity"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	                <label class="col-sm-2 control-label" for="input-specification">{{ entry_specification_tab }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[specification]" {% if oct_popup_view_data.specification %}checked="checked"{% endif %} id="input-specification" tabindex="1">
+					    <label for="input-specification"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	                <label class="col-sm-2 control-label" for="input-review">{{ entry_review_tab }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[review]" {% if oct_popup_view_data.review %}checked="checked"{% endif %} id="input-review" tabindex="1">
+					    <label for="input-review"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <label class="col-sm-2 control-label" for="input-wishlist">{{ entry_wishlist }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[wishlist]" {% if oct_popup_view_data.wishlist %}checked="checked"{% endif %} id="input-wishlist" tabindex="1">
+					    <label for="input-wishlist"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	                <label class="col-sm-2 control-label" for="input-compare">{{ entry_compare }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[compare]" {% if oct_popup_view_data.compare %}checked="checked"{% endif %} id="input-compare" tabindex="1">
+					    <label for="input-compare"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <label class="col-sm-2 control-label" for="input-description">{{ entry_description_tab }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[description]" {% if oct_popup_view_data.description %}checked="checked"{% endif %} id="input-description" tabindex="1">
+					    <label for="input-description"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	                <div class="col-sm-9" id="description" {% if (oct_popup_view_data.description is not defined or (oct_popup_view_data.description is defined and not oct_popup_view_data.description)) %}style="display:none"{% endif %}>
+	                  <label class="col-sm-3 control-label" for="input-description_max">{{ entry_description_max }}</label>
+	                  <div class="col-sm-6">
+	                    <input type="text" name="oct_popup_view_data[description_max]" value="{{ oct_popup_view_data['description_max'] }}" id="input-description_max" class="form-control" />
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <label class="col-sm-2 control-label" for="input-image">{{ entry_image }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[image]" {% if oct_popup_view_data.image %}checked="checked"{% endif %} id="input-image" tabindex="1">
+					    <label for="input-image"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	                <div class="col-sm-9" id="image_view" {% if (oct_popup_view_data.image is not defined or (oct_popup_view_data.image is defined and not oct_popup_view_data.image)) %}style="display:none"{% endif %}>
+	                  <label class="col-sm-2 control-label" for="input-width">{{ entry_width }}</label>
+	                  <div class="col-sm-2">
+	                    <input type="text" name="oct_popup_view_data[image_width]" value="{{ oct_popup_view_data.image_width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control" />
+	                  </div>
+	                  <label class="col-sm-2 control-label" for="input-height">{{ entry_height }}</label>
+	                  <div class="col-sm-2">
+	                    <input type="text" name="oct_popup_view_data[image_height]" value="{{ oct_popup_view_data.image_height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control" />
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <label class="col-sm-2 control-label" for="input-additional_image">{{ entry_additional_image }}</label>
+	                <div class="col-sm-1">
+	                  <div class="toggle-group">
+					    <input type="checkbox" name="oct_popup_view_data[additional_image]" {% if oct_popup_view_data.additional_image %}checked="checked"{% endif %} id="input-additional_image" tabindex="1">
+					    <label for="input-additional_image"></label>
+					    <div class="onoffswitch pull-left" aria-hidden="true">
+					        <div class="onoffswitch-label">
+					            <div class="onoffswitch-inner"></div>
+					            <div class="onoffswitch-switch"></div>
+					        </div>
+					    </div>
+					  </div>
+	                </div>
+	                <div class="col-sm-9" id="images_mini" {% if (oct_popup_view_data.additional_image is not defined or (oct_popup_view_data.additional_image is defined and not oct_popup_view_data.additional_image)) %}style="display:none"{% endif %}>
+	                  <label class="col-sm-2 control-label" for="input-additional_width">{{ entry_additional_width }}</label>
+	                  <div class="col-sm-2">
+	                    <input type="text" name="oct_popup_view_data[image_additional_width]" value="{{ oct_popup_view_data.image_additional_width }}" placeholder="{{ entry_additional_width }}" id="input-additional_width" class="form-control" />
+	                  </div>
+	                  <label class="col-sm-2 control-label" for="input-additional_height">{{ entry_additional_height }}</label>
+	                  <div class="col-sm-2">
+	                    <input type="text" name="oct_popup_view_data[image_additional_height]" value="{{ oct_popup_view_data.image_additional_height }}" placeholder="{{ entry_additional_height }}" id="input-additional_height" class="form-control" />
+	                  </div>
+	                </div>
+	              </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(function() {
+	$('#oct_popup_view_status').change(function() {
+        var $input = $(this);
+
+        if ($input.is(":checked")) {
+            $("#all_settings").slideDown('slow');
+        } else {
+            $("#all_settings").slideUp('slow');
+        }
+    });
+	
+    $('#input-description').change(function() {
+        var $input = $(this);
+
+        if ($input.is(":checked")) {
+            $("#description").slideDown('slow');
+        } else {
+            $("#description").slideUp('slow');
+        }
+    });
+    
+    $('#input-image').change(function() {
+        var $input = $(this);
+
+        if ($input.is(":checked")) {
+            $("#image_view").slideDown('slow');
+        } else {
+            $("#image_view").slideUp('slow');
+        }
+    });
+    
+    $('#input-additional_image').change(function() {
+        var $input = $(this);
+
+        if ($input.is(":checked")) {
+            $("#images_mini").slideDown('slow');
+        } else {
+            $("#images_mini").slideUp('slow');
+        }
+    });
+});
+</script>
+{{ footer }}

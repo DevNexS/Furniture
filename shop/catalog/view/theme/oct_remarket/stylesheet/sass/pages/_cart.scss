@@ -1,0 +1,260 @@
+.rm-cart {
+
+    &-title {
+        font-size: 20px;
+
+        &-bold {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+    }
+
+    &-products {
+        margin-bottom: 30px;
+
+        &-item {
+            border-bottom: $mainBorder;
+            padding: 30px 0;
+            @media (min-width: $break-lg) {
+                padding: 30px;
+            }
+
+            &-left {
+                @media (max-width: $break-md-max) {
+                    position: relative;
+                }
+            }
+
+            .rm-btn-del {
+                margin-right: 30px;
+                @media (max-width: $break-md-max) {
+                    position: absolute;
+                    left: 0;
+                    top: 45px;
+                }
+            }
+
+            img {
+                border: 1px solid #F9F9F9;
+                @media (min-width: $break-lg) {
+                    margin-right: 30px;
+                }
+                @media (max-width: $break-md-max) {
+                    margin-bottom: 20px;
+                }
+            }
+
+            &-info {
+                @media (max-width: $break-md-max) {
+                    margin-bottom: 20px;
+                }
+                &-title {
+                    font-size: 16px;
+                    line-height: 22px;
+                    letter-spacing: 0.3px;
+                    margin-bottom: 20px;
+                    @media (min-width: $break-md) {
+                        font-size: 18px;
+                    }
+                    @media (min-width: $break-lg) and (max-width: $break-lg-max) {
+                        max-width: 280px;
+                    }
+                    @media (min-width: $break-lg) {
+                        margin-bottom: 7px;
+                    }
+
+                    a {
+                        color: $darkTextColor;
+                        text-decoration: underline;
+
+                        &:hover {
+                            color: $linksColor;
+                            text-decoration: none;
+                        }
+                    }
+                }
+
+                &-option {
+                    font-size: 12px;
+                    line-height: 18px;
+
+                    span {
+                        color: #A6A6A6;
+                    }
+                }
+            }
+
+            &-right {
+                @media (max-width: $break-xs-max) {
+                    flex-wrap: wrap;
+                }
+            }
+
+            .rm-product-quantity {
+                margin-bottom: 20px;
+                margin-right: 30px;
+                @media (min-width: $break-lg) {
+                    margin-bottom: 0;
+                }
+            }
+
+            &-update {
+                height: 46px;
+                flex: 0 0 46px;
+                max-width: 46px;
+                margin-right: 30px;
+
+                &:hover {
+                    color: #FFFFFF;
+                }
+            }
+
+            &-price {
+                flex: 0 0 180px;
+                width: 180px;
+
+                &-all {
+                    font-size: 18px;
+                    line-height: 22px;
+                }
+
+                &-one {
+                    font-size: 13px;
+                    line-height: 16px;
+                    color: #A6A6A6;
+                    white-space: nowrap;
+                    @media (min-width: $break-lg) {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+
+    &-block {
+        border-bottom: 1px solid #f7f7f7;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+
+        &-title {
+            margin-bottom: 0;
+            cursor: pointer;
+
+            &:after {
+                content: '';
+                display: inline-block;
+                mask: url("../img/sprite.svg#include--cart-chevron-down");
+                mask-size: cover;
+                margin-left: 8px;
+                flex: 0 0 8px;
+                max-width: 8px;
+                width: 8px;
+                height: 6px;
+                background: inherit;
+                background: $darkTextColor;
+                transition: transform $mainTransition;
+            }
+
+            &.clicked:after {
+                transform: rotate(180deg);
+            }
+        }
+
+        &-row {
+            max-height: 0;
+            overflow-y: hidden;
+            transition: max-height $mainTransition;
+
+            &.opened {
+                max-height: 1000px;
+            }
+        }
+
+        &-group {
+            margin-top: 20px;
+
+            @media (max-width: $break-sm-max) {
+                .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+                    border-top-right-radius: 6px;
+                    border-bottom-right-radius: 6px;
+                    flex: 0 0 auto;
+                    margin-bottom: 20px;
+                    width: 100%;
+                }
+
+                .input-group-btn {
+                    width: 100%;
+                }
+
+                .input-group button {
+                    border-radius: 6px;
+                }
+            }
+
+            input {
+                max-width: 410px;
+            }
+
+            select,
+            input#input-postcode {
+                @media (min-width: $break-md) {
+                    width: 393px;
+                }
+            }
+        }
+
+        &-total-price {
+            font-size: 22px;
+            line-height: 27px;
+            color: $lightTextColor;
+
+            span {
+                color: $darkTextColor;
+            }
+
+            & + & {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    &-text {
+        color: $lightTextColor;
+    }
+}
+
+// Checkout
+
+#accordion {
+
+	.panel-title.rm-content-title {
+	    background: #f2f3f5;
+	    padding: 15px 20px;
+	    margin: 10px 0 0;
+	}
+
+	.panel {
+		&:not(:last-child) {
+			.panel-heading {
+				margin-bottom: 20px;
+			}
+		}
+
+		&:first-child {
+			.panel-title.rm-content-title {
+				margin: 0;
+			}
+		}
+	}
+
+	.panel-body {
+		padding: 0 15px;
+	}
+
+	.fa-chevron-down {
+	    color: #000;
+	    font-size: 9px;
+	    margin-left: 6px;
+	    transition: transform .3s ease;
+	}
+}

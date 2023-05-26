@@ -1,0 +1,304 @@
+footer {
+    margin-top: auto;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.rm-footer {
+    background: #FFFFFF;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.06);
+    border-top: $mainBorder;
+    padding: 20px 0;
+    margin-top: 30px;
+    @media (min-width: $break-md) {
+        padding: 30px 0;
+    }
+
+    &-catalog-btn {
+        margin: 0 0 20px;
+        padding: 0 30px !important;
+        max-width: 100%;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    @media (max-width: $break-sm-max) {
+        &-mobile-inner {
+            margin: 0 5px;
+            padding: 15px;
+            background: #FCFCFC;
+            border: 1px solid #F4F4F4;
+            border-radius: 6px;
+            @media (min-width: $break-xxs) {
+                padding: 20px;
+            }
+
+            &.white {
+                background: #FFFFFF;
+                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.06);
+                border: 0;
+            }
+        }
+
+        &-contacts-btn.rm-btn {
+            height: 40px;
+            line-height: 40px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+    }
+
+    &-title {
+        font-weight: 500;
+        font-size: 16px;
+        @media (max-width: $break-sm-max) {
+            &-toggle {
+                &-icon {
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #F4F4F4;
+                    border-radius: 6px;
+                    margin-right: 20px;
+                }
+
+                &-btn {
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #FBFBFB;
+                    border-radius: 6px;
+                    margin-left: auto;
+
+                    img {
+                        transition: transform $mainTransition;
+                    }
+                }
+
+                &.clicked &-btn img {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    &-first,
+    &-fourth,
+    &-second,
+    &-third {
+        @media (max-width: $break-sm-max) {
+            margin-bottom: 20px;
+        }
+    }
+
+    &-subscribe {
+        margin: 17px auto 20px;
+        max-width: 325px;
+        @media (min-width: $break-lg) {
+            margin: 17px 0 20px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .form-control {
+            background: #F4F4F4;
+            border-right: 0;
+        }
+
+        button {
+            font-size: 12px;
+            color: #F4F4F4;
+            height: 44px;
+            line-height: 44px;
+        }
+
+        .form-checkbox-group {
+            font-size: 10px;
+            margin-left: 15px;
+
+            label {
+                color: #6E727E;
+            }
+        }
+    }
+
+    &-text {
+        color: $darkColor;
+        font-size: 13px;
+    }
+
+    &-address {
+        margin: 10px 0 20px;
+    }
+
+    &-phones {
+        margin: 10px 0 5px;
+        font-size: 14px;
+        color: $darkColor;
+
+        img {
+            margin-right: 5px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: $linksColor;
+        }
+
+        &-link {
+            color: $linksColor;
+            text-decoration: underline;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+            cursor: pointer;
+            @media (min-width: $break-lg) {
+                margin-bottom: 0;
+            }
+
+            &:hover {
+                text-decoration: none;
+                color: $linksColor;
+            }
+        }
+    }
+
+    &-shedule-list {
+        margin: 10px 0 20px;
+        @media (min-width: $break-lg) {
+            margin: 30px 0 20px;
+        }
+    }
+
+    &-mail-link {
+        color: $linksColor;
+        font-size: 12px;
+        letter-spacing: 0.3px;
+        text-decoration: underline;
+
+        &:hover {
+            text-decoration: none;
+            color: $linksColor;
+        }
+    }
+
+    &-links-list {
+        font-size: 14px;
+        line-height: 28px;
+        @media (max-width: $break-sm-max) {
+            max-height: 0;
+            transition: max-height 0.6s ease;
+            overflow: hidden;
+
+            &.expanded {
+                max-height: 1000px;
+            }
+
+            li:first-child {
+                margin-top: 20px;
+            }
+        }
+        @media (min-width: $break-md) {
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 22px;
+        }
+        @media (min-width: $break-lg) {
+            margin-top: 30px;
+        }
+
+        a {
+            color: $darkColor;
+            text-decoration: underline;
+
+            &:hover {
+                color: $linksColor;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &-payments {
+        &-list {
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        &-item {
+            background-repeat: no-repeat;
+            display: inline-block;
+            background-image: url("../img/sprite-rm.png");
+            flex: 0 0 53px;
+            max-width: 53px;
+            height: 33px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            border: 1px solid #E9E9E9;
+
+            &:not(:last-child) {
+                margin-right: 6px;
+            }
+
+            @media (min-width: $break-sm) {
+                margin-bottom: 10px;
+
+                &:not(:last-child) {
+                    margin-right: 10px;
+                }
+            }
+
+            &.privat24 {
+                background-position: -199px -138px;
+            }
+
+            &.mastercard {
+                background-position: -67px -2px;
+            }
+
+            &.maestro {
+                background-position: -133px 0;
+            }
+
+            &.visa {
+                background-position: 0 -1px;
+            }
+
+            &.skrill {
+                background-position: -199px -92px;
+            }
+
+            &.liqpay {
+                background-position: -66px -46px;
+            }
+
+            &.paypal {
+                background-position: 0 -46px;
+            }
+
+            &.custom-payment {
+                background-position: -133px -46px;
+
+                img {
+                    vertical-align: baseline;
+                }
+            }
+        }
+    }
+
+    &-credits {
+        font-size: 12px;
+        line-height: 21px;
+        color: $darkColor;
+        @media (min-width: $break-md) {
+            border-top: $mainBorder;
+            padding-top: 30px;
+            margin-top: 30px;
+        }
+    }
+}

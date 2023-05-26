@@ -1,0 +1,134 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-oct-product-tabs" formaction="{{ action }}" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %} 
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %} 
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		{% if success %}
+	    <script>
+			usNotify('success', '{{ success }}');
+		</script>
+	    {% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post" enctype="multipart/form-data" id="form-oct-product-tabs" class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#setting-tab" data-toggle="tab">{{ tab_setting }}</a></li>
+						<li><a href="#bulk_addition" data-toggle="tab">{{ tab_bulk_addition }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="setting-tab">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<div class="toggle-group">
+										<input type="checkbox" name="oct_product_tabs_status" {% if oct_product_tabs_status %}checked="checked"{% endif %} id="oct_product_tabs_status" tabindex="1">
+										<label for="oct_product_tabs_status"></label>
+										<div class="onoffswitch pull-left" aria-hidden="true">
+											<div class="onoffswitch-label">
+												<div class="onoffswitch-inner"></div>
+												<div class="onoffswitch-switch"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="bulk_addition">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-categoriers">{{ entry_categoriers }}</label>
+								<div class="col-sm-10">
+									<select name="module_categories" id="input-categoriers" class="form-control">
+										<option value="0">{{ text_all_categories }}</option>
+										{% for category in categories %} 
+										<option value="{{ category.category_id }}">{{ category.name }}</option>
+										{% endfor %} 
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_text }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="extra_tab_description_div">
+										{% for language in languages %} 
+										<li><a href="#extra_tab_description{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="extra_tab_description{{ language.language_id }}">
+											<textarea name="tab_description[{{ language.language_id }}][text]" id="extra_tab_description_textarea{{ language.language_id }}" data-toggle="summernote" data-lang="{{ summernote }}" placeholder="{{ entry_text }}" class="form-control"></textarea>
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-tabs">{{ entry_tabs }}</label>
+								<div class="col-sm-10">
+									<select name="module_tab" id="input-tabs" class="form-control">
+										<option value="0">{{ text_select }}</option>
+										{% for tab in tabs %} 
+										<option value="{{ tab.extra_tab_id }}">{{ tab.title }}</option>
+										{% endfor %} 
+									</select>
+									<br/>
+									<button type="button" class="btn btn-success" onclick="action_tab('add');">{{ button_add_tab }}</button>
+									<button type="button" class="btn btn-danger" onclick="action_tab('remove');">{{ button_remove_tab }}</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#extra_tab_description_div a:first').tab('show');
+$('.summernote').summernote({height: 100});
+$('.note-editable').on('keyup', function() {
+	$(this).closest('.tab-pane').find('textarea[name^=\'tab_description\']').html($(this).html());
+});
+
+function action_tab(type) {
+  $.ajax({
+    url:  'index.php?route=octemplates/module/oct_product_tabs_settings/tap_processing&user_token={{ user_token }}'+'&type='+type,
+    type: 'post',
+    cache: false,
+    data: $('#bulk_addition input[type=\'checkbox\']:checked, #bulk_addition select, #bulk_addition textarea[name^=\'tab_description\']'),
+    dataType: 'json',
+    success: function(json) {
+      $('#bulk_addition .alert').remove();
+
+      if (json['success']) {
+        $('#bulk_addition').prepend('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> '+json['success']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+      }
+
+      if (json['error']) {
+        $('#bulk_addition').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> '+json['error']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+      }
+    }
+  });
+}
+</script>
+{{ footer }}

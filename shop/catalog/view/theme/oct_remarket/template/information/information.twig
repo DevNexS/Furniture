@@ -1,0 +1,86 @@
+{{ header }}
+<div id="information-information" class="container">
+	{{ oct_breadcrumbs }}
+	<div class="content-top-box">{{ content_top }}</div>
+	<main>
+		<div class="row">
+			<div class="col-lg-12 rm-page-title">
+				<h1>{{ heading_title }}</h1>
+			</div>
+		</div>
+		<div id="content" class="row no-gutters">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content h-100">
+				{{ description }}
+		    </div>
+	    </div>
+	    {{ column_right }}
+    </div>
+	</main>
+    {{ content_bottom }}
+</div>
+{% if oct_is_youtube %}
+<script>
+function findVideos() {
+	let videos = document.querySelectorAll('.rm-video');
+
+	for (let i = 0; videos.length > i; i++) {
+		setupVideo(videos[i]);
+	}
+}
+
+function setupVideo(video) {
+	let link = video.querySelector('.rm-video__link');
+	let media = video.querySelector('.rm-video__media');
+	let button = video.querySelector('.rm-video__button');
+	let id = parseMediaURL(media);
+
+	video.addEventListener('click', () => {
+		let iframe = createIframe(id);
+
+		link.remove();
+		button.remove();
+		video.appendChild(iframe);
+	});
+
+	link.removeAttribute('href');
+	video.classList.add('rm-video--enabled');
+}
+
+function parseMediaURL(media) {
+	let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
+	let url = media.src;
+	let match = url.match(regexp);
+
+	return match[1];
+}
+
+function createIframe(id) {
+	let iframe = document.createElement('iframe');
+
+	iframe.setAttribute('allowfullscreen', '');
+	iframe.setAttribute('allow', 'autoplay');
+	iframe.setAttribute('src', generateURL(id));
+	iframe.classList.add('rm-video__media');
+
+	return iframe;
+}
+
+function generateURL(id) {
+	let query = '?rel=0&showinfo=0&autoplay=1';
+
+	return 'https://www.youtube.com/embed/' + id + query;
+}
+
+findVideos();
+</script>
+{% endif %}
+{{ footer }}

@@ -1,0 +1,27 @@
+{% if languages|length > 1 %}
+<div id="oct_desktop_language" class="top-nav-account-links-item rm-dropdown-box">
+	<div id="language" class="language">
+		<button class="btn-lang rm-dropdown-toggle d-flex align-items-center">
+			{% for language in languages %}
+			{% if language.code == code %}
+			<img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" class="lang" width="16" height="11" />
+			<span>{{ text_language }}</span>
+			{% endif %}
+			{% endfor %}
+		</button>
+		<form action="{{ action }}" class="h-100" method="post" enctype="multipart/form-data" id="form-language">
+			<div class="rm-dropdown">
+				<ul class="rm-dropdown-inner list-unstyled">
+					{% for language in languages %}
+					<li>
+			          <button class="btn-block language-select{% if language.code == code %} active-item{% endif %}" type="button" name="{{ language.code }}"><img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" width="16" height="11" /> {{ language.name }}</button>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+		    <input type="hidden" name="code" value="" />
+		    <input type="hidden" name="redirect" value="{{ redirect }}" />
+		</form>
+	</div>
+</div>
+{% endif %}

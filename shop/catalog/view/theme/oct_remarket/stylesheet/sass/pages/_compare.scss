@@ -1,0 +1,48 @@
+.rm-table-compare {
+    tbody {
+        border: 0;
+    }
+
+    td {
+        padding: 20px;
+        min-width: 180px;
+
+        &:first-child {
+            color: $darkTextColor;
+            font-weight: 500;
+        }
+    }
+
+    img {
+        border: 1px solid #F9F9F9;
+    }
+
+    .rm-module-price-old {
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .rm-module-price-actual,
+    .rm-table-compare-title {
+        color: $darkTextColor;
+    }
+
+    &-product {
+        background: #FBFBFB;
+
+        td {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    }
+
+    &-btn {
+        @media (max-width: $break-sm-max) {
+            .rm-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+}

@@ -1,0 +1,81 @@
+<div class="modal" id="rm-popup-subscribe" tabindex="-1" role="dialog" aria-labelledby="rm-subscribe-modal-header">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <div class="modal-title" id="rm-subscribe-modal-header">{{ heading_title }}</div>
+	            <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+					<span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+	            </button>
+	        </div>
+	        <div id="subscribe-main-block" class="modal-body">
+	            <div class="modal-body-text text-center">
+	            	{{ promo_text }}
+	            </div>
+				{% if thumb %}
+	            <img src="image/{{ thumb }}" alt="subscribe-img" class="rm-popup-subscribe-image">
+				{% endif %}
+	            <div class="form-group">
+					<input type="email" name="email" value="{{ email }}" class="form-control" id="InputEmail" placeholder="{{ enter_email }}">
+				</div>
+				{% if text_terms %}
+				<div class="form-checkbox-group">
+					<div class="checkbox">
+						<label>
+							<input id="scales-1" type="checkbox" class="rm-form-checkbox-input" name="agree">
+							<span class="check-box"></span>
+							{{ text_terms }}
+						</label>
+					</div>
+				</div>
+				{% endif %}
+				<button type="submit" id="make_subscribe" class="rm-btn dark"><span class="rm-btn-text">{{ button_subscribe }}</span></button>
+				<div class="rm-popup-success d-none flex-column align-items-center text-center w-100 p-0">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--popup-success-icon" alt="" width="70" height="70">
+                    <div id="rm-popup-success-subscribe-text" class="mb-4"></div>
+                    <button type="button" class="rm-btn dark" data-dismiss="modal" aria-label="Close">
+                        <span class="rm-btn-text">{{ oct_info_bar_close }}</span></button>
+                </div>
+			</div>
+	    </div>
+	</div>
+<script>
+$("#InputEmail, #scales-1").on("change paste keyup", function() {
+	$(this).removeClass('error_style');
+});
+$('#make_subscribe').on('click', function() {
+	$.ajax({
+		type: 'post',
+		url:  'index.php?route=octemplates/module/oct_subscribe/makeSubscribe',
+		dataType: 'json',
+		cache: false,
+		data: $('#rm-popup-subscribe input[type=\'email\'], #rm-popup-subscribe input[type=\'checkbox\']').serialize(),
+		beforeSend: function() {
+			masked('body', true);
+		},
+		complete: function() {
+			masked('body', false);
+		},
+		success: function(json) {
+			if (json['error']) {
+				$('#rm-popup-subscribe .text-danger').remove();
+				let errorOption = '';
+
+				$.each(json['error'], function(i, val) {
+					$('#rm-popup-subscribe [name="' + i + '"]').addClass('error_style');
+					errorOption += '<div class="alert-text-item">' + val + '</div>';
+				});
+
+				rmNotify('danger', errorOption);
+			} else {
+				if (json['output']) {
+					$('#rm-popup-success-subscribe-text').html(json['output']);
+					$("#subscribe-main-block").html($(".rm-popup-success"));
+					$(".rm-popup-success").removeClass("d-none");
+				}
+			}
+		}
+	});
+});
+</script>
+</div>

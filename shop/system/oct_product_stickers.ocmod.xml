@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_product_stickers</code>
+	<name>Octemplates - Product Stickers</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="admin/controller/startup/permission.php">
+    	<operation error="skip">
+			<search><![CDATA['extension/module',]]></search>
+			<add position="before"><![CDATA[
+			'octemplates/stickers',
+			]]></add>
+    	</operation>
+	</file>
+	<file path="admin/controller/catalog/product.php">
+    	<operation error="skip">
+			<search><![CDATA[if (isset($this->request->post['location'])) {]]></search>
+			<add position="before"><![CDATA[
+			$data['product_oct_stickers'] = [];
+
+			if ($this->config->get('oct_stickers_status')) {
+				if (isset($this->request->post['oct_stickers'])) {
+					$data['oct_stickers'] = $this->request->post['oct_stickers'];
+				} elseif (!empty($product_info)) {
+					$data['oct_stickers'] = unserialize($product_info['oct_stickers']);
+				} else {
+					$data['oct_stickers'] = [];
+				}
+
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				foreach ($oct_stickers as $index=>$oct_sticker) {
+					foreach ($oct_sticker as $key=>$sticker) {
+						if (!isset($sticker['auto']) || (isset($sticker['auto']) && $sticker['auto'] != 0)) {
+							if (isset($sticker['title'][(int)$this->config->get('config_language_id')]) and !empty($sticker['title'][(int)$this->config->get('config_language_id')])) {
+								$data['product_oct_stickers'][$index.'_'.$key] = $sticker['title'][(int)$this->config->get('config_language_id')];
+							}
+						}
+					}
+				}
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="admin/model/catalog/product.php">
+    	<operation error="skip">
+			<search><![CDATA[if (isset($data['image'])) {]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('oct_stickers_status')) {
+				$this->db->query("UPDATE " . DB_PREFIX . "product SET oct_stickers = '' WHERE product_id = '" . (int)$product_id . "'");
+
+				if (isset($data['oct_stickers']) && !empty($data['oct_stickers']) && is_array($data['oct_stickers'])) {
+					$this->db->query("UPDATE " . DB_PREFIX . "product SET oct_stickers = '" . $this->db->escape(serialize($data['oct_stickers'])) . "' WHERE product_id = '" . (int)$product_id . "'");
+				}
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="admin/view/template/catalog/product_form.twig">
+    	<operation error="skip">
+			<search><![CDATA[<label class="col-sm-2 control-label" for="input-model">{{ entry_model }}</label>]]></search>
+			<add position="before" offset="1"><![CDATA[
+			{% if product_oct_stickers is not empty %}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">{{ enter_oct_product_stickers }}</label>
+				<div class="col-sm-10">
+					<div class="well well-sm" style="height: 150px; overflow: auto;">
+						{% for key, product_oct_sticker in product_oct_stickers %}
+						<div class="checkbox">
+							<label>
+							<input type="checkbox" name="oct_stickers[{{ key }}]" value="{{ key }}" {% if key in oct_stickers|keys %}checked="checked"{% endif %} /> {{ product_oct_sticker }}
+							</label>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/{category,product,manufacturer,search,special}.php">
+		<operation error="skip">
+			<search><![CDATA[$results = $this->model_catalog_product->getProducts($filter_data);]]></search>
+			<add position="after"><![CDATA[
+			$oct_product_stickers = [];
+
+			if ($this->config->get('oct_stickers_status')) {
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				$data['oct_sticker_you_save'] = false;
+
+				if ($oct_stickers) {
+					$data['oct_sticker_you_save'] = isset($oct_stickers['stickers']['special']['persent']) ? true : false;
+				}
+
+				$this->load->model('octemplates/stickers/oct_stickers');
+			}
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['products'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			if (isset($oct_stickers) && $oct_stickers) {
+				$oct_stickers_data = $this->model_octemplates_stickers_oct_stickers->getOCTStickers($result);
+
+				$oct_product_stickers = [];
+
+				if (isset($oct_stickers_data) && $oct_stickers_data) {
+					$oct_product_stickers = $oct_stickers_data['stickers'];
+				}
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA['product_id'  => $result['product_id'],]]></search>
+			<add position="after"><![CDATA[
+			'oct_stickers'  => $oct_product_stickers,
+			'you_save'	  	=> $result['you_save'],
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/special.php">
+		<operation error="skip">
+			<search><![CDATA[$results = $this->model_catalog_product->getProductSpecials($filter_data);]]></search>
+			<add position="after"><![CDATA[
+			$oct_product_stickers = [];
+
+			if ($this->config->get('oct_stickers_status')) {
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				$data['oct_sticker_you_save'] = false;
+
+				if ($oct_stickers) {
+					$data['oct_sticker_you_save'] = isset($oct_stickers['stickers']['special']['persent']) ? true : false;
+				}
+
+				$this->load->model('octemplates/stickers/oct_stickers');
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip">
+			<search><![CDATA[if ($product_info) {]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_product_stickers'] = [];
+			$data['you_save'] = $product_info['you_save'];
+			$data['you_save_price'] = $this->currency->format($this->tax->calculate($product_info['you_save_price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+
+			if ($this->config->get('oct_stickers_status')) {
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				$data['oct_sticker_you_save'] = false;
+
+				if ($oct_stickers) {
+					$data['oct_sticker_you_save'] = isset($oct_stickers['stickers']['special']['persent']) ? true : false;
+				}
+
+				$this->load->model('octemplates/stickers/oct_stickers');
+
+				$oct_stickers_data = $this->model_octemplates_stickers_oct_stickers->getOCTStickers($product_info);
+
+				if ($oct_stickers_data) {
+					$data['oct_product_stickers'] = $oct_stickers_data['stickers'];
+				}
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[$results = $this->model_catalog_product->getProductRelated($this->request->get['product_id']);]]></search>
+			<add position="after"><![CDATA[
+			$oct_product_stickers = [];
+
+			if ($this->config->get('oct_stickers_status')) {
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				$data['oct_sticker_you_save'] = false;
+
+				if ($oct_stickers) {
+					$data['oct_sticker_you_save'] = isset($oct_stickers['stickers']['special']['persent']) ? true : false;
+				}
+
+				$this->load->model('octemplates/stickers/oct_stickers');
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/extension/module/{bestseller,latest,special}.php">
+		<operation error="skip">
+			<search><![CDATA[foreach ($results as $result) {]]></search>
+			<add position="before"><![CDATA[
+			$oct_product_stickers = [];
+
+			if ($this->config->get('oct_stickers_status')) {
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				$data['oct_sticker_you_save'] = false;
+
+				if ($oct_stickers) {
+					$data['oct_sticker_you_save'] = isset($oct_stickers['stickers']['special']['persent']) ? true : false;
+				}
+
+				$this->load->model('octemplates/stickers/oct_stickers');
+			}
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA[foreach ($results as $result) {]]></search>
+			<add position="after"><![CDATA[
+			if (isset($oct_stickers) && $oct_stickers) {
+				$oct_stickers_data = $this->model_octemplates_stickers_oct_stickers->getOCTStickers($result);
+
+				$oct_product_stickers = [];
+
+				if ($oct_stickers_data) {
+					$oct_product_stickers = $oct_stickers_data['stickers'];
+				}
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA['product_id'  => $result['product_id'],]]></search>
+			<add position="after"><![CDATA[
+			'oct_stickers'  => $oct_product_stickers,
+			'you_save'		=> $result['you_save'],
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/extension/module/featured.php">
+		<operation error="skip">
+			<search><![CDATA[foreach ($products as $product_id) {]]></search>
+			<add position="before"><![CDATA[
+			$oct_product_stickers = [];
+
+			if ($this->config->get('oct_stickers_status')) {
+				$oct_stickers = $this->config->get('oct_stickers_data');
+
+				$data['oct_sticker_you_save'] = false;
+
+				if ($oct_stickers) {
+					$data['oct_sticker_you_save'] = isset($oct_stickers['stickers']['special']['persent']) ? true : false;
+				}
+
+				$this->load->model('octemplates/stickers/oct_stickers');
+			}
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA[if ($product_info) {]]></search>
+			<add position="after"><![CDATA[
+			if (isset($oct_stickers) && $oct_stickers) {
+				$oct_stickers_data = $this->model_octemplates_stickers_oct_stickers->getOCTStickers($product_info);
+
+				$oct_product_stickers = [];
+
+				if ($oct_stickers_data) {
+					$oct_product_stickers = $oct_stickers_data['stickers'];
+				}
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA['product_id'  => $product_info['product_id'],]]></search>
+			<add position="after"><![CDATA[
+			'oct_stickers'  => $oct_product_stickers,
+			'you_save'  	=> $product_info['you_save'],
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/model/catalog/product.php">
+		<operation error="skip">
+			<search><![CDATA[$query->row['special'],]]></search>
+			<add position="after"><![CDATA[
+			'oct_stickers'		=> isset($query->row['oct_stickers']) ? unserialize($query->row['oct_stickers']) : false,
+			'you_save'          => ($query->row['price'] != 0 && $query->row['special']) ? '-' . ($query->row['discount'] ? number_format(((float)$query->row['discount'] - (float)$query->row['special']) / (float)$query->row['discount'] * 100, 0) : number_format(((float)$query->row['price'] - (float)$query->row['special']) / (float)$query->row['price'] * 100, 0)) . '%' : false,
+			'you_save_price'	=> $query->row['special'] ? ($query->row['discount'] ? ((float)$query->row['discount'] - (float)$query->row['special']) : ((float)$query->row['price'] - (float)$query->row['special'])) : false,
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA[public function getBestSellerProducts($limit) {]]></search>
+			<add position="before"><![CDATA[
+			public function getOCTBestSellerProducts($product_id) {
+				$query = $this->db->query("SELECT SUM(op.quantity) AS total FROM " . DB_PREFIX . "order_product op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.order_id = o.order_id) LEFT JOIN `" . DB_PREFIX . "product` p ON (op.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE o.order_status_id > '0' AND p.product_id = '". (int)$product_id ."' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id')."'");
+
+				return $query->row['total'];
+			}
+			]]></add>
+    	</operation>
+	</file>
+</modification>

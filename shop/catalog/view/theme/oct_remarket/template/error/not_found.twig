@@ -1,0 +1,15 @@
+{{ header }}
+<div id="error-not-found" class="container rm-404-content">
+	<div class="content-top-box">{{ content_top }}</div>
+	<div class="rm-content text-center">
+		<h1 class="rm-page-title rm-404-content-title text-center">{{ heading_title }}</h1>
+		{% if (oct_404_image is defined and oct_404_image is not empty) %}
+		<div class="rm-404-content-image"><img class="img-fluid" src="{{ oct_404_image }}" /></div>
+		{% endif %}
+		<div class="rm-404-content-text">
+			{{ text_error }}
+		</div>
+	</div>
+	{{ content_bottom }}
+</div>
+{{ footer }}

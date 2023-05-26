@@ -1,0 +1,115 @@
+.rm-banner-plus {
+
+    &-item {
+        position: relative;
+        z-index: 2;
+        overflow: hidden;
+        min-height: 300px;
+        transition: box-shadow $mainTransition;
+
+        > div {
+            box-shadow: -0.5px -0.5px 0 0.5px #F9F9FC, inset -1px -1px 0 0 #F9F9FC;
+            padding: 30px;
+        }
+
+        &:hover {
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+            z-index: 3;
+
+            .rm-btn {
+                background: $primaryColor;
+                color: #FFFFFF;
+            }
+
+            .rm-banner-plus-item-img img {
+                opacity: 0.95;
+            }
+        }
+
+        &-title {
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 22px;
+            margin-bottom: 27px;
+        }
+
+        &-text {
+            position: relative;
+            z-index: 4;
+        }
+
+        &-btn {
+            margin-top: auto;
+
+            .rm-btn {
+                padding: 0 25px;
+                position: relative;
+                z-index: 4;
+            }
+        }
+
+        &-img {
+            position: absolute;
+            z-index: 3;
+            top: 0;
+            bottom: 0;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            padding-right: 1px;
+            @media (max-width: $break-md-max) {
+                left: 30px;
+            }
+
+            img {
+                transition: opacity $mainTransition;
+                max-width: 300px;
+                block-size: auto;
+                
+                @media (max-width: $break-sm-max) {
+                    max-width: 50%;
+                    height: auto;
+                }
+                @media (max-width: $break-md-max) {
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+
+    @media (min-width: $break-md) {
+        &-items {
+            &-25 {
+                img {
+                    max-width: calc(100% - 64px);
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+
+    .rm-module-column-box {
+        margin-right: 0;
+        margin-left: 0;
+
+        .rm-banner-plus-item {
+            padding-right: 0;
+            padding-left: 0;
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+            border-bottom: 1px solid #f9f9fc;
+
+            &-img {
+                img {
+                    max-width: 50%;
+                    margin-left: auto;
+                    block-size: auto;
+                }
+            }
+        }
+    }
+}
+
+.content-top-box .rm-banner-plus.row-padding-top {
+    padding-top: 0;
+}

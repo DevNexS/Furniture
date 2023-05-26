@@ -1,0 +1,100 @@
+{% if reviews %}
+{% if position == 'column_left' or position == 'column_right' %}
+<div  class="rm-module-column-box">
+	<div class="rm-column-title">{{ heading_title }}</div>
+	<div id="rm-column-reviews-{{ module }}" class="rm-module-column-box-content rm-column-last-reviews">
+		{% for review in reviews %}
+		<div class="rm-item h-100">
+			<div class="rm-last-reviews-item d-flex flex-column justify-content-between h-100">
+				<div class="rm-last-reviews-item-top">
+					<a href="{{ review.href }}" class="rm-last-reviews-item-image d-flex align-items-center justify-content-center">
+						<img src="{{ review.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ review.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="oct-lazy"{% endif %} alt="{{ review.name }}" width="{{ review.width }}" height="{{ review.height }}" />
+					</a>
+					<div class="rm-module-rating d-flex align-items-center justify-content-start">
+						<div class="rm-module-rating-stars d-flex align-items-center">
+							{% if review.rating %}
+							{% for i in 1..5 %}
+							{% if review.rating < i %}
+							<span class="rm-module-rating-star"></span>
+							{% else %}
+							<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+							{% endif %}
+							{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+					<a href="{{ review.href }}" class="rm-last-reviews-item-title">{{ review.name }}</a>
+				</div>
+				<div class="rm-last-reviews-item-bottom">
+					<div class="rm-last-reviews-item-info d-flex align-items-center justify-content-between">
+						<div class="rm-last-reviews-item-author">{{ review.author }}</div>
+						<div class="rm-last-reviews-item-date d-flex align-items-center">
+							<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--date-icon" alt="" width="14" height="17" />
+							<span>{{ review.date }}</span>
+						</div>
+					</div>
+					<div class="rm-last-reviews-item-text">
+						{{ review.text }}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<button type="button" id="rm-reviews-{{ module }}-button-prev" class="rm-column-module-btn rm-column-module-btn-prev"><span>&lt;</span></button>
+	<button type="button" id="rm-reviews-{{ module }}-button-next" class="rm-column-module-btn rm-column-module-btn-next"><span>&gt;</span></button>
+	<script>
+		octColumnProducts("rm-reviews-{{ module }}-button-prev", "rm-reviews-{{ module }}-button-next", "rm-column-reviews-{{ module }}");
+	</script>
+</div>
+{% else %}
+<div class="rm-last-reviews">
+	<div class="row row-padding-top">
+		<div class="col-12 rm-module-header">
+			<span>{{ heading_title }}</span>
+		</div>
+	</div>
+	<div id="rm-product-reviews_{{ module }}" class="row no-gutters rm-last-reviews-row flex-nowrap flex-sm-wrap">
+		{% for review in reviews %}
+		<div class="col-12 col-sm-6 col-xl-3 rm-last-reviews-col">
+			<div class="rm-last-reviews-item d-flex flex-column justify-content-between h-100">
+				<div class="rm-last-reviews-item-top d-flex flex-column">
+					<a href="{{ review.href }}" class="rm-last-reviews-item-image d-flex align-items-center justify-content-center">
+						<img src="{{ review.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ review.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="oct-lazy"{% endif %} alt="{{ review.name }}" width="{{ review.width }}" height="{{ review.height }}" />
+					</a>
+					<div class="d-flex flex-column">
+						<div class="rm-module-rating d-flex align-items-center justify-content-start order-1 order-md-0">
+							<div class="rm-module-rating-stars d-flex align-items-center">
+								{% if review.rating %}
+								{% for i in 1..5 %}
+								{% if review.rating < i %}
+								<span class="rm-module-rating-star"></span>
+								{% else %}
+								<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+								{% endif %}
+								{% endfor %}
+								{% endif %}
+							</div>
+						</div>
+						<a href="{{ review.href }}" class="rm-last-reviews-item-title order-0 order-md-1">{{ review.name }}</a>
+					</div>
+				</div>
+				<div class="rm-last-reviews-item-bottom">
+					<div class="rm-last-reviews-item-info d-flex align-items-center justify-content-between">
+						<div class="rm-last-reviews-item-author">{{ review.author }}</div>
+						<div class="rm-last-reviews-item-date d-flex align-items-center">
+							<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--date-icon" alt="" width="14" height="17" />
+							<span>{{ review.date }}</span>
+						</div>
+					</div>
+					<div class="rm-last-reviews-item-text">
+						{{ review.text }}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
+{% endif %}

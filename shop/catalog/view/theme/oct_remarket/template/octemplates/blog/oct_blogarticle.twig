@@ -1,0 +1,256 @@
+{{ header }}
+<div class="container">
+	{{ oct_breadcrumbs }}
+	<div class="content-top-box">{{ content_top }}</div>
+	<main>
+		<div class="row">
+			<div class="col-12 rm-page-title">
+				<h1>{{ heading_title }}</h1>
+			</div>
+		</div>
+		<div id="content" class="row no-gutters">
+		{{ column_left }}
+		{% if column_left and column_right %}
+		{% set class = 'col-lg-6' %}
+		{% elseif column_left or column_right %}
+		{% set class = 'col-lg-9' %}
+		{% else %}
+		{% set class = 'col-lg-12' %}
+		{% endif %}
+		<div class="{{ class }}">
+			<div class="rm-content rm-blog-post h-100">
+				{% if thumb %}
+				<div class="rm-blog-post-photo">
+					<img src="{{ thumb }}" alt="{{ heading_title }}" class="img-fluid" width="{{ thumb_width }}" height="{{ thumb_height }}" />
+				</div>
+				{% endif %}
+				<div class="rm-blog-post-text">
+					{{ description }}
+					{% if tags %}
+					<p class="rm-product-tags">{{ text_tags }}
+						{% for i in 0..tags|length %}
+						{% if i < (tags|length - 1) %} <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,
+						{% else %} <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a> {% endif %}
+						{% endfor %}
+					</p>
+					{% endif %}
+				</div>
+				{% if images %}
+				<div class="rm-blog-post-gallery">
+					<div class="rm-content-title">{{ entry_dop_photo }}</div>
+					<div class="row">
+						{% for image in images %}
+						<div class="col-4 col-md-3 col-lg-2">
+							<a href="{{ image.popup }}" data-fancybox="images" class="rm-blog-post-gallery-item">
+								<img class="img-fluid" src="{{ image.thumb }}" alt="" width="{{ image.thumb_width }}" height="{{ image.thumb_height }}" />
+								<span class="d-none d-xl-flex align-items-center justify-content-center"></span>
+							</a>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				{% endif %}
+				<div class="rm-blog-post-info d-flex flex-column flex-md-row">
+					<div class="rm-blog-post-info-item rm-blog-post-info-item-date d-flex align-items-center">
+						<span>{{ date_added }}</span>
+					</div>
+					{% if review_status %}
+					<div class="rm-blog-post-info-item rm-blog-post-info-item-comments d-flex align-items-center">
+						<span>{{ comments_total }}</span>
+					</div>
+					{% endif %}
+					<div class="rm-blog-post-info-item rm-blog-post-info-item-views d-flex align-items-center">
+						<span>{{ comments_viewed }}</span>
+					</div>
+				</div>
+				{% if review_status %}
+				<div class="rm-blog-post-comments row-padding-top">
+					<div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+						<div class="rm-module-header"><span>{{ text_comments }}</span></div>
+						<button type="button" class="rm-btn dark" data-toggle="modal" data-target="#rm-comment-modal">{{ text_add_comment }}</button>
+						<div class="modal" id="rm-comment-modal" tabindex="-1" role="dialog" aria-labelledby="form-comment" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered narrow" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<div class="modal-title">{{ text_write }}</div>
+										<button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+										<span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form method="post" enctype="multipart/form-data" id="form-comment">
+												<div class="form-group">
+													<input type="text" name="name" class="form-control" id="input-name" placeholder="{{ entry_name }}">
+												</div>
+												<div class="form-group">
+													<textarea id="input-review" name="text" class="form-control" placeholder="{{ oct_article_your_comment }}"></textarea>
+												</div>
+												<div class="modal-comment">{{ text_note }}</div>
+												{% if captcha %}
+												<div class="form-group">
+													{{ captcha }}
+												</div>
+												{% endif %}
+												<button type="button" id="button-comment" class="rm-btn dark">{{ button_continue }}</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="article-comments"></div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+		{{ column_right }}
+	</div>
+	</main>
+	{% if products %}
+	{{ products }}
+	{% endif %}
+	{% if articles %}
+	<div class="rm-news">
+		<div class="row row-padding-top">
+			<div class="col-12 rm-module-header"><span>{{ text_related_articles }}</span></div>
+		</div>
+		<div id="rm-related-article" class="row no-gutters">
+			{% for article in articles %}
+			<div class="col-12 col-md-6 col-xl-3 rm-news-col">
+				<div class="rm-news-item d-flex flex-column h-100">
+					<div class="rm-news-item-top">
+						<div class="rm-news-item-date">{{ article.date_added }}</div>
+						<a href="{{ article.href }}" class="rm-news-item-photo">
+							<img src="{{ article.thumb }}" class="img-fluid" alt="{{ article.name }}" title="{{ article.name }}" width="{{ article.width }}" height="{{ article.height }}" />
+						</a>
+					</div>
+					<div class="rm-news-item-bottom d-flex flex-column h-100">
+						<a href="{{ article.href }}" class="rm-news-item-title flex-grow-1">{{ article.name }}</a>
+						<div class="rm-news-item-text">
+							{{ article.description }}
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+	{{ content_bottom }}
+</div>
+<script>
+	$("#input-name, #input-review").on("change paste keyup", function() {
+		$(this).removeClass('error_style');
+	});
+
+	$('#article-comments').delegate('.pagination a', 'click', function(e) {
+	    e.preventDefault();
+
+	    $('#article-comments').fadeOut('slow');
+
+	    $('#article-comments').load(this.href);
+
+	    $('#article-comments').fadeIn('slow');
+	});
+
+	$('#article-comments').load('index.php?route=octemplates/blog/oct_blogarticle/comment&blogarticle_id={{ blogarticle_id }}');
+
+	$('#button-comment').on('click', function() {
+		$.ajax({
+			url: 'index.php?route=octemplates/blog/oct_blogarticle/write&blogarticle_id={{ blogarticle_id }}',
+			type: 'post',
+			dataType: 'json',
+			cache: false,
+			data: $('#form-comment').serialize(),
+			beforeSend: function() {
+				$('#button-comment').button('loading');
+			},
+			complete: function() {
+				$('#button-comment').button('reset');
+			},
+			success: function(json) {
+				$('.alert-dismissible').remove();
+
+				if (json['error']) {
+					let errors = '';
+
+					$.each(json['error'], function(i, val) {
+						if (val) {
+							$('#form-comment [name="' + i + '"]').addClass('error_style');
+							errors += '<div class="alert-text-item">' + val + '</div>';
+						}
+					});
+
+					rmNotify('danger', errors);
+				}
+
+				if (json['success']) {
+					rmNotify('success', json['success']);
+					$('#rm-comment-modal').modal('hide');
+					$('input[name=\'name\']').val('');
+					$('textarea[name=\'text\']').val('');
+					$('input[name=\'rating\']:checked').prop('checked', false);
+					$('.rm-module-rating-star-is').removeClass('rm-module-rating-star-is');
+				}
+			}
+		});
+	});
+</script>
+{% if oct_is_youtube %}
+<script>
+function findVideos() {
+	let videos = document.querySelectorAll('.rm-video');
+
+	for (let i = 0; videos.length > i; i++) {
+		setupVideo(videos[i]);
+	}
+}
+
+function setupVideo(video) {
+	let link = video.querySelector('.rm-video__link');
+	let media = video.querySelector('.rm-video__media');
+	let button = video.querySelector('.rm-video__button');
+	let id = parseMediaURL(media);
+
+	video.addEventListener('click', () => {
+		let iframe = createIframe(id);
+
+		link.remove();
+		button.remove();
+		video.appendChild(iframe);
+	});
+
+	link.removeAttribute('href');
+	video.classList.add('rm-video--enabled');
+}
+
+function parseMediaURL(media) {
+	let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
+	let url = media.src;
+	let match = url.match(regexp);
+
+	return match[1];
+}
+
+function createIframe(id) {
+	let iframe = document.createElement('iframe');
+
+	iframe.setAttribute('allowfullscreen', '');
+	iframe.setAttribute('allow', 'autoplay');
+	iframe.setAttribute('src', generateURL(id));
+	iframe.classList.add('rm-video__media');
+
+	return iframe;
+}
+
+function generateURL(id) {
+	let query = '?rel=0&showinfo=0&autoplay=1';
+
+	return 'https://www.youtube.com/embed/' + id + query;
+}
+
+findVideos();
+</script>
+{% endif %}
+{{ footer }}

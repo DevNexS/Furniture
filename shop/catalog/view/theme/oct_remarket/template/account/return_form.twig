@@ -1,0 +1,214 @@
+{{ header }}
+<div id="account-return" class="container account-container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	{% if error_warning %}
+	<script>
+	rmNotify('warning', '{{ error_warning }}');
+	</script>
+	{% endif %}
+	<div id="content" class="row">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content rm-account-content h-100">
+		      <div class="rm-account-text">{{ text_description }}</div>
+		      <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+		        <fieldset class="rm-account-form my-4">
+		          <legend class="rm-content-title">{{ text_order }}</legend>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-firstname"><span class="required">*</span> {{ entry_firstname }}</label>
+		            {% if error_firstname %}
+		            <script>
+					rmNotify('warning', '{{ error_firstname }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ entry_firstname }}" id="input-firstname" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-lastname"><span class="required">*</span> {{ entry_lastname }}</label>
+		            {% if error_lastname %}
+		            <script>
+					rmNotify('warning', '{{ error_lastname }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ entry_lastname }}" id="input-lastname" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-email"><span class="required">*</span> {{ entry_email }}</label>
+		            {% if error_email %}
+		            <script>
+					rmNotify('warning', '{{ error_email }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-telephone"><span class="required">*</span> {{ entry_telephone }}</label>
+		            {% if error_telephone %}
+		            <script>
+					rmNotify('warning', '{{ error_telephone }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-order-id"><span class="required">*</span> {{ entry_order_id }}</label>
+		            {% if error_order_id %}
+		            <script>
+					rmNotify('warning', '{{ error_order_id }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="order_id" value="{{ order_id }}" placeholder="{{ entry_order_id }}" id="input-order-id" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-date-ordered">{{ entry_date_ordered }}</label>
+	                <input type="text" name="date_ordered" value="{{ date_ordered }}" placeholder="{{ entry_date_ordered }}" id="input-date-ordered" class="form-control datetime" />
+		          </div>
+		        </fieldset>
+		        <fieldset class="rm-account-form my-4">
+		          <legend class="rm-content-title">{{ text_product }}</legend>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-product"><span class="required">*</span> {{ entry_product }}</label>
+		            {% if error_product %}
+		            <script>
+					rmNotify('warning', '{{ error_product }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="product" value="{{ product }}" placeholder="{{ entry_product }}" id="input-product" class="form-control" />
+					{% if product_id is defined and product_id %}
+					<input type="hidden" name="product_id" value="{{ product_id }}" />
+					{% endif %}
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-model"><span class="required">*</span> {{ entry_model }}</label>
+		            {% if error_model %}
+		            <script>
+					rmNotify('warning', '{{ error_model }}');
+					</script>
+		            {% endif %}
+		            <input type="text" name="model" value="{{ model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-quantity">{{ entry_quantity }}</label>
+		            <input type="text" name="quantity" value="{{ quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="form-control" />
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label"><span class="required">*</span> {{ entry_reason }}</label>
+		            {% if error_reason %}
+		            <script>
+					rmNotify('warning', '{{ error_reason }}');
+					</script>
+		            {% endif %}
+		            {% for return_reason in return_reasons %}
+		              {% if return_reason.return_reason_id == return_reason_id %}
+		              <div class="radio mt-2">
+		                <label class="option">
+		                  <input type="radio" name="return_reason_id" class="input-radio" value="{{ return_reason.return_reason_id }}" checked="checked" />
+						  <span class="radio-box"></span>
+		                  {{ return_reason.name }}
+		                </label>
+		              </div>
+		              {% else %}
+		              <div class="radio mt-2">
+		                <label class="option">
+		                  <input type="radio" name="return_reason_id" class="input-radio" value="{{ return_reason.return_reason_id }}" />
+						  <span class="radio-box"></span>
+		                  {{ return_reason.name }}
+		                </label>
+		              </div>
+		              {% endif %}
+		            {% endfor %}
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label"><span class="required">*</span> {{ entry_opened }}</label>
+		            <div class="d-flex">
+		            	<div class="radio">
+			            	<label class="option">
+				            	{% if opened %}
+				                <input type="radio" id="CheckYes" class="input-radio" name="opened" value="1" checked="checked" />
+				                {% else %}
+				                <input type="radio" id="CheckYes" class="input-radio" name="opened" value="1" />
+				                {% endif %}
+				            	<span class="radio-box"></span>
+								{{ text_yes }}
+							</label>
+		            	</div>
+		            	<div class="radio">
+							<label class="option">
+				              	{% if not opened %}
+				                <input type="radio" id="CheckNo" class="input-radio" name="opened" value="0" checked="checked" />
+				                {% else %}
+				                <input type="radio" id="CheckNo" class="input-radio" name="opened" value="0" />
+				                {% endif %}
+				            	<span class="radio-box"></span>
+				                {{ text_no }}
+			                </label>
+		            	</div>
+		            </div>
+		          </div>
+		          <div class="form-group">
+		            <label class="rm-control-label" for="input-comment">{{ entry_fault_detail }}</label>
+		            <textarea name="comment" rows="10" placeholder="{{ entry_fault_detail }}" id="input-comment" class="form-control">{{ comment }}</textarea>
+		          </div>
+		          {{ captcha }}
+		        </fieldset>
+		        {% if text_agree %}
+		        <div class="form-checkbox-group">
+		        	<label>
+			            {% if agree %}
+			            <input type="checkbox" id="scales" class="rm-form-checkbox-input" name="agree" value="1" checked="checked" />
+			            {% else %}
+			            <input type="checkbox" id="scales" class="rm-form-checkbox-input" name="agree" value="1" />
+			            {% endif %}
+	                    <span class="check-box"></span>
+			            {{ text_agree }}
+		            </label>
+		        </div>
+		        {% endif %}
+		        <div class="btn-group mt-4">
+					<button type="submit" class="mt-4 rm-btn dark">{{ button_continue }}</button>
+		        </div>
+		      </form>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+<script src="catalog/view/javascript/jquery/datetimepicker/moment/moment-with-locales.min.js"></script>
+<script src="catalog/view/theme/oct_remarket/js/bootstrap-datetimepicker.min.js"></script>
+<link href="catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script>
+var nowDate = new Date();
+var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+
+$('#input-date-ordered.datetime').datetimepicker({
+	pickDate: true,
+	pickTime: false,
+	language: '{{ datepicker }}',
+	icons: {
+		time: 'fa fa-clock',
+		date: 'fa fa-calendar-alt',
+		up: 'fa fa-arrow-up',
+		down: 'fa fa-arrow-down',
+		previous: 'fa fa-chevron-left',
+		next: 'fa fa-chevron-right',
+		today: 'fa fa-calendar-check',
+		clear: 'fa fa-trash-alt',
+		close: 'fa fa-times'
+	}
+});
+</script>
+{{ footer }}

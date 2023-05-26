@@ -1,0 +1,58 @@
+{{ header }}
+<div id="affiliate-login" class="container">
+    {{ oct_breadcrumbs }}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="rm-page-title">{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="content-top-box">{{ content_top }}</div>
+    {% if success %}
+        <script>
+            rmNotify('success', '{{ success }}');
+        </script>
+    {% endif %}
+    {% if error_warning %}
+        <script>
+            rmNotify('warning', '{{ error_warning }}');
+        </script>
+    {% endif %}
+    <div class="row">
+        <div id="content" class="col-12">
+            <div class="rm-content rm-account-login h-100">
+                <div class="rm-account-login-enter">
+                    <div class="rm-account-login-title text-center">{{ text_returning_affiliate }}</div>
+                    <form action="{{ action }}" method="post" enctype="multipart/form-data" class="rm-account-login-form">
+                        <div class="form-group">
+                            <label class="rm-control-label" for="input-email">{{ entry_email }}</label>
+                            <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="rm-control-label" for="input-password">{{ entry_password }}</label>
+                            <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control"/>
+                        </div>
+						<div class="rm-account-login-forgotten">
+                            <a href="{{ forgotten }}">{{ text_forgotten }}</a>
+                        </div>
+						<div class="text-center">
+                            <button type="submit" class="rm-btn dark">
+                                <span class="rm-btn-text">{{ button_login }}</span></button>
+								{% if redirect %}
+                                <input type="hidden" name="redirect" value="{{ redirect }}"/>
+	                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+                <div class="rm-account-login-register">
+					<div class="rm-account-login-title text-center">{{ text_register }}</div>
+					<div class="rm-account-login-text">{{ text_register_account }}</div>
+					<div class="text-center">
+						<a href="{{ register }}" class="rm-btn dark"><span class="rm-btn-text">{{ button_continue }}</span></a>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ content_bottom }}
+</div>
+{{ footer }}

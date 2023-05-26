@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_popup_view</code>
+	<name>Octemplates - Popup View</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/controller/extension/module/{featured,bestseller,latest,special}.php">
+    	<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="before"><![CDATA[
+			$data['oct_popup_view_status'] = $this->config->get('oct_popup_view_status');
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/{category,manufacturer,product,search,special}.php">
+    	<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_popup_view_status'] = $this->config->get('oct_popup_view_status');
+			]]></add>
+    	</operation>
+	</file>
+</modification>

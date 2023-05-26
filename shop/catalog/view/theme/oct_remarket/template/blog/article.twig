@@ -1,0 +1,297 @@
+{{ header }}
+<div id="product-product" class="container">
+  	<nav aria-label="breadcrumb">
+		<ul class="breadcrumb rm-breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		{% if loop.last %}
+		<li class="breadcrumb-item rm-breadcrumb-item">{{ breadcrumb.text }}</li>
+		{% else %}
+		<li class="breadcrumb-item rm-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endif %}
+		{% endfor %}
+		</ul>
+	</nav>
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div id="content" class="row no-gutters">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content rm-ocstore-content h-100">
+		    {% if thumb or images %}
+	        <ul class="thumbnails">
+	            {% if thumb %}
+	            <li><a class="thumbnail" href="{{ popup }}" title="{{ heading_title }}"><img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+	            {% endif %}
+	            {% if images %}
+	            {% for image in images %}
+	            <li class="image-additional"><a class="thumbnail" href="{{ image.popup }}" title="{{ heading_title }}"> <img src="{{ image.thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+	            {% endfor %}
+	            {% endif %}
+	        </ul>
+	        {% endif %}
+            <div class="tab-pane active" id="tab-description">{{ description }}</div>
+			{% if review_status %}
+			<div class="rm-module-rating ocs-rating d-flex align-items-center">
+				<div class="rm-module-rating-stars d-flex align-items-center">
+					{% for i in 1..5 %}
+					{% if rating < i %}
+					<span class="rm-module-rating-star"></span>
+					{% else %}
+					<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+					{% endif %}
+					{% endfor %}
+				</div>
+				<div class="rm-module-reviews"><a href="" onclick="gotoReview(); return false;">{{ reviews }}</a> / <a href="" onclick="gotoReviewWrite(); return false;">{{ text_write }}</a></div>
+			</div>
+			<div class="rating">
+            	<hr>
+				<!-- AddThis Button BEGIN -->
+				<div class="addthis_toolbox addthis_default_style" data-url="{{ share }}"><a class="addthis_button_facebook_like" fb:like:layout="button_count"></a> <a class="addthis_button_tweet"></a> <a class="addthis_button_pinterest_pinit"></a> <a class="addthis_counter addthis_pill_style"></a></div>
+				<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-515eeaf54693130e"></script> 
+				<!-- AddThis Button END --> 
+			</div>
+			{% endif %}
+			{% if download_status %}
+			<div class="blog-info">
+				{% if downloads %}
+				<br />
+				{% for download in downloads %}
+				<a href="{{ download.href }}" title=""><i class="fa fa-floppy-o"></i> {{ download.name }} {{ download.size }}</a><br>
+				{% endfor %}
+				<br />
+				{% endif %} 
+			</div>
+			{% endif %} 
+            {% if products %}
+			<div class="row row-padding-top">
+				<div class="col-12 rm-main-title h6">{{ text_related_product }}</div>
+			</div>
+			<div class="row no-gutters">
+				{% for product in products %}
+				<div class="col-6 col-md-4 col-lg-3">
+					<div class="rm-module-item d-flex flex-column h-100 border-0">
+						<ul class="rm-module-buttons list-unstyled d-flex justify-content-center flex-md-column">
+							<li class="rm-module-buttons-item">
+								<button type="button" class="rm-module-buttons-item compare d-flex align-items-center justify-content-center" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><span></span></button>
+							</li>
+							<li class="rm-module-buttons-item">
+								<button type="button" class="rm-module-buttons-item wishlist d-flex align-items-center justify-content-center" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><span></span></button>
+							</li>
+						</ul>
+						<div class="rm-module-img">
+							<a href="{{ product.href }}">
+							<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-fluid" />
+							</a>
+						</div>
+						{% if product.rating is not same as(false) %}
+						<div class="rm-module-rating d-flex align-items-center justify-content-center">
+							<div class="rm-module-rating-stars d-flex align-items-center">
+								{% for i in 1..5 %}
+								{% if product.rating < i %}
+								<span class="rm-module-rating-star"></span>
+								{% else %}
+								<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+								{% endif %}
+								{% endfor %}
+							</div>
+						</div>
+						{% endif %}
+						<div class="rm-module-title">
+							<a href="{{ product.href }}">{{ product.name }}</a>
+						</div>
+						{% if product.price %}
+						<div class="rm-module-price mt-auto">
+							{% if not product.special %}
+							<div class="rm-module-price-bottom">
+								<span class="rm-module-price-new">{{ product.price }}</span>
+							</div>
+							{% else %}
+							<div class="rm-module-price-top d-flex align-items-center justify-content-start">
+								<span class="rm-module-price-old">{{ product.price }}</span>
+								{% if product.you_save %}
+								<div class="rm-module-sticker-discount">{{ product.you_save }}</div>
+								{% endif %}
+							</div>
+							<div class="rm-module-price-bottom">
+								<span class="rm-module-price-new">{{ product.special }}</span>
+							</div>
+							{% endif %}
+							{% if product.tax %}
+							<div class="price-tax">{{ text_tax }} {{ product.tax }}</div>
+							{% endif %}
+						</div>
+						{% endif %}
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+	        {% endif %}
+		
+		{% if articles %}
+	    <div class="row row-padding-top">
+			<div class="col-12 rm-main-title h6">{{ text_related }}</div>
+		</div>
+		<div class="row no-gutters">
+			 {% for article in articles %}
+			<div class="ocs-article-box col-sm-12 col-md-6 col-lg-4 col-xl-3">
+			    <div class="rm-module-item border-0 d-flex flex-column h-100">
+				    <div class="rm-module-img">
+						<a href="{{ article.href }}">
+						<img src="{{ article.thumb }}" alt="{{ article.name }}" title="{{ article.name }}" class="img-fluid" />
+						</a>
+					</div>
+					<div class="rm-module-title flex-grow-1">
+						<a href="{{ article.href }}">{{ article.name }}</a>
+					</div>
+					{% if article.rating %}
+					<div class="rm-module-rating d-flex align-items-center justify-content-center">
+						<div class="rm-module-rating-stars d-flex align-items-center">
+							{% for i in 1..5 %}
+							{% if product.rating < i %}
+							<span class="rm-module-rating-star"></span>
+							{% else %}
+							<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+			        {% endif %}
+			        <div class="rm-product-description my-4">{{ article.description }}</div>
+				    <button class="rm-btn primary mt-auto" type="button" onclick="location.href = ('{{ article.href }}');"><i class="fas fa-share"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_more }}</span></button>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+        {% endif %}
+		
+		{% if review_status %}
+            <div class="tab-pane" id="tab-review">
+              <form class="form-horizontal" id="form-review">
+                <div id="review"></div>
+                <h2 class="rm-main-title h6 mt-4">{{ text_write }}</h2>
+                {% if review_guest %}
+                <div class="form-group">
+                  <div>
+                    <label class="control-label" for="input-name"><span class="required">*</span> {{ entry_name }}</label>
+                    <input type="text" name="name" value="{{ customer_name }}" id="input-name" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div>
+                    <label class="control-label" for="input-review"><span class="required">*</span> {{ entry_review }}</label>
+                    <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
+                    <div class="help-block">{{ text_note }}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div>
+                    <label class="control-label"><span class="required">*</span> {{ entry_rating }}</label>
+                    &nbsp;&nbsp;&nbsp; {{ entry_bad }}&nbsp;
+                    <input type="radio" name="rating" value="1" />
+                    &nbsp;
+                    <input type="radio" name="rating" value="2" />
+                    &nbsp;
+                    <input type="radio" name="rating" value="3" />
+                    &nbsp;
+                    <input type="radio" name="rating" value="4" />
+                    &nbsp;
+                    <input type="radio" name="rating" value="5" />
+                    &nbsp;{{ entry_good }}</div>
+                </div>
+                {{ captcha }}
+                <div class="buttons">
+                    <button type="button" id="button-review" data-loading-text="{{ text_loading }}" class="rm-btn dark">{{ button_continue }}</button>
+                </div>
+                {% else %}
+                {{ text_login }}
+                {% endif %}
+              </form>
+            </div>
+            {% endif %}</div>
+        </div>
+      
+      </div>
+        
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+
+<script type="text/javascript"><!--
+$('#review').delegate('.pagination a', 'click', function(e) {
+    e.preventDefault();
+
+    $('#review').fadeOut('slow');
+
+    $('#review').load(this.href);
+
+    $('#review').fadeIn('slow');
+});
+
+$('#review').load('index.php?route=blog/article/review&article_id={{ article_id }}');
+
+$('#button-review').on('click', function() {
+	$.ajax({
+		url: 'index.php?route=blog/article/write&article_id={{ article_id }}',
+		type: 'post',
+		dataType: 'json',
+		data: $("#form-review").serialize(),
+		beforeSend: function() {
+			$('#button-review').button('loading');
+		},
+		complete: function() {
+			$('#button-review').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				rmNotify('danger', json['error']);
+			}
+
+			if (json['success']) {
+				rmNotify('success', json['success']);
+
+				$('input[name=\'name\']').val('');
+				$('textarea[name=\'text\']').val('');
+				$('input[name=\'rating\']:checked').prop('checked', false);
+			}
+		}
+	});
+});
+
+$(document).ready(function() {
+	$('.thumbnails').magnificPopup({
+		type:'image',
+		delegate: 'a',
+		gallery: {
+			enabled: true
+		}
+	});
+});
+//--></script> 
+<script type="text/javascript"><!--
+$(document).ready(function() {
+
+  gotoReview = function() {
+    offset = $('#form-review').offset();
+    $('html, body').animate({ scrollTop: offset.top-20 }, 'slow');
+  }
+  gotoReviewWrite = function() {
+    offset = $('#form-review h2').offset();
+    $('html, body').animate({ scrollTop: offset.top-20 }, 'slow');
+  }
+  
+});
+--></script>
+{{ footer }} 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_rm_fastorder</code>
+	<name>Octemplates - Fast order</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+
+  <file path="system/library/url.php">
+     <operation error="skip">
+      <search><![CDATA[public function link($route, $args = '', $secure = false) {]]></search>
+      <add position="after"><![CDATA[
+        $get_route = isset($_GET['route']) ? $_GET['route'] : (isset($_GET['_route_']) ? $_GET['_route_'] : '');
+    
+        if ($route == 'checkout/checkout' && $get_route != 'checkout/checkout') {
+          $route = 'checkout/oct_fastorder';
+        }
+
+        //if ($route == 'checkout/cart' && $get_route != 'checkout/cart') {
+        //  $connection = 'SSL';
+        //  $route = 'checkout/oct_fastorder';
+        //}
+      ]]></add>
+    </operation>
+  </file>
+	
+</modification>

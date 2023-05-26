@@ -1,0 +1,275 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form" formaction="{{ action }}" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<button type="submit" form="form" formaction="{{ delete }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+				<button type="submit" form="form" formaction="{{ csv }}" data-toggle="tooltip" title="{{ button_csv }}" class="btn btn-primary"><i class="fa fa-download"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		{% if success %}
+	    <script>
+			usNotify('success', '{{ success }}');
+		</script>
+	    {% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#subscribes-tab" data-toggle="tab">{{ tab_subscribes }}</a></li>
+						<li><a href="#setting-tab" data-toggle="tab">{{ tab_setting }}</a></li>
+						<li><a href="#templates-tab" data-toggle="tab">{{ tab_email_templates }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane" id="setting-tab">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<div class="toggle-group">
+										<input type="checkbox" name="oct_subscribe_status" {% if oct_subscribe_status %}checked="checked"{% endif %} id="oct_subscribe_status" tabindex="1">
+										<label for="oct_subscribe_status"></label>
+										<div class="onoffswitch pull-left" aria-hidden="true">
+											<div class="onoffswitch-label">
+												<div class="onoffswitch-inner"></div>
+												<div class="onoffswitch-switch"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_promo_text }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="promo-text">
+										{% for language in languages %}
+										<li>
+											<a href="#tab-promo-text-language{{ language.code }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %}
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %}
+										<div class="tab-pane" id="tab-promo-text-language{{ language.code }}">
+											<textarea id="promo-text-language{{ language.code }}" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control" style="height:auto;resize:vertical;" rows="3" name="oct_subscribe_text_data[{{ language.code }}][promo_text]">{{ oct_subscribe_text_data[language.code].promo_text is not empty ? oct_subscribe_text_data[language.code ].promo_text : '' }}</textarea>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_time_expire }}</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input value="{{ oct_subscribe_form_data.expire }}" type="text" name="oct_subscribe_form_data[expire]" class="form-control" />
+										<span class="input-group-addon">{{ text_days }}</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_delay }}</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input value="{{ (oct_subscribe_form_data.seconds is defined) ? oct_subscribe_form_data.seconds : '13000' }}" type="text" name="oct_subscribe_form_data[seconds]" class="form-control" />
+										<span class="input-group-addon">ms</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_image }}</label>
+								<div class="col-sm-10"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+									<input type="hidden" name="oct_subscribe_form_data[image]" value="{{ oct_subscribe_form_data.image }}" id="input-image" />
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane active" id="subscribes-tab">
+							<div class="table-responsive">
+								<table class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<td style="width: 1px;" class="text-center">
+												<input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" />
+											</td>
+											<td class="text-left">
+												{% if sort == 'email' %}
+												<a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>
+												{% else %}
+												<a href="{{ sort_email }}">{{ column_email }}</a>
+												{% endif %}
+											</td>
+											<td class="text-left">
+												{% if sort == 'approved' %}
+												<a href="{{ sort_approved }}" class="{{ order|lower }}">{{ column_approved }}</a>
+												{% else %}
+												<a href="{{ sort_approved }}">{{ column_approved }}</a>
+												{% endif %}
+											</td>
+											<td class="text-left">
+												{% if sort == 'ip' %}
+												<a href="{{ sort_ip }}" class="{{ order|lower }}">{{ column_ip }}</a>
+												{% else %}
+												<a href="{{ sort_ip }}">{{ column_ip }}</a>
+												{% endif %}
+											</td>
+											<td class="text-left">
+												{% if sort == 'date_added' %}
+												<a href="{{ sort_date_added }}" class="{{ order|lower }}">{{ column_date_added }}</a>
+												{% else %}
+												<a href="{{ sort_date_added }}">{{ column_date_added }}</a>
+												{% endif %}
+											</td>
+											<td class="text-left">{{ column_action }}</td>
+										</tr>
+									</thead>
+									<tbody>
+										{% if subscribes %} 
+										{% for subscribe in subscribes %}
+										<tr>
+											<td class="text-center">
+												{% if subscribe.subscribe_id in selected %}
+												<input type="checkbox" name="selected[]" value="{{ subscribe.subscribe_id }}" checked="checked" />
+												{% else %} 
+												<input type="checkbox" name="selected[]" value="{{ subscribe.subscribe_id }}" />
+												{% endif %} 
+											</td>
+											<td class="text-left">{{ subscribe.email }}</td>
+											<td class="text-left">
+												{% if subscribe.approve == 1 %} 
+												{{ text_yes }}
+												{% else %}
+												{{ text_no }}
+												{% endif %} 
+											</td>
+											<td class="text-left">{{ subscribe.ip }}</td>
+											<td class="text-left">{{ subscribe.date_added }}</td>
+											<td class="text-left">
+												{% if subscribe.approve != 1 %} 
+												<a href="{{ subscribe.approve }}" data-toggle="tooltip" title="{{ button_approve }}" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></a>
+												{% else %}
+												<button type="button" class="btn btn-success" disabled><i class="fa fa-thumbs-o-up"></i></button>
+												{% endif %} 
+											</td>
+										</tr>
+										{% endfor %}
+										{% else %}
+										<tr>
+											<td class="text-center" colspan="6">{{ text_no_results }}</td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+							<div class="row">
+								<div class="col-sm-6 text-left">{{ pagination }}</div>
+								<div class="col-sm-6 text-right">{{ results }}</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="templates-tab">
+							<fieldset>
+								<legend>{{ tab_setting }}</legend>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-template_status">{{ entry_template_status }}</label>					
+									<div class="col-sm-10">
+										<div class="toggle-group">
+											<input type="checkbox" name="oct_subscribe_template_status" {% if oct_subscribe_template_status %}checked="checked"{% endif %} id="oct_subscribe_template_status" tabindex="1">
+											<label for="oct_subscribe_template_status"></label>
+											<div class="onoffswitch pull-left" aria-hidden="true">
+												<div class="onoffswitch-label">
+													<div class="onoffswitch-inner"></div>
+													<div class="onoffswitch-switch"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="template_view" {% if oct_subscribe_template_status is not defined or (oct_subscribe_template_status is defined and not oct_subscribe_template_status) %}style="display:none"{% endif %}>
+									<legend>{{ entry_template_first }}</legend>
+									<div class="form-group">
+										<label class="col-sm-3 control-label">{{ entry_approve_link }}</label>					
+										<div class="col-sm-9">
+											<ul class="nav nav-tabs" id="email-template-first">
+												{% for language in languages %}
+												<li>
+													<a href="#tab-email_template_first{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+												</li>
+												{% endfor %}				  
+											</ul>
+											<div class="tab-content">
+												{% for language in languages %}
+												<div class="tab-pane" id="tab-email_template_first{{ language.language_id }}">
+													<div class="input-group">
+														<span class="input-group-addon">{{ entry_subscribes_email }}</span> <input value="{{ oct_subscribe_text_data[language.language_id].subject_email_template_first is defined and oct_subscribe_text_data[language.language_id].subject_email_template_first is not empty ? oct_subscribe_text_data[language.language_id].subject_email_template_first : '' }}" type="text" name="oct_subscribe_text_data[{{ language.language_id }}][subject_email_template_first]" class="form-control" />
+													</div>
+													<br />
+													<textarea id="email_template_first{{ language.language_id }}" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control" style="height:auto;resize:vertical;" rows="3" name="oct_subscribe_text_data[{{ language.language_id }}][email_template_first]">{{ oct_subscribe_text_data[language.language_id].email_template_first is defined and oct_subscribe_text_data[language.language_id].email_template_first is not empty ? oct_subscribe_text_data[language.language_id].email_template_first : '' }}</textarea>
+												</div>
+												{% endfor %}				  
+											</div>
+										</div>
+									</div>
+									<legend>{{ entry_template_second }}</legend>
+									<div class="form-group">
+										<label class="col-sm-3 control-label">{{ entry_unsubscribe_link }}</label>					
+										<div class="col-sm-9">
+											<ul class="nav nav-tabs" id="email-template-second">
+												{% for language in languages %}
+												<li>
+													<a href="#tab-email_template_second{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+												</li>
+												{% endfor %}					  
+											</ul>
+											<div class="tab-content">
+												{% for language in languages %}
+												<div class="tab-pane" id="tab-email_template_second{{ language.language_id }}">
+													<div class="input-group">
+														<span class="input-group-addon">{{ entry_subscribes_email }}</span> <input value="{{ oct_subscribe_text_data[language.language_id].subject_email_template_second is defined and oct_subscribe_text_data[language.language_id].subject_email_template_second is not empty ? oct_subscribe_text_data[language.language_id].subject_email_template_second : '' }}" type="text" name="oct_subscribe_text_data[{{ language.language_id }}][subject_email_template_second]" class="form-control" />
+													</div>
+													<br />
+													<textarea id="email_template_second{{ language.language_id }}" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control" style="height:auto;resize:vertical;" rows="3" name="oct_subscribe_text_data[{{ language.language_id }}][email_template_second]">{{ oct_subscribe_text_data[language.language_id].email_template_second is defined and oct_subscribe_text_data[language.language_id].email_template_second is not empty ? oct_subscribe_text_data[language.language_id].email_template_second : '' }}</textarea>
+												</div>
+												{% endfor %}					  
+											</div>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#oct_subscribe_template_status').change(function() {
+    var $input = $(this);
+
+    if ($input.is(":checked")) {
+        $("#template_view").slideDown('slow');
+    } else {
+        $("#template_view").slideUp('slow');
+    }
+});
+
+$('#promo-text a:first').tab('show');
+$('#email-template-first a:first').tab('show');
+$('#email-template-second a:first').tab('show');
+</script>
+{{ footer }}

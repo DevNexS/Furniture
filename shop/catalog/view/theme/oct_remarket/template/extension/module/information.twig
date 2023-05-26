@@ -1,0 +1,11 @@
+{% if informations %}
+<div class="rm-module-column-box">
+  <ul class="list-unstyled rm-column-categories">
+    {% for information in informations %}
+    <li class="rm-column-categories-item"><span class="d-flex justify-content-between"><a href="{{ information.href }}">{{ information.title }}</a></span></li>
+    {% endfor %}
+    <li class="rm-column-categories-item"><span class="d-flex justify-content-between"><a href="{{ contact }}">{{ text_contact }}</a></span></li>
+    <li class="rm-column-categories-item"><span class="d-flex justify-content-between"><a href="{{ sitemap }}">{{ text_sitemap }}</a></span></li>
+  </ul>
+</div>
+{% endif %}

@@ -1,0 +1,64 @@
+{{ header }}
+<div id="information-tracking" class="container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div id="content" class="row no-gutters">
+		{{ column_left }}
+		{% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content">
+		      <p>Please enter your shipping tracking No. below:</p>
+		      <div class="form-group required">
+		        <label class="rm-control-label" for="input-code">{{ entry_code }} </label>
+		        <input type="text" name="code" value="{{ code }}" placeholder="{{ entry_code }}" id="input-code" class="form-control" />
+		      </div>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+    <script>
+	$('#button-tracking').on('click', function() {
+	    $.ajax({
+	        url: 'index.php?route=information/tracking/tracking&code=' + $('input[name="code"]').val(),
+	        dataType: 'json',
+	        cache: false,
+	        beforeSend: function() {
+	        	$('#button-login').button('loading');
+			},
+	        complete: function() {
+	            $('#button-login').button('reset');
+	        },
+	        success: function(json) {
+	            $('.alert-dismissible, .text-danger').remove();
+	            $('.form-group').removeClass('has-error');
+
+	            if (json['redirect']) {
+	                location = json['redirect'];
+	            } else if (json['error']) {
+	                $('#collapse-checkout-option .panel-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+					// Highlight any found errors
+					$('input[name=\'email\']').parent().addClass('has-error');
+					$('input[name=\'password\']').parent().addClass('has-error');
+			   }
+	        },
+	        error: function(xhr, ajaxOptions, thrownError) {
+	            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+	        }
+	    });
+	});
+	</script>
+	{{ content_bottom }}
+</div>
+{{ footer }}

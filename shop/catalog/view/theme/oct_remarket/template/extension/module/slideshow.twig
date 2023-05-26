@@ -1,0 +1,27 @@
+{% if banners %}
+<div class="row row-padding-top">
+	<div class="col-lg-12">
+		  <div id="slideshow{{ module }}" class="default-slideshow">
+		   {% for banner in banners %}
+		      <div class="item text-center">
+		      {% if banner.link %}
+		      <a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-fluid" width="{{ banner.width }}" height="{{ banner.height }}" /></a>
+		      {% else %}
+		      <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-fluid" width="{{ banner.width }}" height="{{ banner.height }}" />
+		      {% endif %}
+		      </div>
+		    {% endfor %}
+		  </div>
+	</div>
+</div>
+<script>
+$('#slideshow{{ module }}').slick({
+	autoplay: true,
+	dots: true,
+	arrows: false,
+	infinite: true,
+	autoplaySpeed: 5000,
+	slidesToShow: 1
+});
+</script>
+{% endif %}

@@ -1,0 +1,123 @@
+<div class="modal show" id="rm-product-gallery" tabindex="-1" role="dialog" aria-labelledby="rm-product-gallery">
+	<div class="all-wrapper">
+		<div id="preloader" class="rm-preloader-overlay d-flex justify-content-center align-items-center loaded"><div class="rm-preloader-spinner"><div></div><div></div><div></div><div></div></div></div>
+		<div id="slider-wrapper" class="is-opacity">
+			<span class="slider-close" data-dismiss="modal" aria-label="Close"></span>
+			{% if images %}
+				<div class="slider main-photos">
+					{% for image in images %}
+					<div class="slider-big-item">
+						<img src="{{ image.popup }}" alt="{{ heading_title }}" class="no-display" style="display:none;">
+					</div>
+					{% endfor %}
+				</div>
+				{% if images|length > 1 %}
+				<div class="additional-wrapper">
+					<div class="slider additional">
+						{% for image in images %}
+						<div>
+							<img src="{{ image.thumb }}" alt="{{ heading_title }}" class="no-display" style="display:none;">
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				{% endif %}
+			{% endif %}
+			<div class="info-wrapper">
+				<div class="slider-header no-display" style="display:none">
+					<span>{{ heading_title }}</span>
+				</div>
+				{% if price %}
+					<div class="rm-price-block no-display" style="display:none">
+						<div class="rm-module-price-box d-flex flex-column align-items-center justify-content-center">
+							{% if special %}
+							<div class="rm-module-price-top d-flex align-items-center">
+                            	<span class="rm-module-price-old">{{ price }}</span>
+                            </div>
+                        	<div class="rm-module-price-bottom d-flex align-items-md-end justify-content-between flex-column flex-md-row">
+                            	<span class="rm-module-price">{{ special }}</span>
+                            </div>
+							{% else %}
+							<div class="rm-module-price-bottom d-flex align-items-md-end justify-content-between flex-column flex-md-row">
+                            	<span class="rm-module-price">{{ price }}</span>
+                            </div>
+							{% endif %}
+                        </div>
+					</div>
+					{% if oct_popup_purchase_status is defined and oct_popup_purchase_status %}
+					<div class="buttons mt-4 no-display" style="display:none">
+						<a href="javascript:;" class="rm-btn dark d-inline-block button-one-click" onclick="octPopPurchase('{{ product_id }}')">{{ oct_product_quickbuy }}</a>
+					</div>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+<link rel="stylesheet" type="text/css" href="catalog/view/theme/oct_remarket/js/slick/slick.min.css">
+<script src="catalog/view/theme/oct_remarket/js/slick/slick.min.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="catalog/view/theme/oct_remarket/stylesheet/oct-images-gallery.css">
+{% if oct_remarket_data.product_zoom is defined and oct_remarket_data.product_zoom %}
+<script src="catalog/view/theme/oct_remarket/js/zoom/jquery.zoom.js" charset="utf-8"></script>
+<script>
+$(document).ready(function() {
+	$(".slider-big-item").zoom();
+});
+</script>
+{% endif %}
+<script>
+function closeGallery() {
+	$('#rm-product-gallery').remove();
+	$('.modal-backdrop').remove();
+	$('body').removeClass('modal-open');
+	$('body, .menu-row').removeAttr('style');
+	$('.main-photos,.additional').slick('unslick');
+}
+
+$(document).ready(function() {
+	$('.main-photos').slick({
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		fade: true,
+		centerMode: true,
+		asNavFor: '.additional',
+		autoplay: false,
+		arrows: false
+	});
+
+	$('.additional').slick({
+		slidesToShow: 4,
+		slidesToScroll: 1,
+		asNavFor: '.main-photos',
+		focusOnSelect: true,
+		arrows: true,
+		responsive: [{
+ 			breakpoint: 480,
+ 			settings: {
+	 			slidesToShow: 3,
+ 				arrows: true
+ 			}
+ 		}]
+	});
+
+	$('.slider-close').on('click',function(){
+	    closeGallery();
+	});
+
+	setTimeout(function() {
+		$('#preloader').removeClass('loaded');
+		$('#slider-wrapper').removeClass('is-opacity');
+		$('#slider-wrapper').addClass('loaded');
+		$('.no-display').removeAttr('style');
+		$('.main-photos').slick('refresh');
+		$('.additional').slick('refresh');
+	}, 1800);
+
+});
+
+$(document).keyup(function(e) {
+    if (e.key === "Escape") {
+        closeGallery();
+    }
+});
+</script>
+</div>

@@ -1,0 +1,48 @@
+<div class="row">
+	<div class="col-sm-6">
+	    <div class="rm-content-title">{{ text_new_customer }}</div>
+	    <div class="rm-account-text mb-2">{{ text_checkout }}</div>
+	    <div class="rm-form-checkbox-group">
+		    <div class="radio mb-2">
+		    	<label for="checkout_register" class="radio-inline">
+				    {% if account == 'register' %}
+			        <input type="radio" id="checkout_register" name="account" value="register" checked="checked" class="input-radio" />
+			        {% else %}
+			        <input type="radio" id="checkout_register" name="account" value="register" class="input-radio" />
+			        {% endif %}
+			        <span class="radio-box"></span>
+			        {{ text_register }}
+		        </label>
+		    </div>
+		    {% if checkout_guest %}
+		    <div class="radio mb-2">
+		    	<label for="checkout_guest" class="radio-inline">
+			        {% if account == 'guest' %}
+			        <input type="radio" id="checkout_guest" name="account" value="guest" checked="checked" class="input-radio" />
+			        {% else %}
+			        <input type="radio" id="checkout_guest" name="account" value="guest" class="input-radio" />
+			        {% endif %}
+			        <span class="radio-box"></span>
+			        {{ text_guest }}
+		        </label>
+		    </div>
+		    {% endif %}
+		</div>
+	    <div class="rm-account-text mb-3">{{ text_register_account }}</div>
+	    <input type="button" value="{{ button_continue }}" id="button-account" data-loading-text="{{ text_loading }}" class="rm-btn dark mb-3" />
+	</div>
+	<div class="col-sm-6">
+	    <div class="rm-content-title">{{ text_returning_customer }}</div>
+	    <div class="rm-account-text mb-2">{{ text_i_am_returning_customer }}</div>
+	    <div class="form-group">
+		    <label class="rm-control-label" for="input-email">{{ entry_email }}</label>
+		    <input type="text" name="email" value="" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+	    </div>
+	    <div class="form-group">
+		    <label class="rm-control-label" for="input-password">{{ entry_password }}</label>
+		    <input type="password" name="password" value="" placeholder="{{ entry_password }}" id="input-password" class="form-control mb-3" />
+		    <a href="{{ forgotten }}">{{ text_forgotten }}</a>
+		</div>
+		<input type="button" value="{{ button_login }}" id="button-login" data-loading-text="{{ text_loading }}" class="rm-btn dark mb-3" />
+	</div>
+</div>

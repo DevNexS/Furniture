@@ -1,0 +1,47 @@
+<div class="oct-fontawesome-icons">
+	<div class="form-group">
+		<input type="text" maxlength="30" placeholder="Search..." id="search" class="form-control" />
+	</div>
+	<div class="row" style="padding:0 15px">
+		<h4>Web Application Icons</h4>
+		{% for key, fa_icon in fa_icons %}
+		<div class="col-xs-2"><i class="{{ key }}" aria-hidden="true"></i><br />{{ fa_icon }}</div>
+		{% endfor %}
+	</div>
+</div>
+<style type="text/css">
+	.oct-fontawesome-icons .col-xs-2 {
+		text-align:center;
+		margin-bottom:10px;
+		min-height:95px;
+	}
+	.oct-fontawesome-icons .col-xs-2 i {
+		padding: 6px;
+		font-size:25px;
+	}
+	.oct-fontawesome-icons .col-xs-2 i:hover {
+		background: #e5e5e5;
+		border-radius: 3px;
+		cursor: pointer;
+	}
+</style>
+<script>
+$(function (){
+	$('#search').keyup(function (){
+		let val = this.value;
+		let re = new RegExp('^'+val,'i');
+		
+		$('.col-xs-2').each(function (){
+			$(this).toggle(re.test($(this).text()));
+		});
+	});
+});
+
+$('.col-xs-2 i').on('click', function() {
+	$('#{{ icone_id }}').attr('class', $(this).attr('class'));
+	$('#{{ input_id }}').val($(this).attr('class'));
+
+	$('#modal-icons').modal('hide');
+	$('#modal-icons').remove();
+});
+</script>

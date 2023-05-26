@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_live_search</code>
+	<name>Octemplates - Live Search</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/controller/common/search.php">
+		<operation error="skip">
+			<search><![CDATA[$data['text_search'] = $this->language->get('text_search');]]></search>
+			<add position="before"><![CDATA[
+	        if ($this->config->get('theme_oct_remarket_live_search_status')) {
+				$oct_live_search_data = $this->config->get('theme_oct_remarket_live_search_data');
+				$data['oct_live_search_status'] = $this->config->get('theme_oct_remarket_live_search_status');
+
+		        $data['delay_setting'] = isset($oct_live_search_data['delay']) && $oct_live_search_data['delay'] ? (int)$oct_live_search_data['delay'] : 500;
+		        $data['count_symbol'] = isset($oct_live_search_data['count_symbol']) && $oct_live_search_data['count_symbol'] ? (int)$oct_live_search_data['count_symbol'] : 2;
+			}
+			]]></add>
+    	</operation>
+	</file>
+</modification>

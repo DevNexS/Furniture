@@ -1,0 +1,290 @@
+{% if products %}
+    {% if position == 'column_left' or position == 'column_right' %}
+        <div class="rm-module-column-box">
+            <div class="rm-column-title">
+                {% if link is defined and link %}
+                    <a href="{{ link }}">
+                    {% endif %}{{ heading_title }}
+                    {% if link is defined and link %}
+                    </a>
+                {% endif %}
+            </div>
+            <div id="rm-column-{{ module_name }}_{{ module }}" class="rm-module-column-box-content">
+                {% for product in products %}
+                    <div class="rm-item h-100">
+                        <div class="rm-module-item d-flex flex-column h-100{% if product.oct_grayscale %} rm-no-stock{% endif %}">
+                            {% if product.oct_stickers is not empty %}
+                			<div class="rm-module-stickers">
+                				{% for key, oct_sticker in product.oct_stickers %}
+                					{% if oct_sticker is not empty %}
+                					<div class="rm-module-stickers-sticker rm-module-stickers-sticker-{{ key }}">
+                						{{ oct_sticker }}
+                					</div>
+                					{% endif %}
+                				{% endfor %}
+                			</div>
+                			{% endif %}
+                            <div class="rm-module-buttons list-unstyled d-flex flex-column">
+                                {% if oct_popup_view_status %}
+                    			<button type="button" aria-label="Quick view" class="rm-module-buttons-item popup-view d-flex align-items-center justify-content-center" title="{{ oct_popup_view }}" onclick="octPopUpView('{{ product.product_id }}')">
+                                    <span></span>
+                                </button>
+                    			{% endif %}
+                                <button type="button" aria-label="Wishlist" class="rm-module-buttons-item wishlist d-flex align-items-center justify-content-center" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                                    <span></span></button>
+                                <button type="button" aria-label="Compare" class="rm-module-buttons-item compare d-flex align-items-center justify-content-center" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                                    <span></span></button>
+                            </div>
+                            <div class="rm-module-img">
+                                <a href="{{ product.href }}">
+                                    <img
+                                        src="{{ product.thumb }}"
+                                        {% if oct_lazyload is defined and oct_lazyload %}
+                                        data-srcset="{{ product.thumb }} 100w"
+                                        srcset="{{ oct_lazy_image }} 100w"
+                                        sizes="100vw"
+                                        class="img-fluid oct-lazy"
+                                        {% else %}
+                                        class="img-fluid"
+                                        {% endif %}
+                                        alt="{{ product.name }}"
+                                        title="{{ product.name }}"
+                                        width="{{ product.width }}"
+                                        height="{{ product.height }}"/>
+                                </a>
+                            </div>
+                            {% if product.rating is not same as(false) %}
+                                <div class="rm-module-rating d-flex align-items-center justify-content-start">
+                                    <div class="rm-module-rating-stars d-flex align-items-center">
+                                        {% for i in 1..5 %}
+                                            {% if product.rating < i %}
+                                                <span class="rm-module-rating-star"></span>
+                                            {% else %}
+                                                <span class="rm-module-rating-star rm-module-rating-star-is"></span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="rm-module-reviews">
+                                        <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--comments-icon" alt="" width="12" height="11" />
+                                        <span>{{ product.reviews }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="rm-module-title">
+                                <a href="{{ product.href }}">{{ product.name }}</a>
+                            </div>
+                            {% if product.price %}
+                                <div class="rm-module-price-box">
+                                    {% if not product.special %}
+                                        <div class="rm-module-price-bottom d-flex align-items-end justify-content-between">
+                                            <span class="rm-module-price">{{ product.price }}</span>
+                                            {% if product.can_buy is not empty and product.can_buy %}
+                                            <button type="button" aria-label="To cart" onclick="cart.add('{{ product.product_id }}');" class="rm-btn secondary rm-cart-btn">
+                                                <span class="rm-cart-btn-icon"></span>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="rm-module-price-top d-flex align-items-center">
+                                            <span class="rm-module-price-old">{{ product.price }}</span>
+                                            {% if product.oct_stickers is not empty %}
+                                				{% if oct_sticker_you_save and product.you_save %}
+                                					<div class="rm-module-sticker-discount">{{ product.you_save }}</div>
+                                				{% endif %}
+                                			{% endif %}
+                                        </div>
+                                        <div class="rm-module-price-bottom d-flex align-items-end justify-content-between">
+                                            <span class="rm-module-price">{{ product.special }}</span>
+                                            {% if product.can_buy is not empty and product.can_buy %}
+                                            <button type="button" aria-label="To cart" onclick="cart.add('{{ product.product_id }}');" class="rm-btn secondary rm-cart-btn">
+                                                <span class="rm-cart-btn-icon"></span>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            {% if product.tax %}
+                                <div class="price-tax">
+                                    {{ text_tax }} {{ product.tax }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" aria-label="Prev" id="rm-{{ module_name }}_{{ module }}-button-prev" class="rm-column-module-btn rm-column-module-btn-prev">
+                <span>&lt;</span></button>
+            <button type="button" aria-label="Next" id="rm-{{ module_name }}_{{ module }}-button-next" class="rm-column-module-btn rm-column-module-btn-next">
+                <span>&gt;</span></button>
+            <script>
+                octColumnProducts("rm-{{ module_name }}_{{ module }}-button-prev", "rm-{{ module_name }}_{{ module }}-button-next", "rm-column-{{ module_name }}_{{ module }}");
+            </script>
+        </div>
+    {% else %}
+        <div class="rm-module">
+            <div class="row row-padding-top">
+                <div class="col-12 rm-module-header{% if show_type == 'width-infinity' %} width-infinity-header{% endif %}">
+                    <span>
+                        {% if link is defined and link %}
+                            <a href="{{ link }}">
+                            {% endif %}{{ heading_title }}
+                            {% if link is defined and link %}
+                            </a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div id="rm-{{ module_name }}_{{ module }}" class="row no-gutters{% if show_type == 'width-infinity' %} width-infinity-row{% endif %}">
+                {% for product in products %}
+                    <div class="col-12 col-md-4 col-xl-3 rm-module-col"{% if show_type == 'width-100' %} data-width="width-100"{% endif %}{% if show_type == 'width-50' %} data-width="width-50"{% endif %}{% if show_type == 'width-infinity' %} data-width="width-infinity"{% endif %}>
+                        <div class="rm-module-item d-flex flex-md-column h-100{% if product.oct_grayscale %} rm-no-stock{% endif %}">
+                            <div class="rm-module-img d-flex flex-column d-md-block">
+                                {% if product.oct_stickers is not empty %}
+                    			<div class="rm-module-stickers">
+                    				{% for key, oct_sticker in product.oct_stickers %}
+                    					{% if oct_sticker is not empty %}
+                    					<div class="rm-module-stickers-sticker rm-module-stickers-sticker-{{ key }}">
+                    						{{ oct_sticker }}
+                    					</div>
+                    					{% endif %}
+                    				{% endfor %}
+                    			</div>
+                    			{% endif %}
+                                <div class="rm-module-buttons list-unstyled d-flex justify-content-center flex-md-column order-1">
+                                    {% if oct_popup_view_status %}
+                        			<button type="button" aria-label="Quick view" class="rm-module-buttons-item popup-view d-flex align-items-center justify-content-center" title="{{ oct_popup_view }}" onclick="octPopUpView('{{ product.product_id }}')">
+                                        <span></span>
+                                    </button>
+                        			{% endif %}
+                                    <button type="button" aria-label="Wishlist" class="rm-module-buttons-item wishlist d-flex align-items-center justify-content-center" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                                        <span></span>
+                                    </button>
+                                    <button type="button" aria-label="Compare" class="rm-module-buttons-item compare d-flex align-items-center justify-content-center" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                                        <span></span>
+                                    </button>
+                                </div>
+                                <a href="{{ product.href }}" class="order-0">
+                                    <img
+                                        src="{{ product.thumb }}"
+                                        {% if oct_lazyload is defined and oct_lazyload %}
+                                        data-srcset="{{ product.thumb }} 100w"
+                                        srcset="{{ oct_lazy_image }} 100w"
+                                        sizes="100vw"
+                                        class="img-fluid oct-lazy"
+                                        {% else %}
+                                        class="img-fluid"
+                                        {% endif %}
+                                        alt="{{ product.name }}"
+                                        title="{{ product.name }}"
+                                        width="{{ product.width }}"
+                                        height="{{ product.height }}"/>
+                                </a>
+                                {% if product.rating is not same as(false) %}
+                                    <div class="rm-module-rating d-flex align-items-center justify-content-center justify-content-md-start order-2">
+                                        <div class="rm-module-rating-stars d-flex align-items-center">
+                                            {% for i in 1..5 %}
+                                                {% if product.rating < i %}
+                                                    <span class="rm-module-rating-star"></span>
+                                                {% else %}
+                                                    <span class="rm-module-rating-star rm-module-rating-star-is"></span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="rm-module-reviews">
+                                            <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--comments-icon" alt="" width="12" height="11" />
+                                            <span>{{ product.reviews }}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if not product.quantity %}
+                                <div class="rm-module-quantity d-flex align-items-center justify-content-center">
+                                    <button type="button" aria-label="Minus" class="rm-module-quantity-btn d-flex align-items-center justify-content-center rm-minus">
+                                        <span class="minus"></span>
+                                    </button>
+                                    <input type="text" class="form-control" name="quantity" value="1" aria-label="Quantity">
+                                    <button type="button" aria-label="Plus" class="rm-module-quantity-btn d-flex align-items-center justify-content-center rm-plus">
+                                        <span class="plus"></span>
+                                    </button>
+                                </div>
+                                {% endif %}
+								<input type="hidden" name="product_id" value="{{ product.product_id }}" />
+                            </div>
+                            <div class="rm-module-caption d-flex flex-column flex-grow-1">
+                                <div class="rm-module-title">
+                                    <a href="{{ product.href }}">{{ product.name }}</a>
+                                </div>
+                                {% if not product.quantity %}
+                                <div class="rm-module-stock">{{ oct_product_stock }}</div>
+                                {% endif %}
+                                {% if product.oct_model is defined and product.oct_model %}
+	                            <div class="rm-category-product-model"><span>{{ oct_view_model_cat }}</span>{{ product.oct_model }}</div>
+                                {% endif %}
+                                {% if product.oct_atributes is defined and product.oct_atributes %}
+                                <div class="rm-module-attr">
+                                {% for attribute in product.oct_atributes %}
+                                    <span class="rm-module-attr-item">
+                                        <span>{{ attribute.name }}:</span> <span class="rm-module-attr-item-header">{{ attribute.text }}</span>
+                                    </span>
+                                {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if product.price %}
+                                    <div class="rm-module-price-box d-flex flex-column mt-auto">
+                                        {% if product.tax %}
+                                            <div class="price-tax">
+                                                {{ text_tax }} {{ product.tax }}
+                                            </div>
+                                        {% endif %}
+                                        {% if not product.special %}
+                                            <div class="rm-module-price-bottom d-flex align-items-md-end justify-content-between flex-column flex-md-row mt-md-auto flex-grow-1">
+                                                <span class="rm-module-price">{{ product.price }}</span>
+                                                {% if product.can_buy is not empty and product.can_buy %}
+                                                <button type="button" aria-label="To cart" class="rm-btn secondary rm-cart-btn d-flex align-items-center justify-content-center justify-content-md-start rm-cat-button-cart">
+                                                    <span class="rm-cart-btn-icon"></span><span class="rm-btn-text">{{ button_cart }}</span>
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <div class="rm-module-price-top d-flex align-items-center mt-md-auto">
+                                                <span class="rm-module-price-old">{{ product.price }}</span>
+                                                {% if product.oct_stickers is not empty %}
+                                    				{% if oct_sticker_you_save and product.you_save %}
+                                    					<div class="rm-module-sticker-discount">{{ product.you_save }}</div>
+                                    				{% endif %}
+                                    			{% endif %}
+                                            </div>
+                                            <div class="rm-module-price-bottom d-flex align-items-md-end justify-content-between flex-column flex-md-row">
+                                                <span class="rm-module-price">{{ product.special }}</span>
+                                                {% if product.can_buy is not empty and product.can_buy %}
+                                                <button type="button" aria-label="To cart" class="rm-btn secondary rm-cart-btn d-flex align-items-center justify-content-center justify-content-md-start rm-cat-button-cart">
+                                                    <span class="rm-cart-btn-icon"></span><span class="rm-btn-text">{{ button_cart }}</span>
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if show_more is defined and show_more and show_type != 'width-infinity' %}
+            <div class="row oct-load-more">
+                <div class="col-12 text-center">
+                    <div class="oct-load-more-button-wrapper">
+                        <input type="hidden" id="more_{{ module_name }}_{{ module }}" name="more_{{ module_name }}_{{ module }}" value="{{ page }}">
+                    <button id="btn_{{ module_name }}_{{ module }}" class="rm-btn rm-btn-2x dark oct-load-more-button text-center mx-0" onclick="octShowMoreModule('{{ module_id }}', '{% if oct_lazyload is defined and oct_lazyload %}1{% else %}0{% endif %}', 'btn_{{ module_name }}_{{ module }}', 'rm-{{ module_name }}_{{ module }}', 'more_{{ module_name }}_{{ module }}', '{{ oct_path }}');">
+                              <span class="rm-btn-icon">
+                                  <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--show-more-icon" alt="" width="24" height="24">
+                              </span>
+                              <span class="rm-btn-text">{{ oct_show_more }}</span>
+                          </button>
+                      </div>
+                  </div>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %}

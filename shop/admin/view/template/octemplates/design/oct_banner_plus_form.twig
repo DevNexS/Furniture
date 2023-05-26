@@ -1,0 +1,279 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-banner-plus" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-banner-plus" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<div class="toggle-group">
+								<input type="checkbox" name="status" {% if status %}checked="checked"{% endif %} id="status" tabindex="1">
+								<label for="status"></label>
+								<div class="onoffswitch pull-left" aria-hidden="true">
+									<div class="onoffswitch-label">
+										<div class="onoffswitch-inner"></div>
+										<div class="onoffswitch-switch"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+							{% if (error_name) %}
+							<div class="text-danger">
+								<script>
+									usNotify('warning', '{{ error_name }}');
+								</script>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-2">
+							<ul class="nav nav-pills nav-stacked" id="settings">
+								{% set image_row = 0 %}
+								{% for oct_banner_plus_image in oct_banner_plus_images %}
+								<li class="banner-li{{ image_row }}"><a href="#image-row{{ image_row }}" data-toggle="tab"><span class="delete-block-in" onclick="removeImage({{ image_row }});"><i class="fa fa-minus-circle"></i></span> {{ oct_banner_plus_image.oct_banner_plus_image_description[1].title }}</a></li>
+								{% set image_row = image_row + 1 %}
+								{% endfor %}
+							</ul>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="javascript:;" onclick="addImage(); updateActive(); return false;" id="add_banner"><i class="fa fa-plus-circle"></i> {{ entry_add_new_block }}</a></li>
+							</ul>
+						</div>
+						<div class="col-sm-10">
+							<div class="tab-content" id="banner-setting-block">
+								{% set image_row = 0 %}
+								{% for oct_banner_plus_image in oct_banner_plus_images %}
+								<div class="tab-pane" id="image-row{{ image_row }}">
+									<div class="col-sm-12">
+										<legend style="padding-bottom:10px;" class="clearfix"><div class="pull-left">{{ entry_settings }}</div></legend>
+										<ul class="nav nav-tabs" id="language_banner{{ image_row }}">
+											{% for language in languages %}
+											<li><a href="#banner_language{{ language.language_id }}-{{ image_row }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />  {{ language.name }}</a></li>
+											{% endfor %}
+										</ul>
+										<div class="tab-content">
+											{% for language in languages %}
+											<div class="tab-pane" id="banner_language{{ language.language_id }}-{{ image_row }}">
+												<div class="form-group required">
+													<label class="col-sm-2 control-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="oct_banner_plus_image[{{ image_row }}][oct_banner_plus_image_description][{{ language.language_id }}][title]" value="{{ oct_banner_plus_image.oct_banner_plus_image_description[language.language_id] is defined ? oct_banner_plus_image.oct_banner_plus_image_description[language.language_id].title : '' }}" placeholder="{{ entry_title }}" class="form-control"/>
+													{% if (error_oct_banner_plus_image[image_row][language.language_id] is defined) %}
+													<div class="text-danger">
+														<script>
+															usNotify('warning', '{{ error_oct_banner_plus_image[image_row][language.language_id] }}');
+														</script>
+													</div>
+													{% endif %}
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-button{{ language.language_id }}">{{ entry_button }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="oct_banner_plus_image[{{ image_row }}][oct_banner_plus_image_description][{{ language.language_id }}][button]" value="{{ oct_banner_plus_image.oct_banner_plus_image_description[language.language_id] is defined ? oct_banner_plus_image.oct_banner_plus_image_description[language.language_id].button : '' }}" placeholder="{{ entry_button }}" class="form-control"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-description{{ language.language_id }}">{{ entry_description }}</label>
+													<div class="col-sm-10">
+														<textarea name="oct_banner_plus_image[{{ image_row }}][oct_banner_plus_image_description][{{ language.language_id }}][description]" class="form-control">{{ oct_banner_plus_image.oct_banner_plus_image_description[language.language_id] is defined ? oct_banner_plus_image.oct_banner_plus_image_description[language.language_id].description : '' }}</textarea>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-link{{ language.language_id }}">{{ entry_link }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="oct_banner_plus_image[{{ image_row }}][oct_banner_plus_image_description][{{ language.language_id }}][link]" value="{{ oct_banner_plus_image.oct_banner_plus_image_description[language.language_id] is defined ? oct_banner_plus_image.oct_banner_plus_image_description[language.language_id].link : '' }}" placeholder="{{ entry_link }}" class="form-control"/>
+													</div>
+												</div>
+											</div>
+											{% endfor %}
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image">{{ entry_image }}</label>
+											<div class="col-sm-10">
+												<a href="" id="thumb-image{{ image_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ oct_banner_plus_image.thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+												<input type="hidden" name="oct_banner_plus_image[{{ image_row }}][image]" value="{{ oct_banner_plus_image.image }}" id="input-image{{ image_row }}" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][sort_order]" value="{{ oct_banner_plus_image.sort_order }}" placeholder="{{ entry_sort_order }}" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_background_color }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][background_color]" value="{{ oct_banner_plus_image.background_color }}" placeholder="{{ entry_background_color }}" class="form-control spectrum"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_title_color }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][title_color]" value="{{ oct_banner_plus_image.title_color }}" placeholder="{{ entry_title_color }}" class="form-control spectrum"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_text_color }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][text_color]" value="{{ oct_banner_plus_image.text_color }}" placeholder="{{ entry_text_color }}" class="form-control spectrum"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_color }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][button_color]" value="{{ oct_banner_plus_image.button_color }}" placeholder="{{ entry_button_color }}" class="form-control spectrum"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_background }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][button_background]" value="{{ oct_banner_plus_image.button_background }}" placeholder="{{ entry_button_background }}" class="form-control spectrum"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_background_hover }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][button_background_hover]" value="{{ oct_banner_plus_image.button_background_hover }}" placeholder="{{ entry_button_background_hover }}" class="form-control spectrum"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_text_hover }}</label>
+											<div class="col-sm-10">
+												<input type="text" name="oct_banner_plus_image[{{ image_row }}][button_text_hover]" value="{{ oct_banner_plus_image.button_text_hover }}" placeholder="{{ entry_button_text_hover }}" class="form-control spectrum"/>
+											</div>
+										</div>
+									</div>
+									<script>
+										$('#language_banner{{ image_row }} a:first').tab('show');
+									</script>
+								</div>
+								{% set image_row = image_row + 1 %}
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var image_row = {{ image_row }};
+
+	function addImage() {
+		html  = '<div class="tab-pane" id="image-row' + image_row + '">';
+		html += '<div class="col-sm-12">';
+		html += '<legend style="padding-bottom:10px;" class="clearfix"><div class="pull-left">{{ entry_settings }}</div></legend>';
+		html += '<ul class="nav nav-tabs" id="language_banner' + image_row + '">';
+		{% for language in languages %}
+		html += '<li><a href="#banner_language{{ language.language_id }}-' + image_row + '" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />  {{ language.name }}</a></li>';
+		{% endfor %}
+		html += '</ul>';
+		html += '<div class="tab-content">';
+		{% for language in languages %}
+		html += '<div class="tab-pane" id="banner_language{{ language.language_id }}-' + image_row + '">';
+		html += '<div class="form-group required">';
+		html += '<label class="col-sm-2 control-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>';
+		html += '<div class="col-sm-10">';
+		html += '<input type="text" name="oct_banner_plus_image[' + image_row + '][oct_banner_plus_image_description][{{ language.language_id }}][title]" value="" placeholder="{{ entry_title }}" class="form-control"/>';
+		html += '</div>';
+		html += '</div>';
+		html += '<div class="form-group">';
+		html += '<label class="col-sm-2 control-label" for="input-button{{ language.language_id }}">{{ entry_button }}</label>';
+		html += '<div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][oct_banner_plus_image_description][{{ language.language_id }}][button]" value="" placeholder="{{ entry_button }}" class="form-control"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-description{{ language.language_id }}">{{ entry_description }}</label><div class="col-sm-10"><textarea name="oct_banner_plus_image[' + image_row + '][oct_banner_plus_image_description][{{ language.language_id }}][description]" class="form-control"></textarea></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-link{{ language.language_id }}">{{ entry_link }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][oct_banner_plus_image_description][{{ language.language_id }}][link]" value="" placeholder="{{ entry_link }}" class="form-control"/></div></div>';
+		html += '</div>';
+		{% endfor %}
+		html += '</div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image">{{ entry_image }}</label><div class="col-sm-10"><a href="" id="thumb-image' + image_row + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="oct_banner_plus_image[' + image_row + '][image]" value="" id="input-image' + image_row + '" /></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][sort_order]" value="" placeholder="{{ entry_sort_order }}" class="form-control" /></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_background_color }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][background_color]" value="{{ oct_default_colors.background_color }}" placeholder="{{ entry_background_color }}" class="form-control spectrum"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_title_color }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][title_color]" value="{{ oct_default_colors.title_color }}" placeholder="{{ entry_title_color }}" class="form-control spectrum"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_text_color }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][text_color]" value="{{ oct_default_colors.text_color }}" placeholder="{{ entry_text_color }}" class="form-control spectrum"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_color }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][button_color]" value="{{ oct_default_colors.button_color }}" placeholder="{{ entry_button_color }}" class="form-control spectrum"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_background }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][button_background]" value="{{ oct_default_colors.button_background }}" placeholder="{{ entry_button_background }}" class="form-control spectrum"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_background_hover }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][button_background_hover]" value="{{ oct_default_colors.button_background_hover }}" placeholder="{{ entry_button_background_hover }}" class="form-control spectrum"/></div></div>';
+		html += '<div class="form-group"><label class="col-sm-2 control-label" for="input-banner_image_button_color">{{ entry_button_text_hover }}</label><div class="col-sm-10"><input type="text" name="oct_banner_plus_image[' + image_row + '][button_text_hover]" value="{{ oct_default_colors.button_text_hover }}" placeholder="{{ entry_button_text_hover }}" class="form-control spectrum"/></div></div>';
+		html += '</div>';
+		html += '</div>';
+
+		html2 = "<li class='banner-li" + image_row + "'><a href='#image-row" + image_row + "' data-toggle='tab'><span class='delete-block-in' onclick='removeImage(" + image_row + ")'><i class='fa fa-minus-circle'></i></span> {{ entry_new_block }}</a></li>";
+
+		$('#banner-setting-block').append(html);
+		$('#settings').append(html2);
+
+		$('#settings li').removeClass('active');
+
+		$("#settings .banner-li" + image_row + " a").tab('show');
+
+		($('.delete-block-in').length == 4) ? ($('#add_banner').hide()) : ($('#add_banner').show());
+
+		image_row++;
+
+		initSpectrum();
+	}
+
+	function removeImage(image_row) {
+		$("#image-row" + image_row).remove();
+		$(".banner-li" + image_row).remove();
+
+		($('.delete-block-in').length == 4) ? ($('#add_banner').hide()) : ($('#add_banner').show());
+
+		$('#settings a:first').tab('show');
+	}
+</script>
+<script>
+	function updateActive() {
+		$('.nav.nav-tabs').each(function () {
+			$(this).children().children().first().tab('show');
+		});
+	}
+
+	($('.delete-block-in').length == 4) ? ($('#add_banner').hide()) : ($('#add_banner').show());
+
+	function initSpectrum() {
+		$(".spectrum").spectrum({
+			preferredFormat: "rgb",
+			showInitial: true,
+			showInput: true,
+			showAlpha: true,
+			showPalette: true,
+			palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
+		});
+	}
+
+	initSpectrum();
+
+	$('#settings a:first').tab('show');
+</script>
+{{ footer }}

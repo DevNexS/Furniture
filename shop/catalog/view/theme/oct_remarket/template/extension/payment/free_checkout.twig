@@ -1,0 +1,22 @@
+<div class="buttons">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" class="rm-btn dark" data-loading-text="{{ text_loading }}" />
+</div>
+<script>
+$('#button-confirm').on('click', function() {
+	$.ajax({
+		type: 'get',
+		url: 'index.php?route=extension/payment/free_checkout/confirm',
+		cache: false,
+		cache: false,
+		beforeSend: function() {
+			$('#button-confirm').button('loading');
+		},
+		complete: function() {
+			$('#button-confirm').button('reset');
+		},
+		success: function() {
+			location = '{{ continue }}';
+		}
+	});
+});
+</script>

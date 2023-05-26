@@ -1,0 +1,30 @@
+{% if blog_categories %}
+<div class="rm-module-column-box">
+	<div class="rm-column-title">{{ heading_title }}</div>
+	<ul class="list-unstyled rm-column-categories rm-column-categories-blog">
+		{% for blog_category in blog_categories %}
+		<li class="rm-column-categories-item">
+			<span class="d-flex justify-content-between"><a href="{{ blog_category.href }}">{{ blog_category.name }}</a>{% if category.children %}<a href="javascript:void(0);" class="rm-categories-toggle"><img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--category-column-toggle" class="chevron-down" alt="" /></a>{% endif %}</span>
+			{% if blog_category.children %}
+			<ul class="rm-categories-children rm-categories-2 list-unstyled">
+				{% for child in blog_category.children %}
+				<li class="rm-column-categories-item">
+					<span class="d-flex justify-content-between"><a href="{{ child.href }}">{{ child.name }}</a></span>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endif %}
+{% if search_block %}
+<div class="rm-module-column-box">
+	<div class="rm-column-title">{{ search_title }}</div>
+	<div id="blog_search" class="rm-blog-search">
+		<input type="text" name="blog_search" value="" placeholder="{{ search_placeholder }}" class="form-control w-100">
+		<button type="button" id="oct-blog-search-button"></button>
+	</div>
+</div>
+{% endif %}

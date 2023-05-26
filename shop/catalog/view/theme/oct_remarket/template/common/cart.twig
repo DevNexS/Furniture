@@ -1,0 +1,11 @@
+{% if oct_popup_cart_status is defined and oct_popup_cart_status %}
+<button title="{{ oct_cart }}" id="cart" class="rm-header-cart d-flex flex-column align-items-center" type="button" onclick="octPopupCart();">
+{% else %}
+<button title="{{ oct_cart }}" id="cart" type="button" class="rm-header-cart d-flex flex-column align-items-center" onclick="location = '{{ cart }}';">
+{% endif %}
+<span class="rm-header-cart-icon position-relative">
+    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--header-cart-icon" alt="cart-icon" width="21" height="21">
+    <span class="rm-header-cart-quantity">{{ total_products }}</span>
+</span>
+<span class="rm-header-cart-text">{{ total_amount }}</span>
+</button>

@@ -1,0 +1,27 @@
+{% if currencies|length > 1 %}
+<div id="oct_desktop_currency" class="top-nav-account-links-item rm-dropdown-box">
+    <div id="currency" class="curency">
+        <button class="btn-currency rm-dropdown-toggle d-flex align-items-center">
+        {% for currency in currencies %}
+        {% if currency.symbol_left and currency.code == code %} {{ currency.symbol_left }} {% elseif currency.symbol_right and currency.code == code %} {{ currency.symbol_right }} {% endif %}
+        {% endfor %} <span>{{ text_currency }}</span></button>
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-currency" class="h-100">
+            <div class="rm-dropdown">
+                <ul class="rm-dropdown-inner list-unstyled">
+                    {% for currency in currencies %}
+                    <li>
+                    {% if currency.symbol_left %}
+                    <button class="currency-select btn-block{% if currency.code == code %} active-item{% endif %}" type="button" name="{{ currency.code }}">{{ currency.symbol_left }} {{ currency.title }}</button>
+                    {% else %}
+                    <button class="currency-select btn-block{% if currency.code == code %} active-item{% endif %}" type="button" name="{{ currency.code }}">{{ currency.symbol_right }} {{ currency.title }}</button>
+                    {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <input type="hidden" name="code" value="" />
+            <input type="hidden" name="redirect" value="{{ redirect }}" />
+        </form>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,120 @@
+{% if categories %}
+<div id="rm-menu" class="rm-menu d-flex">
+    <nav>
+        <ul class="rm-menu-list list-unstyled">
+			{% for category in categories %}
+			<li class="rm-menu-list-item">
+                <div class="d-flex align-items-center justify-content-between">
+                    <a href="{{ category.href }}" class="rm-menu-list-item-link d-flex align-items-center">
+                        {% if category.oct_image %}
+                        <img class="rm-menu-list-item-icon" src="{{ category.oct_image }}" alt="{{ category.name }}" width="{{ category.width }}" height="{{ category.height }}" />
+                        {% endif %}
+                        <span class="rm-menu-list-item-name">{{ category.name }}</span>
+                    </a>
+                    {% if category.children or category.oct_pages %}
+                    <span class="rm-menu-list-item-chevron"></span>
+                    {% endif %}
+                </div>
+				{% if category.children or category.oct_pages %}
+				<div class="rm-menu-list-item-child">
+                    <ul class="rm-menu-list list-unstyled">
+                        {% for child in category.children %}
+                        <li class="rm-menu-list-item">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <a href="{{ child.href }}" class="rm-menu-list-item-link d-flex align-items-center">
+                                    <span class="rm-menu-list-item-name">{{ child.name }}</span>
+                                </a>
+                                {% if child.children or child.oct_pages %}
+                                <span class="rm-menu-list-item-chevron"></span>
+                                {% endif %}
+                            </div>
+                            {% if child.children or child.oct_pages %}
+                            <div class="rm-menu-list-item-child rm-menu-list-item-child-2">
+                                <ul class="rm-menu-list list-unstyled">
+                                    {% for ch in child.children %}
+                                    <li class="rm-menu-list-item">
+										<div class="d-flex align-items-center justify-content-between">
+	                                        <a href="{{ ch.href }}" class="rm-menu-list-item-link d-flex align-items-center">
+	                                            <span class="rm-menu-list-item-name">{{ ch.name }}</span>
+	                                        </a>
+											{% if ch.children or ch.oct_pages %}
+											<span class="rm-menu-list-item-chevron"></span>
+			                                {% endif %}
+			                            </div>
+										{% if ch.children or ch.oct_pages %}
+										<div class="rm-menu-list-item-child rm-menu-list-item-child-2">
+											<ul class="rm-menu-list list-unstyled">
+												{% for child in ch.children %}
+												<li class="rm-menu-list-item">
+													<a href="{{ child.href }}" class="rm-menu-list-item-link d-flex align-items-center">
+			                                            <span class="rm-menu-list-item-name">{{ child.name }}</span>
+			                                        </a>
+												</li>
+			                                    {% endfor %}
+												{% if ch.oct_pages %}
+												<li class="rm-menu-list-landings">
+													<ul>
+														{% for oct_page in ch.oct_pages %}
+															{% if oct_page.page_links is not empty %}
+															<li class="d-flex flex-column align-items-start">
+																<strong>{{ oct_page.page_group[language_id] }}</strong>
+																{% for page_link in oct_page.page_links %}
+																<a href="{{ page_link[language_id].link }}" title="{{ page_link[language_id].title }}">{{ page_link[language_id].title }}</a>
+																{% endfor %}
+															</li>
+															{% endif %}
+														{% endfor %}
+													</ul>
+												</li>
+												{% endif %}
+			                                </ul>
+										</div>
+										{% endif %}
+                                    </li>
+                                    {% endfor %}
+									{% if child.oct_pages %}
+									<li class="rm-menu-list-landings">
+										<ul>
+											{% for oct_page in child.oct_pages %}
+												{% if oct_page.page_links is not empty %}
+												<li class="d-flex flex-column align-items-start">
+													<strong>{{ oct_page.page_group[language_id] }}</strong>
+													{% for page_link in oct_page.page_links %}
+													<a href="{{ page_link[language_id].link }}" title="{{ page_link[language_id].title }}">{{ page_link[language_id].title }}</a>
+													{% endfor %}
+												</li>
+												{% endif %}
+											{% endfor %}
+										</ul>
+									</li>
+									{% endif %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+						{% if category.oct_pages %}
+						<li class="rm-menu-list-landings">
+							<ul>
+								{% for oct_page in category.oct_pages %}
+									{% if oct_page.page_links is not empty %}
+									<li class="d-flex flex-column align-items-start">
+										<strong>{{ oct_page.page_group[language_id] }}</strong>
+										{% for page_link in oct_page.page_links %}
+										<a href="{{ page_link[language_id].link }}" title="{{ page_link[language_id].title }}">{{ page_link[language_id].title }}</a>
+										{% endfor %}
+									</li>
+									{% endif %}
+								{% endfor %}
+							</ul>
+						</li>
+						{% endif %}
+                    </ul>
+                </div>
+				{% endif %}
+			</li>
+			{% endfor %}
+		</ul>
+	</nav>
+</div>
+{% endif %}

@@ -1,0 +1,303 @@
+// Account column module
+.rm-account-list {
+    background-color: #FFF;
+
+    &-item {
+        transition: background $mainTransition;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+
+        &:not(:last-child) {
+            border-bottom: $mainBorder;
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 2px;
+            background: transparent;
+            transition: background $mainTransition;
+        }
+
+        &:hover {
+            background: #FDFDFD;
+
+            &:before {
+                background: $primaryColor;
+            }
+
+            a {
+                color: $linksColor;
+            }
+
+            span {
+                text-decoration: underline;
+            }
+            transform: scale(1);
+        }
+
+        a {
+            line-height: 17px;
+            padding: 15px 20px;
+            letter-spacing: 0.3px;
+            text-decoration: none;
+        }
+
+        img {
+            margin-right: 20px;
+            width: 40px;
+            height: 40px;
+            transform: scale(0.98);
+            transition: transform $mainTransition;
+        }
+    }
+}
+// End of account column module
+// Account login
+
+.rm-account-login {
+    padding: 0;
+
+    > div {
+        padding: 30px;
+        @media (min-width: $break-xl) {
+            padding: 60px 120px 40px;
+        }
+        @media (min-width: $break-xxl) {
+            padding: 60px 240px 40px;
+        }
+    }
+
+    &-enter {
+        border-bottom: $mainBorder;
+        @media (min-width: $break-xl) {
+            padding-bottom: 60px!important;
+        }
+    }
+
+    &-title {
+        font-weight: 500;
+        font-size: 22px;
+        line-height: 27px;
+        text-transform: uppercase;
+        margin-bottom: 26px;
+    }
+
+    &-form {
+        margin-top: 34px;
+    }
+
+    &-forgotten {
+        margin-bottom: 30px;
+    }
+
+    &-text {
+        margin-bottom: 30px;
+    }
+}
+
+.rm-account-login,
+.rm-account-register {
+    .rm-btn {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+}
+// End of account login
+// Account account
+
+.rm-account-content {
+    .form-checkbox-group {
+        margin-left: 15px;
+        font-size: 12px;
+    }
+    @media (max-width: $break-sm-max) {
+        .table td,
+        .table th {
+            white-space: nowrap;
+        }
+
+        #accordion {
+            .panel-body {
+                padding: 0;
+            }
+
+            fieldset {
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    fieldset {
+        & + & {
+            margin-top: 20px;
+        }
+    }
+}
+
+.rm-account-form {
+    @media (min-width: $break-xxl) {
+        max-width: 60%;
+    }
+
+    & + & {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+}
+
+.rm-account-text {
+    font-size: 14px;
+    line-height: 21px;
+    color: #656C7D;
+
+    & + .rm-content-title {
+        margin-top: 30px;
+    }
+
+    &-order {
+        font-size: 16px;
+        line-height: 22px;
+
+        span {
+            margin-left: 5px;
+            font-weight: 500;
+        }
+    }
+}
+
+.rm-account-order {
+    border-bottom: $mainBorder;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+// End of account account
+// Account address list
+
+.rm-acc-address-list-item {
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: $mainBorder;
+}
+// End of Account address list
+// Wishlist
+
+.rm-account-wishlist-item {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: $mainBorder;
+    @media (max-width: $break-lg-max) {
+        flex-direction: column;
+        position: relative;
+
+        .rm-btn {
+            margin-top: 20px;
+        }
+    }
+    @media (max-width: $break-xs-max) {
+        justify-content: center !important;
+
+        .rm-btn {
+            margin: 20px auto 0;
+        }
+
+        .rm-btn-del {
+            position: absolute;
+            top: 36px;
+            left: 0;
+        }
+    }
+
+    &-left {
+        @media (max-width: $break-xs-max) {
+            flex-direction: column;
+            width: 100%;
+
+            .rm-acc-info-block-desc {
+                width: 100%;
+            }
+        }
+    }
+
+    &-img {
+        img {
+            width: 100px;
+            height: 100px;
+            border: $mainBorder;
+            transition: opacity $mainTransition;
+            @media (min-width: $break-md) {
+                margin-right: 30px;
+            }
+        }
+
+        &:hover img {
+            opacity: 0.8;
+        }
+        @media (max-width: $break-xs-max) {
+            flex-direction: column;
+
+            a {
+                margin: 0;
+            }
+
+            .rm-acc-info-link-del {
+                position: absolute;
+                top: 36px;
+                left: 0;
+            }
+        }
+    }
+
+    &-info {
+        .small {
+            color: $darkTextColor;
+            font-size: 13px;
+            line-height: 18px;
+
+            span {
+                color: $lightTextColor;
+                font-weight: 400;
+            }
+        }
+
+        .rm-module-price {
+            margin: 0;
+        }
+
+        span.rm-module-price-new {
+            font-size: 22px;
+            font-weight: 800;
+            @media (max-width: $break-sm-max) {
+                margin-top: 5px;
+                display: block;
+            }
+        }
+
+        span.rm-module-price-old {
+            font-size: 13px;
+            font-weight: 400;
+        }
+    }
+
+    .rm-cart-btn {
+        min-width: 142px;
+
+        &-icon {
+            background: #FFFFFF;
+        }
+    }
+}
+
+.rm-wishlist-price {
+    flex-direction: column;
+    @media (min-width: $break-md) {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+// End of Wishlist

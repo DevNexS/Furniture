@@ -1,0 +1,349 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-featured" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-featured" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<div class="toggle-group">
+								<input type="checkbox" name="status" {% if status %}checked="checked"{% endif %} id="input-status" tabindex="1">
+								<label for="input-status"></label>
+								<div class="onoffswitch pull-left" aria-hidden="true">
+									<div class="onoffswitch-label">
+										<div class="onoffswitch-inner"></div>
+										<div class="onoffswitch-switch"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+							{% if (error_name) %}
+							<div class="text-danger">
+								<script>
+									usNotify('warning', '{{ error_name }}');
+								</script>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+					<ul class="nav nav-tabs" id="language">
+						{% for language in languages %}
+						<li>
+							<a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+					<div class="tab-content">
+						{% for language in languages %}
+						<div class="tab-pane" id="language{{ language.language_id }}">
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_heading }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="heading[{{ language.language_id }}]" value="{{ heading[language.language_id] is not empty ? heading[language.language_id] : '' }}" class="form-control" />
+									{% if (error_heading[language.language_id] is defined) %}
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_heading[language.language_id] }}');
+										</script>
+									</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_link }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="link[{{ language.language_id }}]" value="{{ link[language.language_id] is not empty ? link[language.language_id] : '' }}" class="form-control" />
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-category">{{ entry_category }}</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="min-height: 150px;max-height:300px;overflow: auto;">
+								<table class="table table-striped">
+									{% for category in categories %}
+									<tr>
+										<td class="checkbox">
+											<label>
+											{% if category.category_id in module_categories %}
+											<input type="checkbox" name="module_categories[]" value="{{ category.category_id }}" checked="checked" />
+											{{ category.name }}
+											{% else %}
+											<input type="checkbox" name="module_categories[]" value="{{ category.category_id }}" />
+											{{ category.name }}
+											{% endif %}
+											</label>
+										</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
+							<a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-show_in_category">{{ entry_show_in_categories }}</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="min-height:150px;max-height:300px;overflow: auto;">
+								<table class="table table-striped">
+									{% for category in categories %}
+									<tr>
+										<td class="checkbox">
+											<label>
+											{% if category.category_id in module_show_in_categories %}
+											<input type="checkbox" name="module_show_in_categories[]" value="{{ category.category_id }}" checked="checked" />
+											{{ category.name }}
+											{% else %}
+											<input type="checkbox" name="module_show_in_categories[]" value="{{ category.category_id }}" />
+											{{ category.name }}
+											{% endif %}
+											</label>
+										</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
+							<a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-only_specials">{{ entry_only_specials }}</label>
+							<div class="col-sm-8">
+								<div class="toggle-group">
+									<input type="checkbox" name="only_specials" {% if only_specials %}checked="checked"{% endif %} id="input-only_specials" tabindex="1">
+									<label for="input-only_specials"></label>
+									<div class="onoffswitch pull-left" aria-hidden="true">
+										<div class="onoffswitch-label">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-quantity_view">{{ entry_quantity_view }}</label>
+							<div class="col-sm-8">
+								<div class="toggle-group">
+									<input type="checkbox" name="quantity_view" {% if quantity_view %}checked="checked"{% endif %} id="input-quantity_view" tabindex="1">
+									<label for="input-quantity_view"></label>
+									<div class="onoffswitch pull-left" aria-hidden="true">
+										<div class="onoffswitch-label">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-product"><span data-toggle="tooltip" title="{{ help_product }}">{{ entry_product }}</span></label>
+						<div class="col-sm-10">
+							<input type="text" name="product_name" value="" placeholder="{{ entry_product }}" id="input-product" class="form-control" />
+							<div id="featured-product" class="well well-sm" style="height: 150px; overflow: auto;">
+								{% for product in products %}
+								<div id="featured-product{{ product.product_id }}"><i class="fa fa-minus-circle"></i> {{ product.name }}
+									<input type="hidden" name="product[]" value="{{ product.product_id }}" />
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-limit">{{ entry_limit }}</label>
+							<div class="col-sm-8">
+								<input type="text" name="limit" value="{{ limit }}" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />
+								<span style="font-size:11px;color:#ccc;">{{ help_recomend_limit }}</span>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-show_more">{{ entry_show_more }}</label>
+							<div class="col-sm-8">
+								<div class="toggle-group">
+									<input type="checkbox" name="show_more" {% if show_more %}checked="checked"{% endif %} id="input-show_more" tabindex="1">
+									<label for="input-show_more"></label>
+									<div class="onoffswitch pull-left" aria-hidden="true">
+										<div class="onoffswitch-label">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-product_atributes">{{ entry_product_atributes }}</label>
+							<div class="col-sm-8">
+								<div class="toggle-group">
+									<input type="checkbox" name="product_atributes" {% if product_atributes %}checked="checked"{% endif %} id="input-product_atributes" tabindex="1">
+									<label for="input-product_atributes"></label>
+									<div class="onoffswitch pull-left" aria-hidden="true">
+										<div class="onoffswitch-label">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-product_atributes_limit">{{ text_atributes_limit }}</label>
+							<div class="col-sm-8">
+								<input type="text" id="input-product_atributes_limit" name="product_atributes_limit" value="{{ product_atributes_limit }}" class="form-control" placeholder="{{ text_atributes_limit }}" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-quantity_show">{{ entry_quantity_show }}</label>
+							<div class="col-sm-8">
+								<div class="toggle-group">
+									<input type="checkbox" name="quantity_show" {% if quantity_show %}checked="checked"{% endif %} id="input-quantity_show" tabindex="1">
+									<label for="input-quantity_show"></label>
+									<div class="onoffswitch pull-left" aria-hidden="true">
+										<div class="onoffswitch-label">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group required">
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-width">{{ entry_width }}</label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<input type="text" name="width" value="{{ width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control" />
+									<span class="input-group-addon">px</span>
+								</div>
+								{% if (error_width) %}
+								<div class="text-danger">
+									<script>
+										usNotify('warning', '{{ error_width }}');
+									</script>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-height">{{ entry_height }}</label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<input type="text" name="height" value="{{ height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control" />
+									<span class="input-group-addon">px</span>
+								</div>
+								{% if (error_height) %}
+								<div class="text-danger">
+									<script>
+										usNotify('warning', '{{ error_height }}');
+									</script>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-sort">{{ entry_sort }}</label>
+						<div class="col-sm-5">
+							<select name="sort" id="input-sort" class="form-control">
+							<option value="pd.name"{% if (sort == 'pd.name') %} selected="selected"{% endif %}>{{ text_pdname }}</option>
+							<option value="p.price"{% if (sort == 'p.price') %} selected="selected"{% endif %}>{{ text_pprice }}</option>
+							<option value="p.model"{% if (sort == 'p.model') %} selected="selected"{% endif %}>{{ text_pmodel }}</option>
+							<option value="p.quantity"{% if (sort == 'p.quantity') %} selected="selected"{% endif %}>{{ text_pquantity }}</option>
+							<option value="rating"{% if (sort == 'rating') %} selected="selected"{% endif %}>{{ text_rating }}</option>
+							<option value="p.viewed"{% if (sort == 'p.viewed') %} selected="selected"{% endif %}>{{ text_pviewed }}</option>
+							<option value="p.sort_order"{% if (sort == 'p.sort_order') %} selected="selected"{% endif %}>{{ text_psort_order }}</option>
+							<option value="p.date_added"{% if (sort == 'p.date_added') %} selected="selected"{% endif %}>{{ text_pdate_added }}</option>
+							</select>
+						</div>
+						<div class="col-sm-5">
+							<select name="order" id="input-order" class="form-control">
+							<option value="ASC"{% if (order == 'ASC') %} selected="selected"{% endif %}>{{ text_order_asc }}</option>
+							<option value="DESC"{% if (order == 'DESC') %} selected="selected"{% endif %}>{{ text_order_desc }}</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="select-show_type">{{ entry_module_show_type }}</label>
+						<div class="col-sm-10">
+							<select id="select-show_type" name="show_type" class="form-control">
+								<option value="" {% if show_type == '' %}selected="selected"{% endif %}>{{ entry_module_show_type_deff}}</option>
+								<option value="width-100" {% if show_type == 'width-100' %}selected="selected"{% endif %}>{{ entry_module_show_type_100 }}</option>
+								<option value="width-50" {% if show_type == 'width-50' %}selected="selected"{% endif %}>{{ entry_module_show_type_50 }}</option>
+								<option value="width-infinity" {% if show_type == 'width-infinity' %}selected="selected"{% endif %}>{{ entry_module_show_type_infinity }}</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#language a:first').tab('show');
+$('input[name=\'product_name\']').autocomplete({
+	source: function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	select: function(item) {
+		$('input[name=\'product_name\']').val('');
+
+		$('#featured-product' + item['value']).remove();
+
+		$('#featured-product').append('<div id="featured-product' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+$('#featured-product').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+</script>
+{{ footer }}

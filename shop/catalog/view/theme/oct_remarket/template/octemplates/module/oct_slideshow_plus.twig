@@ -1,0 +1,204 @@
+{% if oct_slideshows_plus %}
+<div class="row rm-slideshow-plus-box">
+	<div class="{% if status_additional_banners %}col-xl-9{% else %}col-lg-12{% endif %}{% if position_banners == 0 %} order-1{% endif %}">
+		<div id="rm-slideshow-plus-{{ module }}" class="rm-slideshow-plus h-100{% if full_img %} rm-slideshow-plus-fullimg{% endif %}">
+			{% set key = 0 %}
+			{% for item_slide in oct_slideshows_plus %}
+			{% set key = key + 1 %}
+			<div class="rm-slideshow-plus-item rm-slideshow-plus-item_{{ key }}">
+				{% if full_img and item_slide.mobile_image %}
+				<div class="rm-slideshow-plus-item-fullimg h-100">
+				<a href="{{ item_slide.link }}" title="{{ item_slide.title }}">
+					<picture>
+					    <source srcset="{{ item_slide.mobile_image }}" media="(max-width: 767px)">
+					    <source srcset="{{ item_slide.image }}">
+					<img class="img-fluid" src="{{ item_slide.image }}" alt="{{ item_slide.title }}" {% if oct_isMobile is defined %}width="{{ item_slide.mobile_width }}" height="{{ item_slide.mobile_height }}"{% else %}width="{{ item_slide.image_width }}" height="{{ item_slide.image_height }}"{% endif %}{% if key > 1 %} loading="lazy"{% endif %}>
+					</picture>
+				</a>
+				</div>
+				{% else %}
+				<div class="rm-slideshow-plus-item-box d-flex flex-column flex-md-row justify-content-between text-center text-md-left h-100">
+					<div class="rm-slideshow-plus-item-text order-1 order-md-0 d-flex flex-column">
+						<div class="rm-slideshow-plus-item-title">{{ item_slide.title }}</div>
+						<p>{{ item_slide.description }}</p>
+						<div class="rm-slideshow-plus-item-btn mt-auto">
+							<a href="{{ item_slide.link }}" class="rm-btn secondary"><span class="rm-btn-text">{{ item_slide.button }}</span></a>
+						</div>
+					</div>
+					{% if not item_slide.full_img %}
+					<a href="{{ item_slide.link }}" class="rm-slideshow-plus-item-img order-0 order-md-1">
+						<img src="{{ item_slide.image }}" alt="{{ item_slide.title }}" width="{{ item_slide.image_width }}" height="{{ item_slide.image_height }}"{% if key > 1 %} loading="lazy"{% endif %}>
+					</a>
+					{% endif %}
+				</div>
+				<style>
+					{% if item_slide.background_color %}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} {background-color: {{ item_slide.background_color }};}
+					{% endif %}
+					{% if item_slide.title_color %}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} .rm-slideshow-plus-item-title {color: {{ item_slide.title_color }};}
+					{% endif %}
+					{% if item_slide.text_color %}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} p {color: {{ item_slide.text_color }};}
+					{% endif %}
+					{% if item_slide.button_color and item_slide.button_background %}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} .rm-btn {background-color: {{ item_slide.button_background }};}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} .rm-btn-text {color: {{ item_slide.button_color }};}
+					{% endif %}
+					{% if item_slide.button_color_hover and item_slide.button_background_hover %}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} .rm-btn:hover {background-color: {{ item_slide.button_background_hover }};}
+					#rm-slideshow-plus-{{ module }} .rm-slideshow-plus-item_{{ key }} .rm-btn:hover .rm-btn-text {color: {{ item_slide.button_color_hover }};}
+					{% endif %}
+				</style>
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+		<script>
+			$(document).ready(function() {
+				$('#rm-slideshow-plus-{{ module }}').slick({
+					autoplay: true,
+					{% if paginations_status %}dots: true,{% endif %}
+					arrows: false,
+					infinite: true,
+					autoplaySpeed: 5000,
+					slidesToShow: 1
+				});
+			});
+		</script>
+	</div>
+	{% if status_additional_banners %}
+	<div class="col-xl-3">
+		<div class="rm-day-discounts">
+			<div class="rm-day-discounts-header">
+				{{ text_promotional_product }}
+			</div>
+			{% if timer_view %}
+			<div class="rm-day-discounts-timer d-flex align-items-center justify-content-center">
+				<div class="rm-day-discounts-timer-text mr-2">{{ oct_discount_timer_text }}:</div>
+				<div class="rm-day-discounts-timer-inner d-inline-flex align-items-center justify-content-center">
+					<div id="rm-day-discounts-timer-hours" class="rm-day-discounts-timer-number"></div>
+					<div class="rm-day-discounts-timer-delimiter animated">:</div>
+					<div id="rm-day-discounts-timer-minutes" class="rm-day-discounts-timer-number"></div>
+					<div class="rm-day-discounts-timer-delimiter animated">:</div>
+					<div id="rm-day-discounts-timer-seconds" class="rm-day-discounts-timer-number"></div>
+				</div>
+			</div>
+			{% endif %}
+			<div id="rm-day-discounts">
+				{% for product in products %}
+				<div class="rm-day-discounts-item{% if product.oct_grayscale %} rm-no-stock{% endif %}">
+					<div class="rm-day-discounts-item-img d-flex justify-content-center">
+					{% if product.you_save %}
+						<div class="rm-day-discounts-item-sticker">{{ oct_discount_text }} {{ product.you_save }}</div>
+					{% endif %}
+						<a href="{{ product.href }}"><img class="img-fluid" src="{{ product.thumb }}" alt="{{ product.name }}"  width="{{ product.width }}" height="{{ product.height }}" loading="lazy"/></a>
+					</div>
+					<div class="rm-day-discounts-item-info">
+						{% if product.rating is not same as(false) %}
+						<div class="rm-module-rating d-flex align-items-center justify-content-start">
+							<div class="rm-module-rating-stars d-flex align-items-center">
+								{% for i in 1..5 %}
+									{% if product.rating < i %}
+										<span class="rm-module-rating-star"></span>
+									{% else %}
+										<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+									{% endif %}
+								{% endfor %}
+							</div>
+							<div class="rm-module-reviews">
+								<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--comments-icon" alt="" width="12" height="10" />
+								<span>{{ product.reviews }}</span>
+							</div>
+						</div>
+						{% endif %}
+						<div class="rm-day-discounts-item-title">
+							<a href="{{ product.href }}">{{ product.name }}</a>
+						</div>
+						{% if product.price %}
+						<div class="rm-module-price-box">
+							{% if not product.special %}
+							<div class="rm-module-price-bottom d-flex align-items-end justify-content-between">
+								<span class="rm-module-price">{{ product.price }}</span>
+								<button type="button" aria-label="To cart" onclick="cart.add('{{ product.product_id }}');" class="rm-btn secondary rm-cart-btn">
+									<span class="rm-cart-btn-icon"></span>
+								</button>
+							</div>
+							{% else %}
+							<div class="rm-module-price-top">
+								<span class="rm-module-price-old">{{ product.price }}</span>
+							</div>
+							<div class="rm-module-price-bottom d-flex align-items-end justify-content-between">
+								<span class="rm-module-price">{{ product.special }}</span>
+								<button type="button" aria-label="To cart" onclick="cart.add('{{ product.product_id }}');" class="rm-btn secondary rm-cart-btn">
+									<span class="rm-cart-btn-icon"></span>
+								</button>
+							</div>
+							{% endif %}
+						</div>
+						{% endif %}
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<script>
+
+				{% if timer_view %}
+				function octCreateDayEnd(){
+					let dayEnd = new Date();
+					dayEnd.setHours(23,59,59);
+					return dayEnd;
+				}
+
+				let octCounterDown = setInterval(function() {
+					let now = new Date().getTime();
+					let difference = octCreateDayEnd() - now;
+					let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+					let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+					let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+					if(hours < 10) {hours = "0"+hours;}
+					if(minutes < 10) {minutes = "0"+minutes;}
+					if(seconds < 10) {seconds = "0"+seconds;}
+
+					document.getElementById("rm-day-discounts-timer-hours").innerHTML = hours;
+					document.getElementById("rm-day-discounts-timer-minutes").innerHTML = minutes;
+					document.getElementById("rm-day-discounts-timer-seconds").innerHTML = seconds;
+
+				}, 1000);
+				{% endif %}
+
+				$(document).ready(function() {
+				  $('#rm-day-discounts').slick({
+					autoplay: true,
+					dots: true,
+					arrows: false,
+					infinite: true,
+					autoplaySpeed: 5000,
+					slidesToShow: 1,
+					responsive: [
+                        {
+                            breakpoint: 1600,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }, {
+                            breakpoint: 1200,
+                            settings: {
+                                slidesToShow: 2
+                            }
+                        }, {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+				  });
+				});
+			</script>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endif %}

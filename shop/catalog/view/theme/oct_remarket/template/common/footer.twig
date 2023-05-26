@@ -1,0 +1,288 @@
+<footer>
+	<div class="rm-footer">
+		<div class="container">
+	        <div class="row">
+				<div class="col-12 col-md-6 col-lg-4 text-center text-lg-left rm-footer-first">
+					<div class="rm-footer-mobile-inner">
+						{% if oct_subscribe is defined %}
+							{{ oct_subscribe }}
+						{% endif %}
+						{% if oct_remarket_data.contact_address[oct_lang_id] is defined and oct_remarket_data.contact_address[oct_lang_id] %}
+							<div class="rm-footer-title">{{ oct_our_address }}:</div>
+							<div class="rm-footer-text rm-footer-address">{{ oct_remarket_data.contact_address[oct_lang_id] }}</div>
+						{% endif %}
+						{% if oct_contact_telephones is defined and oct_contact_telephones is not empty %}
+							<div class="rm-footer-title">{{ oct_our_call }}</div>
+							<ul class="list-unstyled rm-footer-phones">
+								{% for oct_contact_telephone in oct_contact_telephones %}
+								<li class="d-flex align-items-center justify-content-center justify-content-lg-start">
+									<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--phone-icon" alt="" width="14" height="16" />
+									<a href="tel:{{ oct_contact_telephone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}">{{ oct_contact_telephone }}</a>
+								</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+						{% if oct_popup_call_phone_status is defined and oct_popup_call_phone_status %}
+							<span onclick="octPopupCallPhone()" class="rm-footer-phones-link rm-phone-link">{{ oct_our_recall }}</span>
+						{% endif %}
+						<div class="rm-footer-contacts-btn d-md-none">
+							<a href="{{ contact }}" class="rm-btn secondary"><span class="rm-btn-text">{{ oct_go_contact_text }}</span></a>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-lg-3 text-center text-lg-left rm-footer-second">
+					<div class="rm-footer-mobile-inner">
+						{% if oct_contact_opens is defined and oct_contact_opens is not empty %}
+						<div class="rm-footer-title">{{ oct_working_hours }}</div>
+						<ul class="rm-footer-text rm-footer-shedule-list list-unstyled">
+							{% for oct_contact_open in oct_contact_opens %}
+							<li class="rm-footer-shedule-list-item">{{ oct_contact_open }}</li>
+							{% endfor %}
+						</ul>
+						{% endif %}
+						{% if oct_remarket_data.socials is defined and oct_remarket_data.socials is not empty %}
+	                        <div class="rm-footer-title">{{ oct_footer_social_tex }}</div>
+	                        <ul class="rm-social list-unstyled d-flex flex-wrap justify-content-center justify-content-lg-start">
+	                        	{% for social in oct_remarket_data.socials %}
+	                            <li class="rm-social-item"><a rel="noopener noreferrer" href="{{ (social.link == "#" or social.link is empty) ? 'javascript:;' : social.link }}" class="rm-social-{{ social.icone|replace({'fa ': "", "fab " : "", "far " : "", "fas " : ""}) }} d-flex align-items-center justify-content-center" target="_blank"><i class="{{ social.icone }}"></i>{{ social.link }}</a></li>
+	                            {% endfor %}
+	                        </ul>
+	                    {% endif %}
+						{% if oct_remarket_data.contact_email is defined and oct_remarket_data.contact_email %}
+						<a href="mailto:{{ oct_remarket_data.contact_email }}" class="rm-footer-mail-link">{{ oct_remarket_data.contact_email }}</a>
+						{% endif %}
+						<ul class="rm-footer-payments-list list-unstyled d-flex align-items-center justify-content-center justify-content-lg-start">
+							{% if oct_remarket_data.payments.privat24 is defined and oct_remarket_data.payments.privat24 %}
+							<li class="rm-footer-payments-item privat24"></li>
+							{% endif %}
+							{% if oct_remarket_data.payments.visa is defined and oct_remarket_data.payments.visa %}
+							<li class="rm-footer-payments-item visa"></li>
+							{% endif %}
+							{% if oct_remarket_data.payments.skrill is defined and oct_remarket_data.payments.skrill %}
+							<li class="rm-footer-payments-item skrill"></li>
+							{% endif %}
+							{% if oct_remarket_data.payments.lp is defined and oct_remarket_data.payments.lp %}
+							<li class="rm-footer-payments-item liqpay"></li>
+							{% endif %}
+							{% if oct_remarket_data.payments.pp is defined and oct_remarket_data.payments.pp %}
+							<li class="rm-footer-payments-item paypal"></li>
+							{% endif %}
+							{% if oct_remarket_data.payments.mc is defined and oct_remarket_data.payments.mc %}
+							<li class="rm-footer-payments-item mastercard"></li>
+							{% endif %}
+							{% if oct_remarket_data.payments.maestro is defined and oct_remarket_data.payments.maestro %}
+							<li class="rm-footer-payments-item maestro"></li>
+							{% endif %}
+							{% for payment_customer in oct_customer_paymets %}
+							<li class="rm-footer-payments-item custom-payment"><img src="{{ payment_customer }}" alt=""></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+				{% if categories is defined and categories %}
+	            <div class="col-12 col-md-6 col-lg-3 text-md-center text-lg-left rm-footer-third">
+					<div class="rm-footer-mobile-inner white">
+		            	<div class="rm-footer-title rm-footer-title-toggle d-flex align-items-center justify-content-md-center justify-content-lg-start">
+							<span class="rm-footer-title-toggle-icon d-md-none">
+								<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--footer-categories-icon" alt="" width="14" height="14" />
+							</span>
+							<span class="rm-footer-title-toggle-text">{{ oct_footer_category }}</span>
+							<span class="rm-footer-title-toggle-btn d-md-none">
+								<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--footer-toggle-icon" alt="" width="18" height="12" />
+							</span>
+			            </div>
+		                <ul class="rm-footer-links-list list-unstyled">
+		                	{% for category in categories %}
+		                    <li><a href="{{ category.href }}" title="{{ category.name }}">{{ category.name }}</a></li>
+		                    {% endfor %}
+		                </ul>
+		            </div>
+				</div>
+	            {% endif %}
+	            {% if informations %}
+	            <div class="col-12 col-md-6 col-lg-2 text-md-center text-lg-left rm-footer-fourth">
+					<div class="rm-footer-mobile-inner white">
+						<div class="rm-footer-title rm-footer-title-toggle d-flex align-items-center justify-content-md-center justify-content-lg-start">
+							<span class="rm-footer-title-toggle-icon d-md-none"><img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--footer-information-icon" alt="" width="16" height="16" /></span>
+							<span class="rm-footer-title-toggle-text">{{ text_information }}</span>
+							<span class="rm-footer-title-toggle-btn d-md-none">
+								<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--footer-toggle-icon" alt="" width="18" height="12" />
+							</span>
+						</div>
+		                <ul class="rm-footer-links-list list-unstyled">
+		                    {% for information in informations %}
+		                    <li><a href="{{ information.href }}" title="{{ information.title }}">{{ information.title }}</a></li>
+		                    {% endfor %}
+		                </ul>
+		            </div>
+				</div>
+	            {% endif %}
+	        </div>
+			<div class="row d-md-none">
+				<div class="col-12">
+					<button type="button" class="rm-btn primary rm-footer-catalog-btn w-100" onclick="rmSidebar('{{ oct_menu }}', 'menu', 1);">
+						<span class="rm-btn-icon">
+							<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--footer-catalog-icon" alt="" width="14" height="14">
+						</span>
+						<span class="rm-btn-text">{{ oct_menu_catalog }}</span>
+					</button>
+				</div>
+			</div>
+			<div class="row">
+	            <div class="col-lg-12">
+	                <div class="rm-footer-credits text-center">RPGroup © 2023</div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	{% if oct_feedback_data is defined and oct_feedback_data %}
+	<div id="rm_fixed_contact_substrate"></div>
+	<div id="rm_fixed_contact_button" class="d-flex align-items-center justify-content-center">
+		<div class="rm-fixed-contact-pulsation"></div>
+		<div class="rm-fixed-contact-icon text-center d-flex align-items-center justify-content-center"><i class="fas fa-envelope"></i><span class="rm-fixed-contact-text d-none">{{ oct_feedback_text }}</span></div>
+		<div class="rm-fixed-contact-dropdown d-flex flex-column align-items-start">
+			{% if (oct_feedback_data.feedback_messenger is defined and oct_feedback_data.feedback_messenger) and (oct_remarket_data.contact_messenger is defined and oct_remarket_data.contact_messenger) %}
+			<a rel="noopener noreferrer" href="https://m.me/{{ oct_remarket_data.contact_messenger }}" target="_blank" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-messenger d-flex align-items-center justify-content-center"><i class="fab fa-facebook-messenger"></i></span><span>Messenger</span></a>
+			{% endif %}
+
+			{% if (oct_feedback_data.feedback_viber is defined and oct_feedback_data.feedback_viber) and (oct_remarket_data.contact_viber is defined and oct_remarket_data.contact_viber) %}
+			<a rel="noopener noreferrer" href="viber://chat?number=+{{ oct_remarket_data.contact_viber }}" target="_blank" class="rm-fixed-contact-item d-flex align-items-center rm-fixed-contact-viber-desktop"><span class="rm-fixed-contact-item-icon rm-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a>
+			<a rel="noopener noreferrer" href="viber://add?number={{ oct_remarket_data.contact_viber }}" target="_blank" class="rm-fixed-contact-item d-flex align-items-center rm-fixed-contact-viber-mobile"><span class="rm-fixed-contact-item-icon rm-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a>
+			{% endif %}
+
+			{% if (oct_feedback_data.feedback_telegram is defined and oct_feedback_data.feedback_telegram) and (oct_remarket_data.contact_telegram is defined and oct_remarket_data.contact_telegram) %}
+			<a rel="noopener noreferrer" href="https://t.me/{{ oct_remarket_data.contact_telegram }}" target="_blank" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-telegram d-flex align-items-center justify-content-center"><i class="fab fa-telegram"></i></span><span>Telegram</span></a>
+			{% endif %}
+
+			{% if (oct_feedback_data.feedback_skype is defined and oct_feedback_data.feedback_skype) and (oct_remarket_data.contact_skype is defined and oct_remarket_data.contact_skype) %}
+			<a rel="noopener noreferrer" href="skype:{{ oct_remarket_data.contact_skype }}?chat" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-skype d-flex align-items-center justify-content-center"><i class="fab fa-skype"></i></span><span>Skype</span></a>
+			{% endif %}
+
+			{% if (oct_feedback_data.feedback_whatsapp is defined and oct_feedback_data.feedback_whatsapp) and (oct_remarket_data.contact_whatsapp is defined and oct_remarket_data.contact_whatsapp) %}
+			<a rel="noopener noreferrer" href="https://api.whatsapp.com/send?phone={{ oct_remarket_data.contact_whatsapp }}" target="_blank" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-whatsapp d-flex align-items-center justify-content-center"><i class="fab fa-whatsapp"></i></span><span>WhatsApp</span></a>
+			{% endif %}
+
+			{% if (oct_feedback_data.feedback_email is defined and oct_feedback_data.feedback_email) and (oct_remarket_data.contact_email is defined and oct_remarket_data.contact_email) %}
+			<a rel="noopener noreferrer" href="mailto:{{ oct_remarket_data.contact_email }}" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-email d-flex align-items-center justify-content-center"><i class="far fa-envelope"></i></span><span>{{ oct_remarket_data.contact_email }}</span></a>
+			{% endif %}
+
+			{% if (oct_feedback_data.feedback_callback is defined and oct_feedback_data.feedback_callback) and (oct_popup_call_phone_status is defined and oct_popup_call_phone_status) %}
+			<div id="uptocall-mini" onclick="octPopupCallPhone()" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-call d-flex align-items-center justify-content-center"><i class="fas fa-phone"></i></span><span>{{ oct_call_phone }}</span></div>
+			{% endif %}
+
+			{% if oct_feedback_data.feedback_contact_link is defined and oct_feedback_data.feedback_contact_link %}
+			<a href="{{ contact }}" class="rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-contacts d-flex align-items-center justify-content-center"><i class="fas fa-address-book"></i></span><span>{{ text_contact }}</span></a>
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+</footer>
+{% if oct_remarket_data.footer_totop is defined and oct_remarket_data.footer_totop %}
+	<div id="back-top">
+		<button type="button" onclick="scrollToElement('#top');"><i class="fas fa-chevron-up"></i></button>
+	</div>
+{% endif %}
+<div id="rm_overlay"></div>
+{% if oct_subscribe_status is defined and oct_subscribe_status %}
+<script>
+$(function() {
+	if (getOCTCookie('oct_subscribe') == 'undefined') {
+		setTimeout(function(){
+			octPopupSubscribe();
+		}, {{ oct_subscribe_form_data.seconds ? oct_subscribe_form_data.seconds : '10000' }});
+
+		const date = new Date('{{ oct_subscribe_day_now }}'.replace(/-/g, "/"));
+		date.setTime(date.getTime() + ({{ oct_subscribe_form_data.expire ? oct_subscribe_form_data.expire : '1' }} * 24 * 60 * 60 * 1000));
+		document.cookie = 'oct_subscribe=1; path=/; expires=' + date.toUTCString();
+	}
+});
+</script>
+{% endif %}
+{% for script in scripts %}
+<script src="{{ script }}"></script>
+{% endfor %}
+<div class="modal-holder"></div>
+{% if oct_isiOS is defined and oct_isiOS %}
+<script>
+var elementsA = document.getElementsByTagName('a');
+for(var i = 0; i < elementsA.length; i++){
+    elementsA[i].addEventListener('touchend',function(){});
+}
+
+var elementsB = document.getElementsByTagName('button');
+for(var i = 1; i < elementsB.length; i++){
+    elementsB[i].addEventListener('touchend',function(){});
+}
+
+var elementsI = document.getElementsByTagName('input');
+for(var i = 0; i < elementsI.length; i++){
+    elementsI[i].addEventListener('touchend',function(){});
+}
+
+var elementsS = document.getElementsByTagName('span');
+for(var i = 0; i < elementsS.length; i++){
+    elementsS[i].addEventListener('touchend',function(){});
+}
+</script>
+{% endif %}
+{% if (oct_analytics_targets is defined and oct_analytics_targets is not empty) %}
+	<script>
+	{% for target in oct_analytics_targets %}
+	 	$('body').on('click', '{{ target['atribute'] }}', function() {
+		    {% if (target['google'] is defined and target['google']) %}
+			gtag('event', '{{ target['action'] }}', {
+			  'event_category' : '{{ target['category'] }}'
+			});
+		    {% endif %}
+			
+		    {% if (target['yandex'] is defined and target['yandex']) %}
+		    ym({{ oct_analytics_yandex_code }}, 'reachGoal', '{{ target['action'] }}');
+		    {% endif %}
+		});
+	{% endfor %}
+	</script>
+{% endif %}
+{% if (oct_policy_value is defined and oct_policy_value is not empty and oct_policy_value) %}
+<script>
+function get_oct_policy() {
+	$.ajax({
+		url: "index.php?route=octemplates/main/oct_functions/getOctPolicy",
+		type: "post",
+		dataType: "json",
+		cache: false,
+		success: function(t) {
+			if (t['text_oct_policy']) {
+				var html = '<div id="oct-policy" class="fixed-bottom"><div class="container"><div class="row"><div class="col-lg-12 d-flex align-items-center justify-content-between flex-column flex-md-row"><div class="oct-policy-text">'+ t['text_oct_policy'] +'</div><button type="button" id="oct-policy-btn">'+ t['oct_policy_accept'] +'</button></div></div></div></div>';
+
+				$('body').append(html);
+
+				$('#oct-policy-btn').on('click', function () {
+					$('#oct-policy').addClass('hidden');
+					const date = new Date(t['oct_policy_day_now'].replace(/-/g, "/"));
+					date.setTime(date.getTime() + (t['oct_max_day'] * 24 * 60 * 60 * 1000));
+					document.cookie = t['oct_policy_value']+'=1; path=/; expires=' + date.toUTCString();
+				});
+			}
+		},
+		error: function(e, t, i) {
+			alert(i + "\r\n" + e.statusText + "\r\n" + e.responseText)
+		}
+	});
+}
+
+$(function() {
+	if (getOCTCookie('{{ oct_policy_value }}') == 'undefined') {
+		get_oct_policy();
+	}
+});
+</script>
+{% endif %}
+{% if oct_jscode is defined and oct_jscode %}
+	<script>
+	{{ oct_jscode }}
+	</script>
+{% endif %}
+<script async src="catalog/view/theme/oct_remarket/js/oct-fonts.js"></script>
+<link rel="stylesheet" href="catalog/view/theme/oct_remarket/stylesheet/all.css"{% if oct_remarket_data.minify is defined %} media="print" onload="this.media='all'"{% else %} media="all"{% endif %}>
+</body>
+</html>

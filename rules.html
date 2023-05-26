@@ -1,0 +1,334 @@
+<!doctype html>
+<html>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EJ7G5Z8FXS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EJ7G5Z8FXS');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.5/dist/flowbite.min.css" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+  
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'Alpha': ['Alpha', 'sans-serif'],
+              'Formular': ['Formular', 'sans-serif'],
+            },
+            colors: {
+              clifford: '#da373d',
+            }
+          }
+        }
+      }
+    </script>
+  
+    <style>
+  @import url('https://fonts.cdnfonts.com/css/alpha');
+  @import url('https://fonts.cdnfonts.com/css/formular');
+  .hover-image-scale {
+    overflow: hidden;
+  }
+  .hover-image-scale img {
+    transition: 1s;
+    display: block; 
+  }
+  .hover-image-scale img:hover {
+    transform: scale(1.1); 
+  }
+  .sticky {
+    position: sticky;
+    top: 0;
+    min-height: 2em;
+    background: white;
+  }
+  
+  #centerLayer {
+      margin-left: 20%; 
+      width: 15%; 
+      margin-top: 22%;
+      font-size: 40px;
+      font-weight: 300;
+  }
+  
+  #font-banner {
+      font-size: 30px;
+      font-weight: 500;
+  }
+  
+
+  
+  </style>
+</head>
+<body class="bg-white text-gray-600 work-sans leading-normal text-base tracking-normal">
+<!--Nav-->
+<!-- <nav id="header" class="w-full top-0 py-1 sticky z-40" style="border-bottom: 1px solid rgba(0,0,0,.35);">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
+
+        <label for="menu-toggle" class="cursor-pointer md:hidden block">
+            <svg class="fill-current text-gray-900" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <title>menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+            </svg>
+        </label>
+        <input class="hidden" type="checkbox" id="menu-toggle" />
+
+        <div class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1" id="menu">
+            <nav>
+                <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+                    <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Furniture</a></li>
+                    <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Doors</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="order-1 md:order-2">
+            <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+                RPGROUP
+            </a>
+        </div>
+
+        <div class="hidden order-2 md:order-3 md:flex md:items-center md:w-auto w-full" id="menu">
+            <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+                <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Services</a></li>
+                <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Contacts</a></li>
+            </ul>
+
+        </div>
+    </div>
+</nav> -->
+
+<nav id="header" class="bg-white border-gray-200 sticky px-2 md:px-3 py-2 z-40" style="border-bottom: 1px solid rgba(0,0,0,.35);">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3.5">
+        <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-black text-xl" href="/">
+           RPGROUP
+        </a>
+        <div class="flex items-center md:order-1">
+            <button data-collapse-toggle="mega-menu" type="button" class="font-Formular inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mega-menu" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
+        <div id="mega-menu" class="hidden justify-between items-center w-full text-sm md:flex md:w-auto md:order-1">
+            <ul class="flex flex-col mt-4 font-medium md:flex-row md:space-x-8 md:mt-0">
+                <li>
+                    <a href="/" class="font-Formular block py-2 text-[16px] pr-4 pl-3 text-rose-800 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800" aria-current="page">Main</a>
+                </li>
+                <li>
+                    <button id="mega-menu-dropdown-button" data-dropdown-toggle="mega-menu-dropdown"  class="font-Formular flex text-[16px] justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">
+                        Furniture <svg aria-hidden="true" class="ml-1 w-5 h-5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <div id="mega-menu-dropdown" class="grid hidden absolute z-10 grid-cols-3 w-auto text-sm bg-white rounded-lg border border-gray-100 shadow-md md:grid-cols-3">
+                        <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                            <ul class="space-y-4" aria-labelledby="mega-menu-dropdown-button">
+                                <li>
+                                    <a href="/business" class="font-Formular text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                        For business
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="/turnkey" class="font-Formular text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                        Turnkey
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-4 text-gray-900 dark:text-white">
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="/doors" class="font-Formular  text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                        Doors
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="/services" class="font-Formular text-[16px] block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">Services</a>
+                </li>
+                <li>
+                    <a href="/en/contacts" class="font-Formular text-[16px] block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">Contact</a>
+                </li>
+                <li>
+                    <a href="/rules" class="font-Formular text-[16px] block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-rose-800 md:dark:hover:text-rose-800 dark:hover:text-rose-800">Operating Instructions</a>
+                </li>
+  
+                <div id="mega-menu" class="hidden justify-between items-center w-full text-sm md:flex md:w-auto md:order-1">
+                  <ul class="flex flex-col mt-4 font-medium md:flex-row md:space-x-8 md:mt-0">
+                      <li>
+                          <button id="mega-menu-dropdown-button-2" data-dropdown-toggle="mega-menu-dropdown-2" class="flex text-[16px] justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">
+                              ENG <svg aria-hidden="true" class="ml-1 w-5 h-5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                          </button>
+                          <div id="mega-menu-dropdown-2" class="grid hidden absolute z-10 grid-cols-1 w-auto text-sm bg-white rounded-lg border border-gray-100 shadow-md md:grid-cols-1">
+                              <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                                  <ul class="space-y-4" aria-labelledby="mega-menu-dropdown-button">
+                                      <li>
+                                        <a href="/lv/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                              LV
+                                       </a>                              
+                                     </li>
+                                     <li>
+                                      <a href="/ru/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                            RU
+                                     </a>                              
+                                   </li>
+                                   <li>
+                                    <a href="/de/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                          DE
+                                   </a>                              
+                                 </li>
+                                 <li>
+                                  <a href="/fr/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                        FR
+                                 </a>                              
+                               </li>
+                          </ul>
+                  </div>         
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+<!-- <section class="w-full mx-auto bg-nordic-gray-light flex pt-12 md:pt-0 md:items-center bg-cover bg-centre" style="filter: brightness(80%); max-width:2560px; height: 40rem; background-image: url('https://content.poliform.it/assets/2021/11/Poliform_cover_collection_1920x864px_KITCHEN.jpg');">
+    <div class="container mx-auto">
+        <div class="flex flex-col w-full justify-center items-center px-6 tracking-wide">
+            <h1 class="text-white text-5xl my-6 font-Formular">МЕБЕЛЬ | ДЛЯ БИЗНЕСА</h1>
+            <a class="text-xl inline-block no-underline border-b border-white leading-relaxed hover:text-white hover:border-white font-Formular" href="#">products</a>
+        </div>
+      </div>
+    </section> -->
+
+    <section class="w-full bg-nordic-gray-light flex md:pt-0 md:items-center" style="max-width:2560px; height: 30rem;">
+        <img class="absolute w-full md:items-center object-cover object-centre" style="max-width:2560px; height: 30rem; filter: brightness(75%);"  src="/img/rules.jpeg">
+        <div class="container mx-1/2 mb-36 text-center">
+            <div class="absolute absolute-col w-full px-6 tracking-wide">
+                <h1 class="text-white lg:text-5xl text-4xl my-8 lg:my-4 font-Formular ">FURNITURE OPERATING INSTRUCTIONS</h1>
+                <p class="lg:text-lg text-md leading-relaxed text-white font-Formular lg:w-3/5 mx-auto leading-relaxed" href="#">The period during which the furniture retains its beauty and serviceability largely depends on the conditions of its operation and proper care. Each product is designed for a specific purpose, so it is necessary to use any item in accordance with its functional purpose.</p>
+            </div>
+          </div>
+        </section>
+<style>
+
+
+</style>
+
+
+
+<section class="text-gray-600 body-font">
+    <div class="container px-5 py-12 mx-auto">
+      <div class="flex flex-col w-full">
+        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+            • Upon receipt of the goods it is necessary to check them for completeness and external quality characteristics. It is recommended to perform a check by visual inspection to detect visible defects and lack of the necessary hardware.</p><br>
+        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+            • Keep in mind that the acceptance of the furniture without specifying the drawbacks of furniture products that could be found during external inspection deprives a buyer from the right to refer to them in the future. Presence of such features of the furniture items that are associated with the stylistic idea of the manufacturer of raw materials or natural origin of raw materials, in particular: inessential differences in texture or shades of solid wood, wood veneer, natural stone, etc., is not considered as a drawback (defect) of the furniture. The wood defects: knots up to 15 mm; curly gain, eyes, pockets of a length, width and depth not exceeding accordingly 20 mm, 1,5 mm and 3 mm are allowed on the front surfaces of wooden or veneered furniture items. Also, wrinkles of upholstery of soft items arising after the removal of the load and disappearing after smoothing them by hand are not a defect.</p><br>
+            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+               • Furniture should be operated in dry and warm rooms with heating and ventilation when the air temperature is not lower than +10°C and higher than +40°C and relative humidity is in the range 45 – 65%. Significant
+               deviations from these conditions lead to a significant deterioration of consumer appeal of the furniture. Avoid sudden changes i ntemperature and humidity.</p><br>
+                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                    • It is not recommended to place a furniture made of natural wood, veneer or with a paint-and-lacquer coating at a distance of less than 1 m from a heat source as well as under direct sunlight or to allow heating above +70°C. Violation of these conditions causes accelerated aging of the paint-and-lacquer coating and deformation of the furniture boards. The furniture with laminated surface or coated with decorative PVC film should be placed at a distance no less than 15 cm from heaters.</p><br>
+                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                        • The surface of furniture parts should be protected from prolonged exposure to moisture, since this can cause swelling and peeling edges of parts. Any liquids that solve a paint-and-lacquer coating should be prevented from getting on the surfaces coated with paint or lacquer.</p><br>
+                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                           • The furniture parts and structural members should be protected from mechanical damage that may be caused by exposure to hard objects, abrasive powders as well as excessive loads. The human body weight can be withstood only by the products and items specially designed for this purpose – cabinets with a seat, footrests, beds, etc.</p><br>
+                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                               • When using the furniture, do not apply excessive force to open fronts, drawers and other moving parts. Their proper operation is ensured by adjustment. In order to avoid distortions of fronts and drawers it is not recommended to keep them open for a long time. Remember that hinges with an opening angle of about 90°are mostly used for the fronts, therefore when trying to open a front on the larger angle the hinges may break. Avoid contamination and ingress of foreign bodies in the mechanisms of the furniture hardware.</p><br>
+                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                   • Sliding doors and mechanisms should be protected from bumps and jolts since this may lead to loss of the roller mechanism.</p><br>
+                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                       • It is recommended to clean any furniture part after contamination as soon as possible. Prolonged exposure to pollution significantly increases the danger of blotchiness, stains and damage of the furniture products and their parts. Only the substances intended for the care of furniture should be used for that purpose and they should be used in accordance with the supplied instructions on the method and area of application.</p><br>
+                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                           • It is recommended to clean with a soft, dry or slightly damp cloth. After completion of any necessary cleaning it is necessary to wipe dry and dry up the parts that have been processed. Pay attention to the internal parts of the furniture, air flow to which is restricted.</p><br>
+                                           <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                            • When caring of the kitchen furniture it is not allowed to use the substances that have contraindications for contacts with food products.</p><br>
+                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2"> 
+                                                • It is prohibited to move furniture in the loaded condition. When moving the furniture it is recommended to take removable shelves and drawers from it. It is not recommended to move the furniture by “dragging” in order to avoid mechanical damage.</p><br>
+                                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                    • It is not recommended to assemble and disassemble freestanding furniture more than two times.</p><br>
+                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                        • To prevent damage of a bed, the impact of strong vertical load on the mattress and latticed base of the bed (due to jumping, walking, standing on own feet) is not recommended.</p><br>
+                             <!--BOLD NOTES-->                  <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">       <!--BOLD NOTES--> 
+                                                                    The above recommendations are general recommendations for furniture and interior items.</p><br>
+                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                        The following recommendations draw attention to the operation and maintenance of some surfaces and materials.</p><br>
+                                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                            • When operating and caring of the granite and marble surfaces be aware that they are natural materials and characterized by their ability to absorb
+                                                                            liquids and therefore there is danger of appearing blotchiness and stains. Protect the surfaces from prolonged exposure to moisture. It is recommended to
+                                                                            protect these surfaces with special water-repellent substances for granite and marble. Aftertheapplicationofsuchsubstance on a surface it mustbecarefully
+                                                                            wipedwithasoft, drycloth.</p><br>
+                                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                • Artificial stone products require a minimum of care to maintain their appearance. A sharp temperature drop (ice – boiling water) is not recommended. When pouring boiling water into a sink made of artificial stone it is recommended to open cold water. It is recommended to put pots and pans from the stove or oven on the supports. Do not expose the artificial stone products to prolonged influence of corrosive chemical substances. If such substances get on the tabletop or the sink surface, rinse them immediately with plenty of soap and water. It is recommended to clean the artificial stone products with household detergents using a soft sponge. It is not allowed to use steel wools and detergents containing abrasive particles. The surface of the artificial stone is not intended for the use as a cutting surface, as this may deteriorate polishing. Therefore, use cutting boards when cutting food and vegetables. When significant defects of appearance – deep scratches, chips and cracks occur, it is necessary to contact specialists to carry out repairs without dismantling the product.</p><br>
+                                                                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                    • Furniture made of natural wood or veneer – this beautiful addition to any interior, creating a unique, natural environment requires proper care and keeping the basic operation conditions. It is strictly prohibited to use the substances that have abrasive properties or acetone-based substances for the care. Theywilldamagea paint-and-lacquer coatingandwoodstructure.</p><br>
+                                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                        • A furniture polish can be used to make the surface glossy and to remove stains and finger prints on the polished and unpolished wood furniture. It is recommended to read the instruction for use and test the effect of the substance on a small inconspicuous area before the use. In the absence of special substances, a mild soap solution can be used. It is not recommended to put hot objects on the surface of furniture, always use supports.</p><br>
+                                                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                            • The care of coloured coatings is performed with a soft damp cloth using special furniture polishes. In the absence of special substances, a mild soap solution can be used. After wiping the surface with detergent, it is necessary to wipe it immediately with a soft, dry cloth. It should be remembered that all the painted surfaces may eventually change colour depending on the degree of exposure to light.</p><br>
+                                                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                                • When operating and caring of the glass and ceramic surfaces it is necessary to protect them from blows. The use of steel wools and detergents
+                                                                                                containing abrasive particles is not allowed.</p><br>
+                                                                                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                                    • Furnituremadeofgenuine andartificialleathershould be sometimes processed with special substances providing good protection. for the care of the furniture made of genuine leather it is recommended to use the services of the company performing the relevant work of cleaning furniture or to use the substances that are designed for the care of furniture made of leather or tapestry. Caring of artificial leather is performed with a foam sponge or soft cloth with a mild soapy solution. It is recommended to use special substances for removal of stains.</p><br>
+                                                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                                                        When caring of the metal surfaces (aluminium, stainless steel or metals with different types of coatings) it is not recommended to use the substances that have abrasive or corrosive properties as well as steel wools. Aftercleaninga surfaceit can be made glossy, ifnecessary, by polishing with asoft, drycloth.</p><br><br>
+                                                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                                                        Warranty is terminated in the case of violation of any of the paragraphs above.</p><br><br>
+                                                                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                                                            SIA “R.P. Group”</p><br>
+                                                                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                                                Latvija, Rīga, Tvaikonu iela 5, LV-1007<br>Reģ. Nr. LV40003514469<br>Tel. 29224123</p><br>
+      </div>
+    </div>
+  </section>
+
+<footer class="mt-auto w-full py-4 px-4 sm:px-6 lg:px-8 mx-auto bg-gray-100">
+    <div class="bg-gray-100">
+      <div class="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
+        <a class="flex title-font font-medium items-center justify-center text-gray-900">
+          <img class="w-2/3 h-2/3" src="/img/logo.png" alt="Image Description">
+        </a>
+        <p class="text-sm text-gray-500 sm:mt-0 mt-4">© 2022 RPGroup — All Rights Reserved.</p>
+        <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+          <a class="text-gray-500">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+              <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+              <circle cx="4" cy="4" r="2" stroke="none"></circle>
+            </svg>
+          </a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

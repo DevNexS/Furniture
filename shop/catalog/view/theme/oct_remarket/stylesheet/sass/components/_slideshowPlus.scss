@@ -1,0 +1,393 @@
+// ---Slideshow
+
+.rm-slideshow-plus {
+    overflow: hidden;
+
+    > div {
+        display: none;
+        
+        &:nth-child(1) {
+            display: block;
+        }
+    }
+
+    &-box {
+        @media (min-width: $break-lg) {
+            padding-top: 30px;
+        }
+        > div:first-child {
+            margin-bottom: 30px;
+
+            @media (min-width: $break-xl) {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &-item {
+        background-color: #FFFFFF;
+        border-radius: 2px;
+        color: #656C7D;
+        transition: box-shadow $mainTransition;
+        height: 100%;
+        width: 100%;
+
+        &:not(:first-child) {
+            display: none;
+        }
+
+        &:hover {
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.06);
+
+            .rm-slideshow-plus-item-img img {
+                opacity: 0.98;
+            }
+        }
+
+        &-box {
+            padding: 30px 30px 70px 30px;
+            @media (min-width: $break-md) {
+                padding: 30px 30px 50px 30px;
+            }
+            @media (min-width: $break-lg) {
+                padding: 30px 30px 30px 50px;
+            }
+        }
+
+        &-fullimg {
+            position: relative;
+            z-index: 1;
+
+            img {
+                width: 100%;
+                @media (max-width: $break-sm-max) {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+        &-title {
+            font-size: 30px;
+            line-height: 37px;
+            margin: 20px 0 40px;
+            color: $darkTextColor;
+        }
+
+        &-text {
+            min-height: 96px;
+
+            p {
+                font-size: 16px;
+                line-height: 24px;
+                margin-bottom: 30px;
+            }
+        }
+
+        &-btn {
+            @media (min-width: $break-md) {
+                margin-bottom: 50px;
+            }
+
+            .rm-btn {
+                display: inline-block;
+                padding: 0 25px;
+                @media (min-width: $break-md) {
+                    margin-top: 15px;
+                }
+            }
+        }
+
+        &-img {
+
+            img {
+                transition: opacity $mainTransition;
+                @media (max-width: $break-sm-max) {
+                    margin: 0 auto;
+                    max-width: 100%;
+                    block-size: auto;
+                }
+            }
+        }
+    }
+
+    .slick-track {
+        display: flex !important;
+        align-items: stretch;
+
+        .slick-slide {
+            height: auto !important;
+        }
+    }
+
+    .slick-track,
+    .slick-list {
+        height: 100%;
+    }
+
+    .slick-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        height: 14px;
+        text-align: center;
+
+        li {
+            display: inline-block;
+
+            button {
+                width: 14px;
+                height: 14px;
+                padding: 0;
+                background: #CBCBCB;
+                display: block;
+                -webkit-backface-visibility: visible;
+                transition: background $mainTransition;
+                border-radius: 8px;
+                text-indent: -9999px;
+                overflow: hidden;
+            }
+
+            &:not(:last-child) {
+                margin-right: 8px;
+            }
+
+            &.slick-active button,
+            &:hover button {
+                background-color: $primaryColor;
+            }
+        }
+    }
+}
+// ---/Slideshow
+// ---Slideshow day-discounts
+@keyframes seconds {
+    0% {
+       opacity: 0
+   }
+
+   25% {
+       opacity: 1
+   }
+
+
+   75% {
+       opacity: 0
+   }
+
+   100% {
+       opacity: 0
+   }
+}
+
+@media (min-width: $break-lg) {
+    #rm-day-discounts {
+        > div {
+            display: none;
+            
+            &:nth-child(1) {
+                display: block;
+            }
+        }
+    }
+}
+
+.rm-day-discounts {
+    background-color: #FFF;
+    padding: 24px 0 48px;
+    text-align: center;
+    height: 100%;
+
+    @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+        padding: 10px 0 20px;
+    }
+
+    .rm-module-rating {
+        margin-top: 0;
+    }
+
+    .slick-slider {
+        position: static;
+    }
+
+    .slick-track {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    &-header {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+
+        @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+            font-size: 14px;
+            line-height: 18px;
+            margin-bottom: 6px;
+        }
+    }
+
+    &-timer {
+        margin-bottom: 15px;
+        font-size: 12px;
+        line-height: 15px;
+
+        @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+            margin-bottom: 8px;
+        }
+
+        &-text {
+            color: $lightTextColor;
+        }
+
+        &-inner {
+            padding: 4px 6px;
+            border: 1px solid $primaryColor;
+            color: $redColor;
+
+            > * {
+                &.animated {
+                    animation: seconds 1s infinite;
+                }
+            }
+        }
+
+        &-number {
+            width: 20px;
+            text-align: center;
+
+            & + span {
+                font-size: 10px;
+            }
+        }
+
+        &-delimiter {
+            padding: 0 2px;
+        }
+    }
+
+    &-item {
+        padding: 0 30px;
+
+        &:not(:first-child) {
+            display: none;
+        }
+
+        &-img {
+            position: relative;
+            z-index: 1;
+
+            img {
+                margin: 0 auto 15px;
+            }
+        }
+
+        &-sticker {
+            display: flex;
+            align-items: center;
+            padding: 4px 10px;
+            background: $redColor;
+            border-radius: 4px;
+            position: absolute;
+            top: 0;
+            font-size: 12px;
+            line-height: 15px;
+            color: #FDFDFD;
+            margin: 0 auto;
+        }
+
+        .rm-module-price-top {
+            text-align: left;
+            margin-bottom: 0;
+        }
+
+        .rm-module-price-bottom {
+            @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+                .rm-btn {
+                    height: 30px;
+                    line-height: 30px;
+                    padding: 0 8px;
+                }
+
+                .rm-cart-btn-icon {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+
+        &-title {
+            font-weight: 500;
+            line-height: 24px;
+            margin: 15px 0;
+            text-align: left;
+            height: 48px;
+            overflow-y: hidden;
+            font-size: 15px;
+
+            @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+                margin: 10px 0;
+                line-height: 20px;
+                height: 38px;
+                font-size: 13px;
+            }
+
+            a {
+                transition: color $mainTransition;
+                text-decoration: underline;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        &:hover {
+            a {
+                color: $linksColor;
+            }
+        }
+    }
+
+    .slick-dots {
+        text-align: center;
+        -webkit-tap-highlight-color: transparent;
+        position: absolute;
+        bottom: 14px;
+        right: 0;
+        left: 0;
+        @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+            bottom: 10px;
+        }
+
+        li {
+            display: inline-block;
+            zoom: 1;
+
+            button {
+                width: 10px;
+                height: 10px;
+                margin-right: 8px;
+                padding: 0;
+                background-color: #CBCBCB;
+                border-radius: 8px;
+                display: block;
+                -webkit-backface-visibility: visible;
+                transition: background $mainTransition;
+                border-radius: 8px;
+                text-indent: -9999px;
+                overflow: hidden;
+            }
+
+            &.slick-active button,
+            &:hover button {
+                background-color: $primaryColor;
+            }
+        }
+    }
+}

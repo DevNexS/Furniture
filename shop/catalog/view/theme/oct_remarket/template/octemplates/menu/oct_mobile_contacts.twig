@@ -1,0 +1,69 @@
+<div class="rm-sidebar-contacts d-flex flex-column">
+    <div class="rm-header-location-inner">
+        {% if oct_contact_telephones is defined and oct_contact_telephones %}
+        <div class="rm_mobile_menu_first-item rm_mobile_menu_phones">
+            <div class="rm-content-title">{{ oct_telephones }}</div>
+            {% for telephone in oct_contact_telephones %}
+            <a href="tel:{{ telephone }}" class="rm_mobile_menu_phones-item d-flex align-items-center"><span>{{ telephone }}</span></a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if oct_contact_opens is defined and oct_contact_opens %}
+        <div class="rm_mobile_menu_first-item rm_mobile_menu_shedule">
+            <div class="rm-content-title">{{ oct_menu_time }}</div>
+            <ul class="list-unstyled">
+                {% for oct_contact_open in oct_contact_opens %}
+                <li>{{ oct_contact_open }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if (oct_remarket_data.contact_messenger is defined and oct_remarket_data.contact_messenger) or (oct_remarket_data.contact_viber is defined and oct_remarket_data.contact_viber) or (oct_remarket_data.contact_telegram is defined and oct_remarket_data.contact_telegram) or (oct_remarket_data.contact_skype is defined and oct_remarket_data.contact_skype) or (oct_remarket_data.contact_whatsapp is defined and oct_remarket_data.contact_whatsapp) %}
+        <div class="rm_mobile_menu_messengers row no-gutters">
+            {% if oct_remarket_data.contact_messenger is defined and oct_remarket_data.contact_messenger and oct_remarket_data.mobile_menu.messenger is defined and oct_remarket_data.mobile_menu.messenger %}
+            <div class="col-6"><a rel="noopener noreferrer" href="https://m.me/{{ oct_remarket_data.contact_messenger }}" target="_blank" class="rm_mobile_menu_first-item rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-messenger d-flex align-items-center justify-content-center"><i class="fab fa-facebook-messenger"></i></span><span>Messenger</span></a></div>
+            {% endif %}
+
+            {% if oct_remarket_data.contact_viber is defined and oct_remarket_data.contact_viber and oct_remarket_data.mobile_menu.viber is defined and oct_remarket_data.mobile_menu.viber %}
+            <div class="col-6"><a rel="noopener noreferrer" href="viber://add?number={{ oct_remarket_data.contact_viber }}" target="_blank" class="rm_mobile_menu_first-item rm-fixed-contact-item d-flex align-items-center rm-fixed-contact-viber-mobile"><span class="rm-fixed-contact-item-icon rm-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a></div>
+            {% endif %}
+
+            {% if oct_remarket_data.contact_telegram is defined and oct_remarket_data.contact_telegram and oct_remarket_data.mobile_menu.telegram is defined and oct_remarket_data.mobile_menu.telegram %}
+            <div class="col-6"><a rel="noopener noreferrer" href="https://t.me/{{ oct_remarket_data.contact_telegram }}" target="_blank" class="rm_mobile_menu_first-item rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-telegram d-flex align-items-center justify-content-center"><i class="fab fa-telegram"></i></span><span>Telegram</span></a></div>
+            {% endif %}
+
+            {% if oct_remarket_data.contact_skype is defined and oct_remarket_data.contact_skype and oct_remarket_data.mobile_menu.skype is defined and oct_remarket_data.mobile_menu.skype %}
+            <div class="col-6"><a rel="noopener noreferrer" href="skype:{{ oct_remarket_data.contact_skype }}?chat" class="rm_mobile_menu_first-item rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-skype d-flex align-items-center justify-content-center"><i class="fab fa-skype"></i></span><span>Skype</span></a></div>
+            {% endif %}
+
+            {% if oct_remarket_data.contact_whatsapp is defined and oct_remarket_data.contact_whatsapp and oct_remarket_data.mobile_menu.whatsapp is defined and oct_remarket_data.mobile_menu.whatsapp %}
+            <div class="col-6"><a rel="noopener noreferrer" href="https://api.whatsapp.com/send?phone={{ oct_remarket_data.contact_whatsapp }}" target="_blank" class="rm_mobile_menu_first-item rm-fixed-contact-item d-flex align-items-center"><span class="rm-fixed-contact-item-icon rm-fixed-contact-whatsapp d-flex align-items-center justify-content-center"><i class="fab fa-whatsapp"></i></span><span>WhatsApp</span></a></div>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% if socials is defined and socials is not empty %}
+        <div class="rm_mobile_menu_first-item rm_mobile_menu_shedule">
+            <div class="rm-content-title">{{ oct_join_socials }}</div>
+            <ul class="rm-social list-unstyled d-flex flex-wrap">
+                {% for social in socials %}
+                <li class="rm-social-item">
+                    <a rel="noopener noreferrer" href="{{ (social.link == "#" or social.link is empty) ? 'javascript:;' : social.link }}" class="rm-social--{{ social.icone|replace({'fa ': "", "fab " : "", "far " : "", "fas " : ""}) }} d-flex align-items-center justify-content-center" target="_blank">
+                    <i class="{{ social.icone }}"></i></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if (oct_remarket_data.mobile_menu.email is defined and oct_remarket_data.mobile_menu.email) and (oct_remarket_data.contact_email is defined and oct_remarket_data.contact_email is not empty) %}
+        <div class="rm_mobile_menu_first-item rm_mobile_menu_email">
+            <div class="rm-content-title">E-mail</div>
+            <a href="mailto:{{ oct_remarket_data.contact_email }}">{{ oct_remarket_data.contact_email }}</a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="d-flex justify-content-center rm-header-location-contacts-btn">
+        <a href="{{ contact }}" class="rm-btn dark w-100 text-center">
+            <span class="rm-btn-text">{{ oct_go_contact_text }}</span>
+        </a>
+    </div>
+</div>

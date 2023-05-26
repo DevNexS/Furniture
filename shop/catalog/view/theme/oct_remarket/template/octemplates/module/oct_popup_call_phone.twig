@@ -1,0 +1,101 @@
+<div class="modal" id="rm-callback-modal" tabindex="-1" role="dialog" aria-labelledby="rm-callback">
+	<div class="modal-dialog modal-dialog-centered narrow" role="document">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <h5 class="modal-title" id="rm-callback">{{ heading_title }}</h5>
+	            <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+					<span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+	            </button>
+	        </div>
+	        <div id="call-main-block" class="modal-body">
+				<div class="pb-4">{{ enter_text }}</div>
+		        <form method="post" enctype="multipart/form-data" id="call-phone-form">
+					{% if oct_popup_call_phone_data.name %}
+					<div class="form-group">
+						<input type="text" name="name" value="{{ name }}" class="form-control" id="InputName" placeholder="{{ enter_name }}">
+					</div>
+					{% endif %}
+					{% if oct_popup_call_phone_data.telephone %}
+					<div class="form-group">
+						<input type="tel" name="telephone" value="{{ telephone }}" class="form-control" id="InputPhone" placeholder="{{ enter_telephone }}">
+					</div>
+					{% endif %}
+					<input class="input-text" value="" type="hidden" name="url_page" />
+					{% if oct_popup_call_phone_data.comment %}
+					<div class="form-group">
+						<textarea name="comment" class="form-control" id="InputComment" placeholder="{{ enter_comment }}"></textarea>
+					</div>
+					{% endif %}
+					{% if text_terms %}
+					<div class="form-checkbox-group">
+						<div class="checkbox">
+							<label>
+								<input id="scales-1" type="checkbox" class="rm-form-checkbox-input" name="agree">
+								<span class="check-box"></span>
+								{{ text_terms }}
+							</label>
+						</div>
+					</div>
+					{% endif %}
+					<button type="submit" class="rm-btn dark">{{ button_send }}</button>
+				</form>
+				<div class="rm-popup-success d-none flex-column align-items-center text-center w-100">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--popup-success-icon" alt="" width="70" height="70">
+                    <div id="rm-popup-success-call-text"></div>
+                    <button type="button" class="rm-btn dark" data-dismiss="modal" aria-label="Close">
+                        <span class="rm-btn-text">{{ oct_info_bar_close }}</span></button>
+                </div>
+	        </div>
+	    </div>
+	</div>
+	<script>
+	$("#InputName, #InputPhone, #InputComment, #scales-1").on("change paste keyup", function() {
+		$(this).removeClass('error_style');
+	});
+
+	$('[name="url_page"]').val(window.location.href);
+
+	$('#call-phone-form').on('submit', function( event ) {
+		event.preventDefault();
+		$.ajax({
+			type: 'post',
+			url:  'index.php?route=octemplates/module/oct_popup_call_phone/send',
+			dataType: 'json',
+			cache: false,
+			data: $('#call-phone-form').serialize(),
+			beforeSend: function() {
+				masked('body', true);
+			},
+			complete: function() {
+				masked('body', false);
+			},
+			success: function(json) {
+				if (json['error']) {
+					$('#rm-callback-modal .text-danger').remove();
+					let errorOption = '';
+
+					$.each(json['error'], function(i, val) {
+						$('#rm-callback-modal [name="' + i + '"]').addClass('error_style');
+						errorOption += '<div class="alert-text-item">' + val + '</div>';
+					});
+
+					rmNotify('danger', errorOption);
+				} else {
+					if (json['output']) {
+						$("#rm-popup-success-call-text").html(json['output']);
+						$("#call-main-block").html($(".rm-popup-success"));
+						$(".rm-popup-success").removeClass("d-none");
+					}
+				}
+			}
+		});
+	});
+	</script>
+	{% if mask is defined and mask is not empty %}
+	<script src="catalog/view/theme/oct_remarket/js/jquery.inputmask.bundle.min.js"></script>
+	<script>
+	rmInputMask('#InputPhone','{{ mask }}');
+	</script>
+	{% endif %}
+</div>

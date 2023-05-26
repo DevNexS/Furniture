@@ -1,0 +1,119 @@
+<div class="rm-column-title">{{ heading_title }}</div>
+<ul class="rm-account-list list-unstyled">
+    {% if logged %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ account }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-001" alt="">
+                <span>{{ text_account }}</span>
+            </a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ edit }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-014" alt="">
+                <span>{{ text_edit }}</span>
+            </a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ password }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-002" alt="">
+                <span>{{ text_password }}</span>
+            </a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ address }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-003" alt="">
+                <span>{{ text_address }}</span>
+            </a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ wishlist }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-004" alt="">
+                <span>{{ text_wishlist }}</span></a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ order }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-006" alt="">
+                <span>{{ text_order }}</span></a>
+        </li>
+        {% if download_view is defined and download_view %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ download }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-007" alt="">
+                <span>{{ text_download }}</span></a>
+        </li>
+        {% endif %}
+        {% if recurring_view is defined and recurring_view %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ recurring }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-012" alt="">
+                <span>{{ text_recurring }}</span></a>
+        </li>
+        {% endif %}
+        {% if reward_view is defined and reward_view %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ reward }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-008" alt="">
+                <span>{{ text_reward }}</span></a>
+        </li>
+        {% endif %}
+        {% if return_view is defined and return_view %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ return }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-009" alt="">
+                <span>{{ text_return }}</span></a>
+        </li>
+        {% endif %}
+        {% if transaction_view is defined and transaction_view %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ transaction }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-011" alt="">
+                <span>{{ text_transaction }}</span></a>
+        </li>
+        {% endif %}
+        {% if newsletter_view is defined and newsletter_view %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ newsletter }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-005" alt="">
+                <span>{{ text_newsletter }}</span></a>
+        </li>
+        {% endif %}
+        {% if affiliate_view is defined and affiliate_view %}
+        {% if not tracking %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ affiliate }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-010" alt="">
+                    <span>{{ text_oct_affiliate }}</span></a>
+            </li>
+        {% else %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ affiliate }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-010" alt="">
+                    <span>{{ text_oct_affiliate }}</span></a>
+            </li>
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ tracking }}">
+                    <i class="fas fa-code"></i>
+                    <span>{{ text_oct_tracking }}</span></a>
+            </li>
+        {% endif %}
+        {% endif %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ logout }}">
+                <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-013" alt="">
+                <span>{{ text_logout }}</span></a>
+        </li>
+    {% else %}
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ login }}">
+                <span>{{ text_login }}</span></a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ register }}">
+                <span>{{ text_register }}</span></a>
+        </li>
+        <li class="rm-account-list-item">
+            <a class="rm-account-link d-flex align-items-center" href="{{ forgotten }}">
+                <span>{{ text_forgotten }}</span></a>
+        </li>
+    {% endif %}
+</ul>

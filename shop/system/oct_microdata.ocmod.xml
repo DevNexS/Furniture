@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_microdata</code>
+	<name>Octemplates - Microdata</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>http://octemplates.net/</link>
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip">
+			<search><![CDATA[$data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);]]></search>
+			<add position="before"><![CDATA[
+			$oct_cat_info = [];
+			$oct_product_categories_name = '';
+			$data['oct_reviews_all'] = [];
+			$data['oct_price_currency'] = '';
+			$data['oct_description_microdata'] = '';
+
+			if (isset($oct_remarket_data['micro']) && $oct_remarket_data['micro'] = 'on') {
+				$data['oct_micro_heading_title'] = htmlspecialchars($data['heading_title']);
+
+				$oct_product_categories = $this->model_catalog_product->getCategories($product_id);
+
+				foreach ($oct_product_categories as $product_category) {
+					$cat_info = $this->model_catalog_category->getCategory($product_category['category_id']);
+
+					if ($cat_info) {
+						$oct_cat_info[] = $cat_info;
+					}
+				}
+
+				$i = 1;
+
+				foreach ($oct_cat_info as $cat_info_name) {
+					$oct_product_categories_name .= $cat_info_name['name'];
+
+					if ($i < count($oct_cat_info)){
+						$oct_product_categories_name .= ", ";
+					}
+
+					$i++;
+				}
+
+				$data['oct_product_categories'] = $oct_product_categories_name;
+
+				// Get the currency
+				$oct_currency = $data['oct_price_currency'] = $this->session->data['currency'];
+
+				// Get the number of decimal places from the configuration
+				$oct_decimal_places = (int)$this->config->get('config_decimal_place');
+
+				$data['oct_special_microdata'] = false;
+				$data['oct_price_microdata'] = false;
+
+				// Get the product price or special
+				if (!empty($product_info['special'])) {
+					$data['oct_special_microdata'] = (float)rtrim(preg_replace( '/[^.\d]/', '', $this->currency->format($product_info['special'], $oct_currency, '', true, $oct_decimal_places)));
+				} else {
+					$data['oct_price_microdata'] = (float)rtrim(preg_replace( '/[^.\d]/', '', $this->currency->format($product_info['price'], $oct_currency, '', true, $oct_decimal_places)));
+				}
+
+				$data['oct_description_microdata'] = htmlspecialchars(strip_tags(str_replace("\r", "", str_replace("\n", "", str_replace("\\", "/", str_replace("\"", "", html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')))))));
+
+				$oct_reviews_all = $this->model_catalog_review->getReviewsByProductId($product_id);
+
+				foreach ($oct_reviews_all as $result) {
+					$data['oct_reviews_all'][] = [
+						'author'     => htmlspecialchars($result['author']),
+						'text'       => htmlspecialchars(strip_tags(str_replace("\r", "", str_replace("\n", "", str_replace("\\", "/", str_replace("\"", "", $result['text'])))))),
+						'rating'     => (int)$result['rating'],
+						'date_added' => date($this->language->get('Y-m-d'), strtotime($result['date_added']))
+					];
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+</modification>

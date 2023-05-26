@@ -1,0 +1,33 @@
+<div class="shipping-method">
+	<div class="oct-checkout-block-title d-flex align-items-center mb-3">
+		<img src="catalog/view/theme/oct_remarket/img/sprite-fastorder.svg#include--delivery-icon" alt="" width="24" height="24">
+		<span class="text-uppercase ps-3">{{ heading_shipping_block }}</span>
+	</div>
+	{% if error_warning %}
+	<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+	{% endif %}
+	{% if shipping_methods %}
+	<p class="mb-3">{{ text_shipping_method }}</p>
+	<div class="shipping-method-box">
+		{% for shipping_method in shipping_methods %}
+			<p class="mb-2"><strong>{{ shipping_method.title }}</strong></p>
+			{% if not shipping_method.error %}
+				{% for quote in shipping_method['quote'] %}
+				<div class="mb-3 radio">
+					<label class="ml-0">
+					{% if quote.code == code or  not code %}
+					{% set code = quote.code %}
+					<input type="radio" name="shipping_method" value="{{ quote.code }}" title="{{ quote.title }}" checked="checked" />
+					{% else %} 
+					<input type="radio" name="shipping_method" value="{{ quote.code }}" title="{{ quote.title }}" />
+					{% endif %}
+					{{ quote.title }} - {{ quote.text }}</label>
+				</div>
+				{% endfor %}
+			{% else %} 
+				<div class="alert alert-danger">{{ shipping_method.error }}</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+	{% endif %}
+</div>

@@ -1,0 +1,72 @@
+{{ header }}
+<div id="account-tracking" class="container account-container">
+    {{ oct_breadcrumbs }}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="rm-page-title">{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="content-top-box">{{ content_top }}</div>
+    <div id="content" class="row">
+        {{ column_left }}
+        {% if column_left and column_right %}
+        {% set class = 'col-lg-6' %}
+        {% elseif column_left or column_right %}
+        {% set class = 'col-lg-9' %}
+        {% else %}
+        {% set class = 'col-lg-12' %}
+        {% endif %}
+        <div class="{{ class }}">
+            <div class="rm-content rm-account-content h-100">
+                <div class="rm-account-text">{{ text_description }}</div>
+                <form class="form-horizontal">
+                    <fieldset class="rm-account-form">
+                        <div class="form-group">
+                            <label class="rm-control-label" for="input-code">{{ entry_code }}</label>
+                            <textarea cols="40" rows="5" placeholder="{{ entry_code }}" id="input-code" class="form-control">{{ code }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="rm-control-label" for="input-generator">
+                                <span data-toggle="tooltip" title="{{ help_generator }}">{{ entry_generator }}</span>
+							</label>
+                            <input type="text" name="product" value="" placeholder="{{ entry_generator }}" id="input-generator" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="rm-control-label" for="input-link">{{ entry_link }}</label>
+                            <textarea name="link" cols="40" rows="5" placeholder="{{ entry_link }}" id="input-link" class="form-control"></textarea>
+                        </div>
+                    </form>
+                    <div class="buttons mt-4">
+                        <a href="{{ continue }}" class="rm-btn dark">{{ button_continue }}</a>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        {{ column_right }}
+    </div>
+    {{ content_bottom }}
+</div>
+<script type="text/javascript">
+    <!--
+    $('input[name=\'product\']').autocomplete({
+        'source': function(request, response) {
+            $.ajax({
+                url: 'index.php?route=account/tracking/autocomplete&filter_name=' + encodeURIComponent(request) + '&tracking=' + encodeURIComponent($('#input-code').val()),
+                dataType: 'json',
+                cache: false,
+                success: function(json) {
+                    response($.map(json, function(item) {
+                        return {label: item['name'], value: item['link']}
+                    }));
+                }
+            });
+        },
+        'select': function(item) {
+            $('input[name=\'product\']').val(item['label']);
+            $('textarea[name=\'link\']').val(item['value']);
+        }
+    });
+
+    //-->
+</script>
+{{ footer }}

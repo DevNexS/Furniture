@@ -1,0 +1,208 @@
+.rm-control-label {
+    display: block;
+    font-size: 14px;
+    line-height: 25px;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    color: $darkTextColor;
+    font-size: 14px;
+    background-color: #FDFDFD;
+    border: 1px solid #E9E9E9;
+    padding: 7px 20px;
+    border-radius: 6px;
+    height: 44px;
+    @media (max-width: $break-md-max) {
+        transition: unset;
+    }
+
+    &::placeholder {
+        color: $darkTextColor;
+        font-size: 14px;
+    }
+
+    &:focus {
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+        border: 1px solid #D3D8E7;
+        background-color: #FFFFFF;
+    }
+}
+
+.input-group {
+    button {
+        border-radius: 0 6px 6px 0;
+    }
+}
+// .Form-group .Form-checkbox-group
+.form-checkbox-group,
+.form-group {
+    margin-bottom: 20px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+// Default Product one click
+
+.rm-product-one-click {
+    .form-control {
+        color: $lightTextColor;
+        font-size: 13px;
+        line-height: 16px;
+        background: #FDFDFD url("../img/sprite.svg#include--buy-one-click-icon") no-repeat 10px 14px;
+        background-size: 16px auto;
+        padding: 0 30px;
+        max-width: 230px;
+        @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+            font-size: 12px;
+            padding-right: 15px;
+        }
+    }
+
+    .rm-btn {
+        font-size: 12px;
+        padding: 0 22px;
+        height: 44px;
+        line-height: 44px;
+        @media (min-width: $break-xl) and (max-width: $break-xl-max) {
+            padding: 0 10px;
+        }
+    }
+}
+
+.rm-input-with-btn {
+    border-radius: 6px 0 0 6px;
+}
+// Default Checkbox
+
+.form-checkbox-group {
+    .rm-form-checkbox-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+
+        & + .check-box::after {
+            content: '';
+            opacity: 0;
+            background: url(../img/sprite.svg#include--check-box) no-repeat;
+            width: 8px;
+            height: 7px;
+            transition: opacity $mainTransition;
+            position: absolute;
+            left: 3px;
+            top: calc(50% - 3px);
+        }
+
+        &:checked + .check-box::after {
+            opacity: 1;
+        }
+
+        &:focus + .check-box {
+            box-shadow: inset 0 0 0 0.1rem rgba(198, 198, 198, 0.1);
+            border: 1px solid #D0D1D4;
+        }
+    }
+
+    label {
+        color: $darkTextColor;
+        line-height: 16px;
+        position: relative;
+        margin: 0 0 0 10px;
+        cursor: pointer;
+
+        a {
+            color: $linksColor;
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.check-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    background-color: transparent;
+    border: 1px solid #E9E9E9;
+    border-radius: 2px;
+    margin-left: -25px;
+    transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+}
+// Default Select
+
+.rm-select {
+    height: 44px;
+    font-size: 12px;
+    background: #FDFDFD url("../img/sprite.svg#include--input-sort") no-repeat right 15px center;
+    background-size: 10px;
+    background-color: #FDFDFD;
+    border: 1px solid #E9E9E9;
+    border-radius: 6px;
+    padding: 0 30px 0 15px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    color: $darkTextColor;
+
+    &:focus {
+        box-shadow: inset 0 0 0 0.1rem rgba(198, 198, 198, 0.1);
+        border: 1px solid #E9E9E9;
+        background-color: #F8F8F8;
+    }
+}
+// Default Radio
+
+.input-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+
+    &:checked + .radio-box::after {
+        opacity: 1;
+    }
+
+    &:focus + .radio-box {
+        box-shadow: inset 0 0 0 0.1rem rgba(198, 198, 198, 0.1);
+    }
+}
+
+.radio label {
+    margin: 0 20px 0 26px;
+    position: relative;
+    cursor: pointer;
+}
+
+.radio-box {
+    position: absolute;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background-color: #FFF;
+    border: 1px solid #d1d2d5;
+    border-radius: 50%;
+    margin-left: -26px;
+    transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 6px;
+        height: 6px;
+        background-color: $primaryColor;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity $mainTransition;
+    }
+}

@@ -1,0 +1,48 @@
+<div class="rm-footer-title">{{ oct_text_subscribe_title }}</div>
+<form action="javascript:;" id="footer-subscribe" class="rm-footer-subscribe">
+	<div class="input-group">
+    	<input type="email" id="InputSubscribeEmail" class="form-control rm-input-with-btn" name="email" placeholder="{{ enter_email_static_subscribe }}">
+	    <button type="submit" id="footer-make-subscribe" class="rm-btn dark">{{ oct_text_subscribe_button }}</button>
+	</div>
+    {% if text_terms %}
+    <div class="form-checkbox-group">
+        <label>
+          <input type="checkbox" class="rm-form-checkbox-input" name="agree" id="oct-scales-static">
+          <span class="check-box"></span>
+          {{ text_terms }}
+        </label>
+    </div>
+    {% endif %}
+</form>
+<script>
+$("#InputSubscribeEmail, #oct-scales-static").on("change paste keyup", function() {
+	$(this).removeClass('error_style');
+});
+$('#footer-make-subscribe').on('click', function() {
+	$.ajax({
+		type: 'post',
+		url:  'index.php?route=octemplates/module/oct_subscribe/makeSubscribe',
+		dataType: 'json',
+		cache: false,
+		data: $('#footer-subscribe').serialize(),
+		success: function(json) {
+			if (json['error']) {
+				$('#us-subscribe-modal .text-danger').remove();
+				let errorOption = '';
+
+				$.each(json['error'], function(i, val) {
+					$('#footer-subscribe [name="' + i + '"]').addClass('error_style');
+					errorOption += '<div class="alert-text-item">' + val + '</div>';
+				});
+
+				rmNotify('danger', errorOption);
+			} else {
+				if (json['output']) {
+					$('#footer-subscribe [name="email"]').val('');
+					rmNotify('success', '<div class="alert-text-item">' + json['output'] + '</div>');
+				}
+			}
+		}
+	});
+});
+</script>

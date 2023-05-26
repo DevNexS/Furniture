@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_blog</code>
+	<name>Octemplates - Blog &amp; Articles</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="admin/controller/startup/permission.php">
+    	<operation error="skip">
+			<search><![CDATA['extension/module',]]></search>
+			<add position="before"><![CDATA[
+			'octemplates/blog',
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/startup/seo_url.php">
+    	<operation error="skip">
+			<search><![CDATA[if ($url[0] == 'category_id') {]]></search>
+			<add position="before"><![CDATA[
+			if ($url[0] == 'blogarticle_id') {
+				$this->request->get['blogarticle_id'] = $url[1];
+			}
+
+			if ($url[0] == 'blogcategory_id') {
+				if (!isset($this->request->get['blog_path'])) {
+					$this->request->get['blog_path'] = $url[1];
+				} else {
+					$this->request->get['blog_path'] .= '_' . $url[1];
+				}
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[ && $url[0] != 'product_id']]></search>
+			<add position="replace"><![CDATA[&& $url[0] != 'product_id' && $url[0] != 'blogcategory_id' && $url[0] != 'blogarticle_id']]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[} elseif (isset($this->request->get['path'])) {]]></search>
+			<add position="before"><![CDATA[
+			} elseif (isset($this->request->get['blogarticle_id'])) {
+				$this->request->get['route'] = 'octemplates/blog/oct_blogarticle';
+			} elseif (isset($this->request->get['blog_path'])) {
+				$this->request->get['route'] = 'octemplates/blog/oct_blogcategory';
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {]]></search>
+			<add position="replace"><![CDATA[
+			if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'octemplates/blog/oct_blogarticle' && $key == 'blogarticle_id')) {
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[} elseif ($key == 'path') {]]></search>
+			<add position="before"><![CDATA[
+			} elseif ($key == 'blog_path') {
+				$blog_categories = explode('_', $value);
+
+				foreach ($blog_categories as $blog_category) {
+					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `query` = 'blogcategory_id=" . (int)$blog_category . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+
+					if ($query->num_rows && $query->row['keyword']) {
+						$url .= '/' . $query->row['keyword'];
+					} else {
+						$url = '';
+
+						break;
+					}
+				}
+
+				unset($data[$key]);
+			]]></add>
+    	</operation>
+	</file>
+	<file path="system/library/slaseopro.php">
+		<operation error="skip">
+			<search><![CDATA[} elseif (count($url) > 1) {]]></search>
+			<add position="before"><![CDATA[
+			} elseif ($url[0] == 'blogcategory_id') {
+				if (!isset($this->request->get['blog_path'])) {
+					$this->request->get['blog_path'] = $url[1];
+				} else {
+					$this->request->get['blog_path'] .= '_' . $url[1];
+				}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[} elseif (isset($this->request->get['manufacturer_id'])) {]]></search>
+			<add position="before"><![CDATA[
+			} elseif (isset($this->request->get['blogarticle_id'])) {
+				$this->request->get['route'] = 'octemplates/blog/oct_blogarticle';
+
+				if (!isset($this->request->get['blog_path'])) {
+					$blog_path = $this->getOctBlogPathByArticle($this->request->get['blogarticle_id']);
+
+					if ($blog_path) $this->request->get['blog_path'] = $blog_path;
+				}
+			} elseif (isset($this->request->get['blog_path'])) {
+				if ($this->config->get('sla_seo_pro_short_url')) {
+					$blogcategory = explode('_', $this->request->get['blog_path']);
+					$blogcategory = end($blogcategory);
+
+					$this->request->get['blog_path'] = $this->getOctBlogPathByBlogCategory($blogcategory);
+				}
+
+				$this->request->get['route'] = 'octemplates/blog/oct_blogcategory';
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[case 'category_id':]]></search>
+			<add position="before"><![CDATA[
+			case 'blogarticle_id':
+				$queries[] = $key . '=' . $value;
+				unset($data[$key]);
+				$postfix = 1;
+
+				break;
+
+			case 'blogcategory_id':
+				$queries[] = $key . '=' . $value;
+				unset($data[$key]);
+				$postfix = 1;
+
+				break;
+
+			case 'blog_path':
+				$blogcategories = explode('_', $value);
+
+				foreach($blogcategories as $blogcategory) {
+					$queries[] = 'blogcategory_id=' . $blogcategory;
+				}
+
+				unset($data[$key]);
+
+				break;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[case 'product/manufacturer/info':]]></search>
+			<add position="before"><![CDATA[
+			case 'octemplates/blog/oct_blogarticle':
+				if (isset($data['blogarticle_id'])) {
+					$tmp = $data;
+					$data = array();
+
+					if ($this->config->get('sla_seo_pro_include_path')) {
+						$data['blog_path'] = $this->getOctBlogPathByArticle($tmp['blogarticle_id']);
+
+						if (!$data['blog_path']) unset($data['blog_path']);
+					} else {
+						unset ($data['blog_path']);
+					}
+
+					$data['blogarticle_id'] = $tmp['blogarticle_id'];
+
+					$sla_seo_pro_utm = explode('\n',$this->config->get('sla_seo_pro_utm'));
+
+					foreach ($sla_seo_pro_utm as $utm) {
+						if (isset($tmp[$utm])) {
+							$data[$utm] = $tmp[$utm];
+						}
+					}
+				}
+
+				break;
+
+			case 'octemplates/blog/oct_blogcategory':
+				if (isset($data['blog_path'])) {
+					$blogcategory = explode('_', $data['blog_path']);
+					$blogcategory = end($blogcategory);
+
+					$data['blog_path'] = $this->getOctBlogPathByBlogCategory($blogcategory);
+
+					if (!$data['blog_path']) {unset($data['blog_path']) ;return; }
+
+					if ($this->config->get('sla_seo_pro_short_url')) {
+						$dblogpath = explode('_',$data['blog_path']);
+						$data['blog_path'] = end($dblogpath);
+					}
+				}
+
+				break;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[private function getPathByProduct($product_id) {]]></search>
+			<add position="before"><![CDATA[
+			private function getOctBlogPathByArticle($blogarticle_id) {
+				$blogarticle_id = (int)$blogarticle_id;
+
+				if ($blogarticle_id < 1) return false;
+
+				$query_ = 'blogarticle_id=' . $blogarticle_id;
+
+				if (isset($this->cache_data['seopath'][$query_]) && $this->cache_data['seopath'][$query_])
+					return $this->cache_data['seopath'][$query_];
+
+				$query = $this->db->query("SELECT blogcategory_id FROM " . DB_PREFIX . "oct_blogarticle_to_category WHERE blogarticle_id = '" . (int)$blogarticle_id . "' ORDER BY blogcategory_id DESC LIMIT 1");
+
+				if ($query->num_rows) {
+					$path_blogarticle_id = $this->getOctBlogPathByBlogCategory($query->row['blogcategory_id']);
+				} else {
+					return false;
+				}
+
+				if ($path_blogarticle_id) {
+					$query = $this->db->query("UPDATE " . DB_PREFIX . "seo_url SET seopath = '" . $this->db->escape($path_blogarticle_id) . "'	WHERE query = 'blogarticle_id=" .(int)$blogarticle_id . "'");
+				}
+
+				$this->cache_data['seopath'][$query_] = $path_blogarticle_id;
+
+				return $path_blogarticle_id;
+			}
+
+			private function getOctBlogPathByBlogCategory($blogcategory_id) {
+				$blogcategory_id = (int)$blogcategory_id;
+
+				if ($blogcategory_id < 1) return false;
+
+				$query_ = 'blogcategory_id=' . $blogcategory_id;
+
+				if (isset($this->cache_data['seopath'][$query_]) && $this->cache_data['seopath'][$query_])
+					return $this->cache_data['seopath'][$query_];
+
+				$sql = "SELECT GROUP_CONCAT(c1.blogcategory_id ORDER BY level SEPARATOR '_') blog_path
+				FROM " . DB_PREFIX . "oct_blogcategory_path cp
+				LEFT JOIN " . DB_PREFIX . "oct_blogcategory c1 ON (cp.blog_path_id = c1.blogcategory_id)
+				WHERE cp.blogcategory_id = " . (int)$blogcategory_id . "
+				GROUP BY cp.blogcategory_id";
+
+				$query = $this->db->query($sql);
+
+				$path_blogcategory_id = (isset($query->row['blog_path']) && $query->row['blog_path']) ? $query->row['blog_path'] : false;
+
+				if ($path_blogcategory_id) {
+					$query = $this->db->query("
+					UPDATE " . DB_PREFIX . "seo_url
+					SET seopath = '" . $this->db->escape($path_blogcategory_id) . "'
+					WHERE query = 'blogcategory_id=" . (int)$blogcategory_id . "'");
+				}
+
+				$this->cache_data['seopath'][$query_] = $path_blogcategory_id;
+
+				return $path_blogcategory_id;
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="system/library/seopro.php">
+		<operation error="skip">
+			<search><![CDATA[private $cat_tree = [];]]></search>
+			<add position="before"><![CDATA[
+			private $oct_blog_cat_tree = [];
+			private $oct_blogcategories = [];
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if(!in_array($url[0], ['category_id', 'product_id', 'manufacturer_id', 'information_id', 'article_id', 'blog_category_id'])) {]]></search>
+			<add position="replace"><![CDATA[
+			if(!in_array($url[0], ['category_id', 'product_id', 'manufacturer_id', 'information_id', 'article_id', 'blog_category_id', 'blogarticle_id', 'blogcategory_id'])) {
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[} elseif ($url[0] == 'blog_category_id') {]]></search>
+			<add position="before"><![CDATA[
+			} elseif ($url[0] == 'blogcategory_id') {
+				if (!isset($this->request->get['blog_path'])) {
+					$this->request->get['blog_path'] = $url[1];
+				} else {
+					$this->request->get['blog_path'] .= '_' . $url[1];
+				}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if (isset($this->request->get['product_id'])) {]]></search>
+			<add position="before"><![CDATA[
+			if (isset($this->request->get['blogarticle_id'])) {
+				if(isset($this->request->get['blog_path'])) {
+					unset($this->request->get['blog_path']);
+				};
+
+				$blog_path = $this->getOctBlogPathByArticle($this->request->get['blogarticle_id']);
+			if ($blog_path) $this->request->get['blog_path'] = $blog_path;
+				$this->request->get['route'] = 'octemplates/blog/oct_blogarticle';
+			} elseif (isset($this->request->get['blog_path'])) {
+				$this->request->get['route'] = 'octemplates/blog/oct_blogcategory';
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[case 'blog/article':]]></search>
+			<add position="before"><![CDATA[
+			case 'octemplates/blog/oct_blogarticle':
+				if (isset($data['blogarticle_id'])) {
+					$route = 'octemplates/blog/oct_blogarticle';
+					$blog_path = '';
+					$blogarticle_id = $data['blogarticle_id'];
+
+					if (isset($data['blog_path']) || $this->config->get('config_seo_url_include_path')) {
+						$blog_path = $this->getOctBlogPathByArticle($blogarticle_id);
+					}
+
+					//start add valide get-param
+					if ($this->valide_get_param) {
+						$valide_get_param_data = [];
+
+						foreach($this->valide_get_param as $get_param) {
+							if (isset($data[$get_param])) {
+								$valide_get_param_data[$get_param] = $data[$get_param];
+								$this->response->addHeader('X-Robots-Tag: noindex');
+							}
+						};
+					}
+					//end add valide get-param
+
+					unset($data);
+					$data['route'] = $route;
+
+					if ($blog_path && $this->config->get('config_seo_url_include_path')) {
+						$data['blog_path'] = $blog_path;
+					}
+
+					$data['blogarticle_id'] = $blogarticle_id;
+					//start add valide get-param
+					if ($this->valide_get_param) {
+						$data = array_merge($data, $valide_get_param_data);
+					}
+				}
+
+				break;
+
+			case 'octemplates/blog/oct_blogcategory':
+				if (isset($data['blog_path'])) {
+					$blog_path = explode('_', $data['blog_path']);
+					$blog_path = end($blog_path);
+					$data['blog_path'] = $this->getOctPathByCategory($blog_path);
+				}
+
+				break;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[case 'product/product/review':]]></search>
+			<add position="before"><![CDATA[
+			case 'octemplates/blog/oct_blogarticle/comment':
+				return [$url, $data, $postfix];
+				break;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[case 'category_id':]]></search>
+			<add position="before"><![CDATA[
+			case 'blogarticle_id':
+				$blogarticle_id = (int)$value;
+				$queries[] = 'blogarticle_id=' . $blogarticle_id;
+
+				$postfix = true;
+
+				unset($data[$key]);
+
+				break;
+			case 'blogcategory_id':
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[case 'path':]]></search>
+			<add position="before"><![CDATA[
+			case 'blog_path':
+				$blogcategories = explode('_', $value);
+
+				foreach ($blogcategories as $blogcategory_id) {
+					$queries[] = 'blogcategory_id=' . (int)$blogcategory_id;
+				}
+
+				unset($data[$key]);
+
+				break;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->cat_tree = $this->cache->get('seopro.cat_tree');]]></search>
+			<add position="before" offset="1"><![CDATA[
+			if($this->config->get('config_seo_url_cache')){
+				$this->oct_blog_cat_tree = $this->cache->get('seopro.oct_blog_cat_tree');
+			}
+
+			if((!$this->oct_blog_cat_tree || empty($this->oct_blog_cat_tree)) && $this->config->get('oct_blogsettings_status')) {
+
+				$this->oct_blog_cat_tree = [];
+
+				$all_cat_query = $this->db->query("SELECT blogcategory_id, parent_id FROM " . DB_PREFIX . "oct_blogcategory ORDER BY parent_id");
+
+				$allcats = [];
+				$blogcategories = [];
+
+				if($all_cat_query->num_rows) {
+					$allcats = $all_cat_query->rows;
+				};
+
+				foreach ($allcats as $blogcategory) {
+					$blogcategories[$blogcategory['blogcategory_id']]['parent_id'] = $blogcategory['parent_id'];
+				};
+
+				unset ($allcats);
+
+				foreach ($blogcategories as $blogcategory_id => $blogcategory) {
+					$blog_path = $this->getBlogPath($blogcategories, $blogcategory_id);
+
+					$this->oct_blog_cat_tree[$blogcategory_id]['blog_path'] = $blog_path;
+				};
+
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[private function getPath($categories, $category_id, $current_path = []) {]]></search>
+			<add position="before"><![CDATA[
+			private function getBlogPath($blogcategories, $blogcategory_id, $current_path = []) {
+				if (!$this->config->get('oct_blogsettings_status')) {
+					return;
+				}
+
+				if(!$current_path)
+					$current_path = [(int)$blogcategory_id];
+
+				$blog_path = $current_path;
+
+				$parent_id = 0;
+
+				if(isset($blogcategories[$blogcategory_id]['parent_id']))
+					$parent_id = (int)$blogcategories[$blogcategory_id]['parent_id'];
+
+				if($parent_id > 0) {
+					$new_blog_path =  array_merge ([$parent_id] , $current_path);
+					$blog_path =  $this->getBlogPath($blogcategories, $parent_id, $new_blog_path);
+				}
+
+				return $blog_path;
+			}
+
+			private function getOctBlogPathByArticle($blogarticle_id) {
+				if (!$this->config->get('oct_blogsettings_status')) {
+					return;
+				}
+
+				if ((int)$blogarticle_id < 1)
+					return false;
+
+				if ($this->config->get('config_seo_url_cache')) {
+					$this->oct_blogcategories = $this->cache->get('seopro.oct_blogarticle_blogcategories');
+					if(isset($this->oct_blogcategories[$blogarticle_id]))
+						return $this->oct_blogcategories[$blogarticle_id];
+				}
+
+				$query = $this->db->query("SELECT blogcategory_id FROM " . DB_PREFIX . "oct_blogarticle_to_category WHERE blogarticle_id = '" . (int)$blogarticle_id . "' ORDER BY blogcategory_id DESC LIMIT 1");
+				$blogcategory_id = $this->getOctPathByCategory($query->num_rows ? (int)$query->row['blogcategory_id'] : 0);
+
+				if ($this->config->get('config_seo_url_cache')) {
+					$this->oct_blogcategories[$blogarticle_id] = $blogcategory_id;
+				}
+
+				return $blogcategory_id;
+			}
+
+			private function getOctPathByCategory($blogcategory_id) {
+				if (!$this->config->get('oct_blogsettings_status')) {
+					return;
+				}
+
+				$blog_path = '';
+
+				if ((int)$blogcategory_id < 1 && !isset($this->cat_tree[$blogcategory_id]))
+					return false;
+
+				if (!empty($this->oct_blog_cat_tree[$blogcategory_id]['blog_path']) && is_array($this->oct_blog_cat_tree[$blogcategory_id]['blog_path'])) {
+					$blog_path = implode('_', $this->oct_blog_cat_tree[$blogcategory_id]['blog_path']);
+				}
+
+				return $blog_path;
+
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/information/sitemap.php">
+		<operation error="skip">
+			<search><![CDATA[$data['categories'] = array();]]></search>
+			<add position="before"><![CDATA[
+			$data['blog_categories'] = [];
+
+			if ($this->config->get('oct_blogsettings_status')) {
+				$this->load->model('octemplates/blog/oct_blogcategory');
+
+				$blog_categories_1 = $this->model_octemplates_blog_oct_blogcategory->getBlogCategories(0);
+
+				foreach ($blog_categories_1 as $blog_category_1) {
+					$blog_level_2_data = [];
+
+					$blog_categories_2 = $this->model_octemplates_blog_oct_blogcategory->getBlogCategories($blog_category_1['blogcategory_id']);
+
+					foreach ($blog_categories_2 as $blog_category_2) {
+						$blog_level_3_data = array();
+
+						$blog_categories_3 = $this->model_octemplates_blog_oct_blogcategory->getBlogCategories($blog_category_2['blogcategory_id']);
+
+						foreach ($blog_categories_3 as $blog_category_3) {
+							$blog_level_3_data[] = array(
+								'name' => $blog_category_3['name'],
+								'href' => $this->url->link('octemplates/blog/oct_blogcategory', 'blog_path=' . $blog_category_1['blogcategory_id'] . '_' . $blog_category_2['blogcategory_id'] . '_' . $blog_category_3['blogcategory_id'])
+							);
+						}
+
+						$blog_level_2_data[] = array(
+							'name'     => $blog_category_2['name'],
+							'children' => $blog_level_3_data,
+							'href'     => $this->url->link('octemplates/blog/oct_blogcategory', 'blog_path=' . $blog_category_1['blogcategory_id'] . '_' . $blog_category_2['blogcategory_id'])
+						);
+					}
+
+					$data['blog_categories'][] = array(
+						'name'     => $blog_category_1['name'],
+						'children' => $blog_level_2_data,
+						'href'     => $this->url->link('octemplates/blog/oct_blogcategory', 'blog_path=' . $blog_category_1['blogcategory_id'])
+					);
+				}
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/extension/feed/google_sitemap.php">
+		<operation error="skip">
+			<search><![CDATA[$this->load->model('catalog/information');]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('oct_blogsettings_status')) {
+				$this->load->model('octemplates/blog/oct_blogarticle');
+				$oct_blogsettings_data = $this->config->get('oct_blogsettings_data');
+
+				$articles = $this->model_octemplates_blog_oct_blogarticle->getArticles();
+
+				foreach ($articles as $article) {
+					$output .= '<url>';
+					$output .= '  <loc>' . $this->url->link('octemplates/blog/oct_blogarticle', 'blogarticle_id=' . $article['blogarticle_id']) . '</loc>';
+					$output .= '  <changefreq>weekly</changefreq>';
+					$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($article['date_modified'])) . '</lastmod>';
+					$output .= '  <priority>1.0</priority>';
+
+					if ($article['image']) {
+						$output .= '  <image:image>';
+						$output .= '  <image:loc>' . $this->model_tool_image->resize($article['image'], $oct_blogsettings_data['article_width'], $oct_blogsettings_data['article_height']) . '</image:loc>';
+						$output .= '  <image:caption>' . $article['name'] . '</image:caption>';
+						$output .= '  <image:title>' . $article['name'] . '</image:title>';
+						$output .= '  </image:image>';
+					}
+
+					$output .= '</url>';
+				}
+
+				$this->load->model('octemplates/blog/oct_blogcategory');
+
+				$output .= $this->getBlogCategories(0);
+			}
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="before"><![CDATA[
+			protected function getBlogCategories($parent_id, $current_path = '') {
+				$output = '';
+
+				$results = $this->model_octemplates_blog_oct_blogcategory->getBlogCategories($parent_id);
+
+				foreach ($results as $result) {
+					if (!$current_path) {
+						$new_path = $result['blogcategory_id'];
+					} else {
+						$new_path = $current_path . '_' . $result['blogcategory_id'];
+					}
+
+					$output .= '<url>';
+					$output .= '  <loc>' . $this->url->link('octemplates/blog/oct_blogcategory', 'blog_path=' . $new_path) . '</loc>';
+					$output .= '  <changefreq>weekly</changefreq>';
+					$output .= '  <priority>0.7</priority>';
+					$output .= '</url>';
+
+					$output .= $this->getBlogCategories($result['blogcategory_id'], $new_path);
+				}
+
+				return $output;
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/common/{column_left,column_right,content_bottom,content_top}.php">
+		<operation error="skip">
+			<search><![CDATA[if ($route == 'product/category' && isset($this->request->get['path'])) {]]></search>
+			<add position="before"><![CDATA[
+			if ($route == 'octemplates/blog/oct_blogcategory' && isset($this->request->get['blog_path'])) {
+				$this->load->model('octemplates/blog/oct_blogcategory');
+
+				$blog_path = explode('_', (string)$this->request->get['blog_path']);
+
+				$layout_id = $this->model_octemplates_blog_oct_blogcategory->getBlogCategoryLayoutId(end($blog_path));
+			}
+
+			if ($route == 'octemplates/blog/oct_blogarticle' && isset($this->request->get['blogarticle_id'])) {
+				$this->load->model('octemplates/blog/oct_blogarticle');
+
+				$layout_id = $this->model_octemplates_blog_oct_blogarticle->getArticleLayoutId($this->request->get['blogarticle_id']);
+			}
+			]]></add>
+    	</operation>
+	</file>
+</modification>

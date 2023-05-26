@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_atributes_view</code>
+	<name>Octemplates - Atributes View</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/model/catalog/product.php">
+		<operation error="skip">
+			<search><![CDATA[public function getProductAttributes($product_id) {]]></search>
+			<add position="before"><![CDATA[
+	        public function getOctProductAttributes($product_id, $limit = 5) {
+		        $product_attribute_data = [];
+
+				$product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name LIMIT " . (int)$limit);
+
+				foreach ($product_attribute_query->rows as $product_attribute) {
+					$product_attribute_data[] = [
+						'attribute_id' => $product_attribute['attribute_id'],
+						'name'         => $product_attribute['name'],
+						'text'         => $product_attribute['text']
+					];
+				}
+
+				return $product_attribute_data;
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip">
+			<search><![CDATA[$data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);]]></search>
+			<add position="after"><![CDATA[
+			$limit_attr  = $this->config->get('theme_oct_remarket_data_pr_atr_limit') ? $this->config->get('theme_oct_remarket_data_pr_atr_limit') : 5;
+
+			$data['oct_attributs'] = (isset($oct_remarket_data['product_atributes']) && $oct_remarket_data['product_atributes']) ? $this->model_catalog_product->getOctProductAttributes($this->request->get['product_id'], $limit_attr) : '';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/{category,manufacturer,search,special}.php">
+		<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="after"><![CDATA[
+	        $oct_remarket_data_atributes = $this->config->get('theme_oct_remarket_data_atributes');
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[$data['products'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			$oct_atributes = false;
+
+			if (isset($oct_remarket_data_atributes) && $oct_remarket_data_atributes) {
+				$limit_attr  = $this->config->get('theme_oct_remarket_data_cat_atr_limit') ? $this->config->get('theme_oct_remarket_data_cat_atr_limit') : 5;
+
+				$oct_atributes = $this->model_catalog_product->getOctProductAttributes(isset($product_info) ? $product_info['product_id'] : $result['product_id'], $limit_attr);
+			}
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA['thumb'       => $image,]]></search>
+			<add position="after"><![CDATA[
+			'oct_atributes'       => $oct_atributes,
+			]]></add>
+    	</operation>
+	</file>
+</modification>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_product_views</code>
+	<name>Octemplates - Product Views</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/model/catalog/product.php">
+    	<operation error="skip">
+			<search><![CDATA[public function updateViewed($product_id) {]]></search>
+			<add position="after"><![CDATA[
+			if ($product_id) {
+				$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "module` WHERE `code` LIKE 'oct_product_views'");
+			
+				if ($query->num_rows) {
+					$product_ids = [];
+					
+					if (isset($this->request->cookie['oct_product_views'])) {
+			            $product_ids = explode(',', $this->request->cookie['oct_product_views']);
+			        } elseif (isset($this->session->data['oct_product_views'])) {
+			            $product_ids = $this->session->data['oct_product_views'];
+			        }
+			        
+			        if (isset($this->request->cookie['viewed'])) {
+			            $product_ids = array_merge($product_ids, explode(',', $this->request->cookie['viewed']));
+			        } elseif (isset($this->session->data['viewed'])) {
+			            $product_ids = array_merge($product_ids, $this->session->data['viewed']);
+			        }
+					
+					$product_ids = array_diff($product_ids, [(int)$product_id]);
+		            
+		            array_unshift($product_ids, (int)$product_id);
+		            
+		            $pr_ids = array_slice($product_ids, 0, 20);
+		            
+		            setcookie('oct_product_views', implode(',',$pr_ids), time() + 60 * 60 * 24 * 30, '/', $this->request->server['HTTP_HOST']);
+				}
+			}
+			]]></add>
+    	</operation>
+	</file>
+</modification>

@@ -1,0 +1,169 @@
+{{ header }}
+<div id="information-contact" class="container">
+	{{ oct_breadcrumbs }}
+	<div class="content-top-box">{{ content_top }}</div>
+	<main>
+		<div class="row">
+			<div class="col-lg-12 rm-page-title">
+				<h1>{{ heading_title }}</h1>
+			</div>
+		</div>
+		<div id="content">
+		{% if oct_contact_image is defined or contact_address is defined or contact_open is defined or contact_telephone is defined or contact_map is defined %}
+		<div class="row no-gutters rm-contact-location">
+			{% if oct_contact_image is defined and oct_contact_image %}
+			<div class="col-lg-6 col-xl-3">
+				<img src="{{ oct_contact_image }}" alt="{{ store }}" class="img-fluid d-none d-lg-block">
+			</div>
+			{% endif %}
+			<div class="col-lg-6{% if oct_contact_image is defined and oct_contact_image %} col-xl-4{% else %} col-xl-7{% endif %}">
+				<div class="rm-contact-location-info">
+					<div class="rm-contact-location-store-title">{{ store }}</div>
+					{% if contact_address is defined and contact_address %}
+					<div class="rm-contact-location-address">{{ contact_address }}</div>
+					{% endif %}
+					<div class="row no-gutters">
+						{% if contact_open is defined and contact_open %}
+						<div class="col-xl-6">
+							<div class="rm-contact-location-title">{{ oct_working_hours }}:</div>
+							<ul class="list-unstyled">
+								{% for open in contact_open %}
+								<li>{{ open }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+						{% endif %}
+						{% if contact_telephone is defined and contact_telephone %}
+						<div class="col-xl-6 mt-4 mt-xl-0">
+							<div class="rm-contact-location-title">{{ oct_telephones }}</div>
+							<ul class="list-unstyled">
+								{% for telephone in contact_telephone %}
+								<li class="rm-contact-location-phone"><a href="tel:{{ telephone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}">{{ telephone }}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% if contact_map is defined %}
+			<div class="col-xl-5">
+				{{ contact_map }}
+			</div>
+			{% endif %}
+		</div>
+		{% endif %}
+		{% if oct_locations %}
+		{% for location in oct_locations %}
+		<div class="row no-gutters rm-contact-location">
+			{% if location.thumb is defined and location.thumb %}
+			<div class="col-lg-6 col-xl-3">
+				<img src="{{ location.thumb }}" alt="{{ location.title }}" class="img-fluid d-none d-lg-block">
+			</div>
+			{% endif %}
+			<div class="col-lg-6{% if location.thumb is defined and location.thumb %} col-xl-4{% else %} col-xl-7{% endif %}">
+				<div class="rm-contact-location-info">
+					<div class="rm-contact-location-store-title">{{ location.title }}</div>
+					{% if location.address is defined and location.address %}
+					<div class="rm-contact-location-address">{{ location.address }}</div>
+					{% endif %}
+					<div class="row no-gutters">
+						{% if location.open is defined and location.open %}
+						<div class="col-xl-6">
+							<div class="rm-contact-location-title">{{ oct_working_hours }}:</div>
+							<ul class="list-unstyled">
+								{% for open in location.open %}
+								<li>{{ open }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+						{% endif %}
+						{% if location.phone is defined and location.phone %}
+						<div class="col-xl-6 mt-4 mt-xl-0">
+							<div class="rm-contact-location-title">{{ oct_telephones }}</div>
+							<ul class="list-unstyled">
+								{% for phone in location.phone %}
+								<li class="rm-contact-location-phone"><a href="tel:{{ phone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}">{{ phone }}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+						{% endif %}
+					</div>
+					{% if location.link is defined and location.link %}
+					<div class="rm-contact-location-title rm-contact-location-link">{{ oct_text_contact_site }} <a href="{{ location.link }}">{{ location.link|replace({"https://" : "", "http://" : ""}) }}</a></div>
+					{% endif %}
+				</div>
+			</div>
+			{% if location.map is defined %}
+			<div class="col-xl-5">
+				{{ location.map }}
+			</div>
+			{% endif %}
+		</div>
+		{% endfor %}
+		{% endif %}
+		<div class="row no-gutters">
+			<div class="col-12 col-lg-6 offset-lg-3">
+				<div class="rm-content h-100">
+					<div class="rm-contact-form">
+						<div class="text-center mb-4">
+							{% if contact_socials is defined and contact_socials %}
+							<div class="rm-social-title">{{ oct_footer_social_tex }}</div>
+							<ul class="rm-social list-unstyled d-flex flex-wrap justify-content-center">
+								{% for contact_social in contact_socials %}
+								<li class="rm-social-item">
+									<a rel="noopener noreferrer" href="{% if contact_social.link %}{{ contact_social.link }}{% else %}javascript:;{% endif %}" class="rm-social-facebook d-flex align-items-center justify-content-center" target="_blank">
+									<i class="{{ contact_social.icone }}"></i></a>
+								</li>
+								{% endfor %}
+							</ul>
+							{% endif %}
+							<div class="rm-contact-form-text">{{ oct_text_contact_form }}</div>
+						</div>
+						<form action="{{ action }}" method="post" enctype="multipart/form-data">
+							<div class="form-group">
+								<label for="input-name"><span class="required">*</span> {{ entry_name }}</label>
+								{% if (error_name) or (error_email) or (error_enquiry) or (error_oct_terms) %}
+								<script>
+									scrollToElement('.rm-content');
+									rmNotify('danger', '{% if error_name %}{{ error_name }}{% endif %}{% if error_email %}<br />{{ error_email }}{% endif %}{% if error_enquiry %}<br />{{ error_enquiry }}{% endif %}{% if error_oct_terms %}<br />{{ error_oct_terms }}{% endif %}');
+								</script>
+								{% endif %}
+								<input type="text" name="name" value="{{ name }}" id="input-name" class="form-control{% if error_name %} error_style{% endif %}" placeholder="{{ entry_name }}" />
+							</div>
+							<div class="form-group">
+								<label for="input-email"><span class="required">*</span> {{ entry_email }}</label>
+								<input type="email" name="email" value="{{ email }}" id="input-email" class="form-control{% if error_email %} error_style{% endif %}" placeholder="{{ entry_email }}" />
+							</div>
+							<div class="form-group">
+								<label for="input-enquiry"><span class="required">*</span> {{ entry_enquiry }}</label>
+								<textarea name="enquiry" rows="10" id="input-enquiry" class="form-control{% if error_enquiry %} error_style{% endif %}" placeholder="{{ entry_enquiry }}">{{ enquiry }}</textarea>
+							</div>
+							{{ captcha }}
+							{% if text_terms %}
+							<div class="form-checkbox-group">
+								<div class="checkbox">
+									<label>
+									<input id="scales" type="checkbox" class="rm-form-checkbox-input{% if error_oct_terms %} error_style{% endif %}" name="scales"{% if scales_in is defined and scales_in %} checked{% endif %}>
+									<span class="check-box"></span>
+									{{ text_terms }}
+									</label>
+								</div>
+							</div>
+							{% endif %}
+							<button class="rm-btn dark" type="submit">{{ button_submit }}</button>
+						</form>
+						<script>
+							$("#input-name, #input-email, #input-enquiry, #scales").on("change paste keyup", function() {
+								$(this).removeClass('error_style');
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</main>
+	{{ content_bottom }}
+</div>
+{{ footer }}

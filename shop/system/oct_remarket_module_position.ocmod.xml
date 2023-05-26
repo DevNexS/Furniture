@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_remarket_module_position</code>
+	<name>Octemplates - ReMarket Theme Module Position</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+
+	<file path="catalog/controller/common/column_left.php">
+		<operation error="skip">
+			<search><![CDATA[if ($setting_info && $setting_info['status']) {]]></search>
+			<add position="after"><![CDATA[
+			$setting_info['module_id'] = $part[1];
+			$setting_info['position'] = 'column_left';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/column_right.php">
+		<operation error="skip">
+			<search><![CDATA[if ($setting_info && $setting_info['status']) {]]></search>
+			<add position="after"><![CDATA[
+			$setting_info['module_id'] = $part[1];
+			$setting_info['position'] = 'column_right';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/content_top.php">
+		<operation error="skip">
+			<search><![CDATA[if ($setting_info && $setting_info['status']) {]]></search>
+			<add position="after"><![CDATA[
+			$setting_info['module_id'] = $part[1];
+			$setting_info['position'] = 'content_top';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/content_bottom.php">
+		<operation error="skip">
+			<search><![CDATA[if ($setting_info && $setting_info['status']) {]]></search>
+			<add position="after"><![CDATA[
+			$setting_info['module_id'] = $part[1];
+			$setting_info['position'] = 'content_bottom';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/*.php">
+		<operation error="skip">
+			<search><![CDATA[$this->load->model('catalog/product');]]></search>
+			<add position="after"><![CDATA[
+			$data['position'] = isset($setting['position']) ? $setting['position'] : '';
+			]]></add>
+		</operation>
+	</file>
+</modification>

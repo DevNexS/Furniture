@@ -1,0 +1,217 @@
+<div class="rm-cart-block">
+    <div class="rm-content-title rm-cart-block-title d-flex align-items-center justify-content-between justify-content-md-start">{{ heading_title }}</div>
+    <div class="row rm-cart-block-row">
+        <div class="col-lg-7">
+            <div id="collapse-shipping" class="rm-cart-block-group">
+                <p class="mb-4">{{ text_shipping }}</p>
+                <div class="form-horizontal">
+                    <div class="form-group d-md-flex align-items-center justify-content-between mb-4">
+                        <label for="input-country"><span class="required">*</span> {{ entry_country }}</label>
+                        <select name="country_id" id="input-country" class="rm-select form-control">
+                            <option value="">{{ text_select }}</option>
+                            {% for country in countries %}
+                                {% if country.country_id == country_id %}
+                                    <option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+                                {% else %}
+                                    <option value="{{ country.country_id }}">{{ country.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group d-md-flex align-items-center justify-content-between mb-4">
+                        <label for="input-zone"><span class="required">*</span> {{ entry_zone }}</label>
+                        <select name="zone_id" id="input-zone" class="rm-select form-control"></select>
+                    </div>
+                    <div class="form-group d-md-flex align-items-center justify-content-between mb-4">
+                        <label for="input-postcode"><span class="required">*</span> {{ entry_postcode }}</label>
+                        <input type="text" name="postcode" value="{{ postcode }}" placeholder="{{ entry_postcode }}" id="input-postcode" class="form-control"/>
+                    </div>
+                    <button type="button" id="button-quote" data-loading-text="{{ text_loading }}" class="rm-btn dark">{{ button_quote }}</button>
+                </div>
+                <script>
+                    $('#button-quote').on('click', function () {
+                        $.ajax({
+                            url: 'index.php?route=extension/total/shipping/quote',
+                            type: 'post',
+                            data: 'country_id=' + $('select[name=\'country_id\']').val() + '&zone_id=' + $('select[name=\'zone_id\']').val() + '&postcode=' + encodeURIComponent($('input[name=\'postcode\']').val()),
+                            dataType: 'json',
+                            cache: false,
+                            beforeSend: function () {
+                                $('#button-quote').button('loading');
+                            },
+                            complete: function () {
+                                $('#button-quote').button('reset');
+                            },
+                            success: function (json) {
+                                $('.alert-dismissible, .text-danger').remove();
+
+                                if (json['error']) {
+                                    if (json['error']['warning']) {
+                                        rmNotify('danger', json['error']['warning']);
+                                    }
+
+                                    if (json['error']['country']) {
+                                        $('select[name=\'country_id\']');
+                                        rmNotify('danger', json['error']['country']);
+                                    }
+
+                                    if (json['error']['zone']) {
+                                        $('select[name=\'zone_id\']');
+                                        rmNotify('danger', json['error']['zone']);
+                                    }
+
+                                    if (json['error']['postcode']) {
+                                        $('input[name=\'postcode\']');
+                                        rmNotify('danger', json['error']['postcode']);
+                                    }
+                                }
+
+                                if (json['shipping_method']) {
+                                    $('#modal-shipping').remove();
+
+                                    html = '<div id="modal-shipping" class="modal">';
+                                    html += '  <div class="modal-dialog modal-dialog-centered">';
+                                    html += '    <div class="modal-content">';
+                                    html += '      <div class="modal-header">';
+                                    html += '        <h5 class="modal-title">{{ text_shipping_method }}</h5>';
+                                    html += '      </div>';
+                                    html += '      <div class="modal-body">';
+
+                                    let oct_i = 1;
+
+                                    for (i in json['shipping_method']) {
+                                        html += '<p><strong>' + json['shipping_method'][i]['title'] + '</strong></p>';
+
+                                        if (!json['shipping_method'][i]['error']) {
+                                            let oct_i_i = 1;
+
+                                            for (j in json['shipping_method'][i]['quote']) {
+                                                html += '<div class="form-group">';
+	                                                html += '<div class="radio mt-2">';
+													html += '  <label class="option" for="shipping_method_input' + oct_i + oct_i_i + '" >';
+	                                                if (json['shipping_method'][i]['quote'][j]['code'] == '{{ shipping_method }}') {
+	                                                    html += '<input type="radio" id="shipping_method_input' + oct_i + oct_i_i + '" class="input-radio" name="shipping_method" value="' + json['shipping_method'][i]['quote'][j]['code'] + '" checked="checked" />';
+	                                                } else {
+	                                                    html += '<input type="radio" id="shipping_method_input' + oct_i + oct_i_i + '" class="input-radio" name="shipping_method" value="' + json['shipping_method'][i]['quote'][j]['code'] + '" />';
+	                                                }
+													html += '<span class="radio-box"></span>';
+
+	                                            html += json['shipping_method'][i]['quote'][j]['title'] + ' - ' + json['shipping_method'][i]['quote'][j]['text'] + '</label></div></div>';
+                                                oct_i_i++;
+                                            }
+                                        } else {
+                                            html += '<div class="alert alert-danger alert-dismissible">' + json['shipping_method'][i]['error'] + '</div>';
+                                        }
+
+                                        oct_i++;
+                                    }
+                                    html += '      <div class="btn-group d-flex flex-column flex-md-row justify-content-between">';
+                                    html += '        <button type="button" class="rm-btn dark order-1 order-md-0" data-dismiss="modal">{{ button_cancel }}</button>';
+
+                                    {% if shipping_method %}
+                                        html += '        <input type="button" value="{{ button_shipping }}" id="button-shipping" data-loading-text="{{ text_loading }}" class="rm-btn dark order-0 order-md-1 mb-4 mb-md-0" />';
+                                    {% else %}
+                                        html += '        <input type="button" value="{{ button_shipping }}" id="button-shipping" data-loading-text="{{ text_loading }}" class="rm-btn dark order-0 order-md-1 mb-4 mb-md-0" disabled="disabled" />';
+                                    {% endif %}
+
+                                    html += '      </div>';
+
+                                    html += '      </div>';
+                                    html += '    </div>';
+                                    html += '  </div>';
+                                    html += '</div> ';
+
+                                    $('body').append(html);
+
+                                    $('#modal-shipping').modal('show');
+
+                                    $('input[name=\'shipping_method\']').on('change', function () {
+                                        $('#button-shipping').prop('disabled', false);
+                                    });
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                            }
+                        });
+                    });
+
+                    $(document).delegate('#button-shipping', 'click', function () {
+                        $.ajax({
+                            url: 'index.php?route=extension/total/shipping/shipping',
+                            type: 'post',
+                            data: 'shipping_method=' + encodeURIComponent($('input[name=\'shipping_method\']:checked').val()),
+                            dataType: 'json',
+                            cache: false,
+                            beforeSend: function () {
+                                $('#button-shipping').button('loading');
+                            },
+                            complete: function () {
+                                $('#button-shipping').button('reset');
+                            },
+                            success: function (json) {
+                                $('.alert-dismissible').remove();
+
+                                if (json['error']) {
+                                    rmNotify('danger', json['error']);
+                                }
+
+                                if (json['redirect']) {
+                                    location = json['redirect'];
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                            }
+                        });
+                    });
+                </script>
+                <script>
+                    $('select[name=\'country_id\']').on('change', function () {
+                        $.ajax({
+                            url: 'index.php?route=extension/total/shipping/country&country_id=' + this.value,
+                            dataType: 'json',
+                            cache: false,
+                            beforeSend: function () {
+                                $('select[name=\'country_id\']').prop('disabled', true);
+                            },
+                            complete: function () {
+                                $('select[name=\'country_id\']').prop('disabled', false);
+                            },
+                            success: function (json) {
+                                if (json['postcode_required'] == '1') {
+                                    $('input[name=\'postcode\']').parent().parent().addClass('required');
+                                } else {
+                                    $('input[name=\'postcode\']').parent().parent().removeClass('required');
+                                }
+
+                                html = '<option value="">{{ text_select }}</option>';
+
+                                if (json['zone'] && json['zone'] != '') {
+                                    for (i = 0; i < json['zone'].length; i++) {
+                                        html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+                                        if (json['zone'][i]['zone_id'] == '{{ zone_id }}') {
+                                            html += ' selected="selected"';
+                                        }
+
+                                        html += '>' + json['zone'][i]['name'] + '</option>';
+                                    }
+                                } else {
+                                    html += '<option value="0" selected="selected">{{ text_none }}</option>';
+                                }
+
+                                $('select[name=\'zone_id\']').html(html);
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                            }
+                        });
+                    });
+
+                    $('select[name=\'country_id\']').trigger('change');
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

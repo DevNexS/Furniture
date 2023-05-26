@@ -1,0 +1,278 @@
+{
+    "business": [
+        {
+            "id": "1",
+            "name": "JAUNA TEIKA",
+            "image": "/img/business/8_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "2",
+            "name": "OLIMPIA",
+            "image": "/img/business/11.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "3",
+            "name": "JAUNA TEIKA",
+            "image": "/img/business/6_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "4",
+            "name": "JAUNA TEIKA",
+            "image": "/img/business/12_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "5",
+            "name": "HOTEL 22A",
+            "image": "/img/business/1.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "6",
+            "name": "STADIUM 'SCONTO' VIP LODGE",
+            "image": "/img/business/4.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "7",
+            "name": "KUKOTAVA",
+            "image": "/img/business/10.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "8",
+            "name": "FK RIGA",
+            "image": "/img/business/3_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "9",
+            "name": "STADIUM 'SCONTO' VIP LODGE",
+            "image": "/img/business/5.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "10",
+            "name": "PLACE ELEVEN BISTRO",
+            "image": "/img/business/2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "11",
+            "name": "JAUNA TEIKA",
+            "image": "/img/business/9.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "12",
+            "name": "JAUNA TEIKA",
+            "image": "/img/business/7_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "13",
+            "name": "OFFICE KR.VALDEMARA",
+            "image": "/img/business/14_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "14",
+            "name": "FRANCE",
+            "image": "/img/business/15.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "15",
+            "name": "PLACE ELEVEN",
+            "image": "/img/business/16_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        }
+    ],
+    "turnkey": [
+        {
+            "id": "1",
+            "name": "JURMALA",
+            "image": "/img/turnkey/1.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "2",
+            "name": "JURMALA",
+            "image": "/img/turnkey/13.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "3",
+            "name": "JURMALA",
+            "image": "/img/turnkey/20.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "4",
+            "name": "APARTMENTS ELIZABETES",
+            "image": "/img/turnkey/44.jpeg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "5",
+            "name": "JURMALA",
+            "image": "/img/turnkey/117_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "6",
+            "name": "PARKERS APARTMENS",
+            "image": "img/turnkey/8.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "7",
+            "name": "JURMALA",
+            "image": "img/turnkey/03.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "8",
+            "name": "AGENSKALNA PRIEDES",
+            "image": "img/turnkey/102.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "9",
+            "name": "JURMALA",
+            "image": "img/turnkey/123.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "10",
+            "name": "NO NAME",
+            "image": "img/turnkey/112.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "11",
+            "name": "JURMALA",
+            "image": "img/turnkey/14.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "12",
+            "name": "AQUA TEXTURE",
+            "image": "img/turnkey/25.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "13",
+            "name": "FRANCE",
+            "image": "img/turnkey/1002_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "14",
+            "name": "MARUPE",
+            "image": "img/turnkey/129.jpeg",
+            "saturate": "filter: saturate(100%);"
+        },
+        {
+            "id": "15",
+            "name": "AGENSKALNA PRIEDES",
+            "image": "img/turnkey/101_3.jpg",
+            "saturate": "filter: saturate(120%);"
+        }
+    ],
+    "doors": [
+        {
+            "id": "1",
+            "name": "MOSKVA",
+            "image": "/img/doors/1_new.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "2",
+            "name": "MOSKVA",
+            "image": "/img/doors/2_2.png",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "3",
+            "name": "FRANCE",
+            "image": "/img/doors/25.jpeg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "4",
+            "name": "MOSKVA",
+            "image": "/img/doors/4_2.png",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "5",
+            "name": "HELSINKI",
+            "image": "/img/doors/30.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "6",
+            "name": "NICE",
+            "image": "/img/doors/24.jpeg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "7",
+            "name": "JURMALA",
+            "image": "/img/doors/macro.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "8",
+            "name": "BERLIN",
+            "image": "/img/doors/8_2.png",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "9",
+            "name": "APARTMENTS ELIZABETES",
+            "image": "/img/doors/26_2.jpeg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "10",
+            "name": "BERLIN",
+            "image": "/img/doors/10_2.png",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "11",
+            "name": "KEKAVA",
+            "image": "/img/doors/21_3.jpeg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "12",
+            "name": "JURMALA",
+            "image": "/img/doors/texture.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "13",
+            "name": "JURMALA",
+            "image": "/img/doors/101_2.jpg",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "14",
+            "name": "SAINT-PETERSBURG",
+            "image": "/img/doors/14.png",
+            "saturate": "filter: saturate(120%);"
+        },
+        {
+            "id": "15",
+            "name": "JURMALA",
+            "image": "/img/doors/23_4.jpeg",
+            "saturate": "filter: saturate(140%);"
+        }
+    ]
+}

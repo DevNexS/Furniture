@@ -1,0 +1,15 @@
+
+
+<ul class="rm-categories-box list-unstyled rm-module-column-box">
+	{% for category in categories %}
+		 <li class="rm-column-categories-item{% if category.blog_category_id == blog_category_id %} active{% endif %}"><span class="d-flex justify-content-between"><a href="{{ category.href }}">{{ category.name }}</a>{% if category.children %}<a href="javascript:void(0);" class="fm-categories-toggle"><i class="fas fa-chevron-down"></i></a>{% endif %}</span>
+		{% if category.children %}
+		<ul class="rm-categories-children rm-categories-2 list-unstyled">
+		{% for child in category.children %}
+			<li class="rm-column-categories-item{% if child.blog_category_id == child_id %} active{% endif %}"><span class="d-flex justify-content-between"><a href="{{ child.href }}">{{ child.name }}</a></span></li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+		</li>
+	{% endfor %}
+</ul>

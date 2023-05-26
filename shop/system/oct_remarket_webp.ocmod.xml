@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_remarket_webp</code>
+	<name>Octemplates - WebP</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/model/tool/image.php">
+		<operation error="skip">
+			<search><![CDATA[$image_new = str_replace(' ', '%20', $image_new);]]></search>
+			<add position="before"><![CDATA[
+			$oct_webp_image = $octWebpIs = false;
+
+			$gd = gd_info();
+
+			if (isset($gd['WebP Support']) && $gd['WebP Support'] && (isset($this->request->server['HTTP_ACCEPT']) && strpos($this->request->server['HTTP_ACCEPT'], 'webp')) && $this->config->get('theme_oct_remarket_webp')) {
+				$octWebpIs = true;
+			}
+
+			if ($octWebpIs && $extension != 'gif') {
+				$oct_webp_image = 'cache/webp/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.webp';
+
+				if (!is_file(DIR_IMAGE . $oct_webp_image) || (filemtime(DIR_IMAGE . $image_new) > filemtime(DIR_IMAGE . $oct_webp_image))) {
+					$path = '';
+
+					$directories = explode('/', dirname($oct_webp_image));
+
+					foreach ($directories as $directory) {
+						$path = $path . '/' . $directory;
+
+						if (!is_dir(DIR_IMAGE . $path)) {
+							@mkdir(DIR_IMAGE . $path, 0777);
+						}
+					}
+
+					if (strtolower($extension) == 'jpg' || strtolower($extension) == 'jpeg') {
+						$image_original = imagecreatefromjpeg(DIR_IMAGE . $image_new);
+					} elseif (strtolower($extension) == 'png') {
+						$image_original = imagecreatefrompng(DIR_IMAGE . $image_new);
+					}
+
+					if (isset($image_original)) {
+						imagewebp($image_original, DIR_IMAGE . $oct_webp_image, 85);
+						imagedestroy($image_original);
+
+						if (filesize(DIR_IMAGE . $oct_webp_image) % 2 == 1) {
+							file_put_contents(DIR_IMAGE . $oct_webp_image, "\0", FILE_APPEND);
+						}
+					} else {
+						$oct_webp_image = false;
+					}
+				}
+			}
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[. $image_new;]]></search>
+			<add position="replace"><![CDATA[. ((isset($oct_webp_image) && $oct_webp_image) ? $oct_webp_image : $image_new);]]></add>
+    	</operation>
+	</file>
+</modification>

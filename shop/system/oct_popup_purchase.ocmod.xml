@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_popup_purchase</code>
+	<name>Octemplates - Popup Purchase</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/controller/product/product.php">
+    	<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_status')) {
+				$data['oct_popup_purchase_status'] = $this->config->get('oct_popup_purchase_status');
+			}
+
+			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_byoneclick_status')) {
+				$oct_byoneclick_data = $this->config->get('oct_popup_purchase_byoneclick_data');
+				$oct_data['oct_byoneclick_status'] = isset($oct_byoneclick_data['product']) ? 1 : 0;
+				$oct_data['oct_byoneclick_mask'] = $oct_byoneclick_data['mask'];
+				$oct_data['oct_byoneclick_product_id'] = $this->request->get['product_id'];
+				$oct_data['oct_byoneclick_page'] = '_product';
+				$data['oct_byoneclick'] = $this->load->controller('octemplates/module/oct_popup_purchase/byoneclick', $oct_data);
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/checkout/cart.php">
+    	<operation error="skip">
+			<search><![CDATA[$products = $this->cart->getProducts();]]></search>
+			<add position="after"><![CDATA[
+			if (($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_byoneclick_status')) && $products) {
+				$oct_byoneclick_data = $this->config->get('oct_popup_purchase_byoneclick_data');
+				$oct_data['oct_byoneclick_status'] = isset($oct_byoneclick_data['cart']) ? 1 : 0;
+				$oct_data['oct_byoneclick_mask'] = $oct_byoneclick_data['mask'];
+				$oct_data['oct_byoneclick_product_id'] = $oct_data['oct_cart_in'] = $oct_data['oct_cart_page'] = 1;
+				$oct_data['oct_byoneclick_page'] = '_cart';
+				$data['oct_byoneclick'] = $this->load->controller('octemplates/module/oct_popup_purchase/byoneclick', $oct_data);
+			}
+			]]></add>
+    	</operation>
+	</file>
+</modification>

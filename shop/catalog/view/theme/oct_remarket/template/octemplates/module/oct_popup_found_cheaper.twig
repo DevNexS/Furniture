@@ -1,0 +1,150 @@
+<div class="modal" id="rm-cheaper-modal" tabindex="-1" role="dialog" aria-labelledby="rm-cheaper">
+	<div class="modal-dialog modal-dialog-centered wide" role="document">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <div class="modal-title" id="rm-cheaper">{{ heading_title }}</div>
+	            <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+					<span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+	            </button>
+	        </div>
+	        <div id="cheaper-main-block" class="modal-body d-flex flex-column flex-md-row">
+	            <div class="modal-body-left text-center">
+	            	<div class="pb-4">{{ enter_text }}</div>
+					{% if images is defined and images|length > 1 %}
+					<div id="popup_found_cheaper_images" class="d-none d-md-block">
+						{% for image in images %}
+						<div class="d-flex justify-content-center">
+							<img src="{{ image.popup }}" alt="{{ heading_title }}" class="modal-body-img d-block mx-auto">
+						</div>
+						{% endfor %}
+					</div>
+					<script>
+						$(document).ready(function() {
+							$('#popup_found_cheaper_images').slick({
+								autoplay: true,
+								dots: false,
+								arrows: false,
+								infinite: true,
+								autoplaySpeed: 3000,
+								slidesToShow: 1
+							});
+						});
+					</script>
+					{% else %}
+					{% if thumb is defined %}
+		            <img src="{{ thumb }}" class="d-none d-md-block modal-body-img mx-auto" alt="{{ heading_title_product }}">
+					{% endif %}
+					{% endif %}
+					<div class="modal-product-title">{{ heading_title_product }}</div>
+					<div class="rm-product-center-price">
+						{% if not special %}
+						<span>{{ price }}<span>
+						{% else %}
+						<span>{{ special }}<span>
+						{% endif %}
+					</div>
+	            </div>
+	            <div class="modal-body-right">
+		        	<form method="post" enctype="multipart/form-data" id="found-cheaper-form">
+						{% if oct_popup_found_cheaper_data.name %}
+						<div class="form-group">
+							<input type="text" name="name" value="{{ name }}" class="form-control" id="InputName" placeholder="{{ enter_name }}">
+						</div>
+						{% endif %}
+						{% if oct_popup_found_cheaper_data.telephone %}
+						<div class="form-group">
+							<input type="tel" name="telephone" value="{{ telephone }}" class="form-control" id="InputPhone" placeholder="{{ enter_telephone }}">
+						</div>
+						{% endif %}
+						{% if oct_popup_found_cheaper_data.email is defined and oct_popup_found_cheaper_data.email %}
+						<div class="form-group">
+							<input type="tel" name="email" value="{{ email }}" class="form-control" id="InputEmail" placeholder="{{ enter_email }}">
+						</div>
+						{% endif %}
+						{% if oct_popup_found_cheaper_data.link %}
+						<div class="form-group">
+							<input type="text" name="link" value="{{ link }}" class="form-control" id="InputLink" placeholder="{{ enter_link }}">
+						</div>
+						{% endif %}
+						{% if oct_popup_found_cheaper_data.comment %}
+						<div class="form-group">
+							<textarea name="comment" class="form-control" id="InputComment" placeholder="{{ enter_comment }}">{{ comment }}</textarea>
+						</div>
+						{% endif %}
+						{% if text_terms %}
+						<div class="form-checkbox-group">
+							<div class="checkbox">
+								<label>
+									<input id="scales-2" type="checkbox" class="rm-form-checkbox-input" name="agree">
+									<span class="check-box"></span>
+									{{ text_terms }}
+								</label>
+							</div>
+						</div>
+						{% endif %}
+						<button type="submit" class="rm-btn dark">{{ button_send }}</button>
+						<input type="hidden" name="pid" value="{{ href }}">
+						<input type="hidden" name="mid" value="{{ model }}">
+					</form>
+		        </div>
+				<div class="rm-popup-success d-none flex-column align-items-center text-center w-100">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--popup-success-icon" alt="" width="70" height="70">
+                    <div id="rm-popup-success-cheaper-text"></div>
+                    <button type="button" class="rm-btn dark" data-dismiss="modal" aria-label="Close">
+                        <span class="rm-btn-text">{{ oct_info_bar_close }}</span></button>
+                </div>
+		    </div>
+	    </div>
+	</div>
+<script>
+$("#InputName, #InputPhone, #InputEmail, #InputLink, #InputComment, #scales-2").on("change paste keyup", function() {
+	$(this).removeClass('error_style');
+});
+
+$('#found-cheaper-form').on('submit', function (event) {
+	event.preventDefault();
+	$.ajax({
+		type: 'post',
+		url: 'index.php?route=octemplates/module/oct_popup_found_cheaper/send',
+		dataType: 'json',
+		data: $('#found-cheaper-form').serialize(),
+		cache: false,
+		beforeSend: function() {
+			masked('body', true);
+		},
+		complete: function() {
+			masked('body', false);
+		},
+		success: function (json) {
+			if (json['error']) {
+				$('#rm-cheaper-modal .text-danger').remove();
+				let errorOption = '';
+
+				$.each(json['error'], function (i, val) {
+					$('#rm-cheaper-modal [name="' + i + '"]').addClass('error_style');
+					errorOption += '<div class="alert-text-item">' + val + '</div>';
+				});
+
+				rmNotify('danger', errorOption);
+			} else {
+				if (json['output']) {
+					$("#rm-popup-success-cheaper-text").html(json['output']);
+					$("#cheaper-main-block").html($(".rm-popup-success"));
+					$(".rm-popup-success").removeClass("d-none");
+					$(".modal-dialog").removeClass("wide");
+				}
+			}
+		}
+	});
+});
+</script>
+<link rel="stylesheet" type="text/css" href="catalog/view/theme/oct_remarket/js/slick/slick.min.css">
+<script src="catalog/view/theme/oct_remarket/js/slick/slick.min.js" charset="utf-8"></script>
+{% if oct_popup_found_cheaper_data.mask is defined and oct_popup_found_cheaper_data.mask is not empty %}
+<script src="catalog/view/theme/oct_remarket/js/jquery.inputmask.bundle.min.js"></script>
+<script>
+rmInputMask('#InputPhone','{{ oct_popup_found_cheaper_data.mask }}');
+</script>
+{% endif %}
+</div>

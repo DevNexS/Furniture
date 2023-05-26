@@ -1,0 +1,67 @@
+{% if banners %}
+<div class="rm-carousel row-padding-top">
+	{% if heading_title is not empty %}
+	<div class="row">
+        <div class="col-12 rm-module-header">
+			<span>{{ heading_title }}</span>
+		</div>
+	</div>
+	{% endif %}
+	<div id="rm-carousel-{{ module }}">
+		{% for banner in banners %}
+	  	<div class="rm-carousel-item">
+			<div class="rm-carousel-item-wrap d-flex flex-column align-items-center justify-content-between h-100">
+		      	{% if banner.link %}
+		      	<a href="{{ banner.link }}" class="text-center">
+				{% endif %}
+					<img src="{{ banner.image }}" class="img-fluid" alt="{{ banner.title }}" width="{{ banner.width }}" height="{{ banner.height }}" />
+					<span>{{ banner.title }}</span>
+				{% if banner.link %}
+				</a>
+		    	{% endif %}
+			</div>
+	    </div>
+		{% endfor %}
+	</div>
+</div>
+<script>
+$( document ).ready(function() {
+	$('#rm-carousel-{{ module }}').slick({
+		infinite: false,
+		slidesToShow: 6,
+		slidesToScroll: 1,
+	    autoplay: true,
+		dots: false,
+		arrows: true,
+		prevArrow:"<button type='button' class='slick-prev pull-left'>&lt;</button>",
+		nextArrow:"<button type='button' class='slick-next pull-right'>&gt;</button>",
+		responsive: [
+            {
+                breakpoint: 1600,
+                settings: {
+                    slidesToShow: 6,
+                    slidesToScroll: 1
+                }
+            }, {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 4
+                }
+            }, {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3
+                }
+            }, {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 2
+                }
+            }
+        ]
+	});
+});
+</script>
+{% endif %}

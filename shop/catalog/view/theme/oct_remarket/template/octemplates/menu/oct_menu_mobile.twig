@@ -1,0 +1,369 @@
+<div class="rm_mobile_menu_first">
+    <div id="rm_mobile_menu_toggle_button" class="rm_mobile_menu-list-item d-flex align-items-center rm_mobile_menu_first-item">
+        <span>{{ oct_menu_title }}</span>
+        <span class="rm_mobile_menu_first-toggle"></span>
+    </div>
+    <div id="rm_mobile_account_toggle_button" class="rm_mobile_menu-list-item d-flex align-items-center rm_mobile_menu_first-item">
+        <span>{{ oct_account }}</span>
+        <span class="rm_mobile_menu_first-toggle"></span>
+    </div>
+    {% if product_views_count %}
+    <div id="rm_mobile_viewed_toggle_button" class="rm_mobile_menu-list-item d-flex align-items-center rm_mobile_menu_first-item">
+        <span>{{ oct_product_views }}</span>
+        <span class="rm_mobile_menu_first-toggle"></span>
+    </div>
+    {% endif %}
+    <a id="rm_mobile_wishlist" href="{{ wishlist_link }}" class="rm_mobile_menu-list-item d-flex align-items-center rm_mobile_menu_first-item">
+        <span>{{ fixed_bar_wishlist }}</span>
+        <span class="rm_mobile_menu-list-item-status{% if wishlist_total %} has-child{% endif %}"></span>
+    </a>
+    <a id="rm_mobile_compare" href="{{ compare_link }}" class="rm_mobile_menu-list-item d-flex align-items-center rm_mobile_menu_first-item">
+        <span>{{ fixed_bar_compare }}</span>
+        <span class="rm_mobile_menu-list-item-status{% if compare_total %} has-child{% endif %}"></span>
+    </a>
+    {% if mobile_informations is defined and mobile_informations %}
+    <div class="rm_mobile_menu_first-item rm_mobile_menu_info">
+        <ul class="list-unstyled">
+            {% for info in mobile_informations %}
+            <li><a href="{{ info.href }}">{{ info.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if (language is defined and language) or (currency is defined and currency) %}
+    <div id="rm_sidebar_switcher">
+        {% if language is defined and language %}
+        <div id="oct_mobile_language"></div>
+        {% endif %}
+        {% if currency is defined and currency %}
+        <div id="oct_mobile_currency"></div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% if oct_menu %}
+<div class="rm_mobile_menu_second">
+    <div class="rm-sidebar-title d-flex align-items-center">
+        <div class="rm_mobile_menu_back rm_mobile_menu_first_back d-flex align-items-center">
+            <span class="rm_mobile_menu_back-icon"></span>
+            <span class="rm_mobile_menu_back-text">{{ oct_menu_title }}</span>
+        </div>
+        <span class="rm-sidebar-title-close modal-close">
+            <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+            <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+        </span>
+    </div>
+    <ul class="rm_mobile_menu-list">
+        {% for oct_category in oct_menu %}
+        <li class="rm_mobile_menu-list-item d-flex align-items-center justify-content-between">
+            <a href="{{ oct_category.href }}" {{ oct_category.target }} class="d-flex align-items-center">
+                {% if oct_category.oct_image %}
+                <img class="oct-menu-cat-icon" src="{{ oct_category.oct_image }}" alt="{{ oct_category.name }}" />
+                {% endif %}
+                <span>{{ oct_category.name }}</span>
+            </a>
+            {% if oct_category.children or oct_category.oct_pages %}
+            <button class="rm_mobile_menu_second_button"><span class="rm_mobile_menu-list-item-toggle"></span></button>
+            <div class="rm_mobile_menu_third">
+                <div class="rm-sidebar-title d-flex align-items-center">
+                    <div class="rm_mobile_menu_back rm_mobile_menu_second_back d-flex align-items-center">
+                        <span class="rm_mobile_menu_back-icon"></span>
+                        <span class="rm_mobile_menu_back-text">{{ oct_category.name }}</span>
+                    </div>
+                    <span class="rm-sidebar-title-close modal-close">
+                        <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+                        <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+                    </span>
+                </div>
+                <ul class="rm_mobile_menu-list">
+                    {% for child in oct_category.children %}
+                    <li class="rm_mobile_menu-list-item d-flex align-items-center justify-content-between">
+                        <a href="{{ child.href }}"><span>{{ child.name }}</span></a>
+                        {% if child.children or child.oct_pages %}
+                        <button class="rm_mobile_menu_third_button"><span class="rm_mobile_menu-list-item-toggle"></span></button>
+                        <div class="rm_mobile_menu_fourth">
+                            <div class="rm-sidebar-title d-flex align-items-center">
+                                <div class="rm_mobile_menu_back rm_mobile_menu_third_back d-flex align-items-center">
+                                    <span class="rm_mobile_menu_back-icon"></span>
+                                    <span class="rm_mobile_menu_back-text">{{ child.name }}</span>
+                                </div>
+                                <span class="rm-sidebar-title-close modal-close">
+                                    <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+                                    <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+                                </span>
+                            </div>
+                            <ul class="rm_mobile_menu-list">
+                                {% for ch in child.children %}
+                                <li class="rm_mobile_menu-list-item d-flex align-items-center justify-content-between">
+                                    <a href="{{ ch.href }}"><span>{{ ch.name }}</span></a>
+                                    {% if ch.children or ch.oct_pages %}
+                                    <button class="rm_mobile_menu_fourth_button"><span class="rm_mobile_menu-list-item-toggle"></span></button>
+                                    <div class="rm_mobile_menu_fifth">
+                                        <div class="rm-sidebar-title d-flex align-items-center">
+                                            <div class="rm_mobile_menu_back rm_mobile_menu_fourth_back d-flex align-items-center">
+                                                <span class="rm_mobile_menu_back-icon"></span>
+                                                <span class="rm_mobile_menu_back-text">{{ ch.name }}</span>
+                                            </div>
+                                            <span class="rm-sidebar-title-close modal-close">
+                                                <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+                                                <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+                                            </span>
+                                        </div>
+                                        <ul class="rm_mobile_menu-list">
+                                            {% for c in ch.children %}
+                                            <li class="rm_mobile_menu-list-item d-flex align-items-center justify-content-between">
+                                                <a href="{{ c.href }}">
+                                                    <span>{{ c.name }}</span>
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                            {% if ch.oct_pages %}
+                                                {% for oct_page in ch.oct_pages %}
+                                                    {% if oct_page.page_links is not empty %}
+                                                    <li class="group-title">
+                                                        <strong>{{ oct_page.page_group[language_id] }}</strong>
+                                                        {% for page_link in oct_page.page_links %}
+                                                        <a href="{{ page_link[language_id].link }}" title="{{ page_link[language_id].title }}">{{ page_link[language_id].title }}</a>
+                                                        {% endfor %}
+                                                    </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                                {% if child.oct_pages %}
+                                {% for oct_page in child.oct_pages %}
+                                    {% if oct_page.page_links is not empty %}
+                                    <li class="group-title">
+                                        <strong>{{ oct_page.page_group[language_id] }}</strong>
+                                        {% for page_link in oct_page.page_links %}
+                                        <a href="{{ page_link[language_id].link }}" title="{{ page_link[language_id].title }}">{{ page_link[language_id].title }}</a>
+                                        {% endfor %}
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                    {% if oct_category.oct_pages %}
+                    {% for oct_page in oct_category.oct_pages %}
+                        {% if oct_page.page_links is not empty %}
+                        <li class="group-title">
+                            <strong>{{ oct_page.page_group[language_id] }}</strong>
+                            {% for page_link in oct_page.page_links %}
+                            <a href="{{ page_link[language_id].link }}" title="{{ page_link[language_id].title }}">{{ page_link[language_id].title }}</a>
+                            {% endfor %}
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<div class="rm_mobile_account">
+    <div class="rm-sidebar-title d-flex align-items-center">
+        <div class="rm_mobile_menu_back rm_mobile_menu_first_back d-flex align-items-center">
+            <span class="rm_mobile_menu_back-icon"></span>
+            <span class="rm_mobile_menu_back-text">{{ text_heading }}</span>
+        </div>
+        <span class="rm-sidebar-title-close modal-close">
+            <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+            <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+        </span>
+    </div>
+<div class="rm_mobile_account-box{% if isLogged %} logged{% endif %}">
+        {% if isLogged %}
+        <ul class="rm-account-list list-unstyled">
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ account }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-001" alt="">
+                    <span>{{ text_account }}</span>
+                </a>
+            </li>
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ edit }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-014" alt="">
+                    <span>{{ text_edit }}</span>
+                </a>
+            </li>
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ password }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-002" alt="">
+                    <span>{{ text_password }}</span>
+                </a>
+            </li>
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ address }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-003" alt="">
+                    <span>{{ text_address }}</span>
+                </a>
+            </li>
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ wishlist }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-004" alt="">
+                    <span>{{ text_wishlist }}</span></a>
+            </li>
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ order }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-006" alt="">
+                    <span>{{ text_order }}</span></a>
+            </li>
+            {% if download_view is defined and download_view %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ download }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-007" alt="">
+                    <span>{{ text_download }}</span></a>
+            </li>
+            {% endif %}
+            {% if recurring_view is defined and recurring_view %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ recurring }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-012" alt="">
+                    <span>{{ text_recurring }}</span></a>
+            </li>
+            {% endif %}
+            {% if reward_view is defined and reward_view %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ reward }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-008" alt="">
+                    <span>{{ text_reward }}</span></a>
+            </li>
+            {% endif %}
+            {% if return_view is defined and return_view %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ return }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-009" alt="">
+                    <span>{{ text_return }}</span></a>
+            </li>
+            {% endif %}
+            {% if transaction_view is defined and transaction_view %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ transaction }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-011" alt="">
+                    <span>{{ text_transaction }}</span></a>
+            </li>
+            {% endif %}
+            {% if newsletter_view is defined and newsletter_view %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ newsletter }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-005" alt="">
+                    <span>{{ text_newsletter }}</span></a>
+            </li>
+            {% endif %}
+            {% if affiliate_view is defined and affiliate_view %}
+            {% if not tracking %}
+                <li class="rm-account-list-item">
+                    <a class="rm-account-link d-flex align-items-center" href="{{ affiliate }}">
+                        <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-010" alt="">
+                        <span>{{ text_oct_affiliate }}</span></a>
+                </li>
+            {% else %}
+                <li class="rm-account-list-item">
+                    <a class="rm-account-link d-flex align-items-center" href="{{ affiliate }}">
+                        <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-010" alt="">
+                        <span>{{ text_oct_affiliate }}</span></a>
+                </li>
+                <li class="rm-account-list-item">
+                    <a class="rm-account-link d-flex align-items-center" href="{{ tracking }}">
+                        <i class="fas fa-code"></i>
+                        <span>{{ text_oct_tracking }}</span></a>
+                </li>
+            {% endif %}
+            {% endif %}
+            <li class="rm-account-list-item">
+                <a class="rm-account-link d-flex align-items-center" href="{{ logout }}">
+                    <img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--account-icon-013" alt="">
+                    <span>{{ text_logout }}</span></a>
+            </li>
+        </ul>
+        {% else %}
+        <div class="rm_mobile_account-login">
+            <div class="rm-content-title text-center">{{ text_login_is }}</div>
+            <form action="javascript:;" id="rm-mobile-login" class="d-flex flex-column">
+                <div class="form-group">
+                    <label for="input-email" class="rm-control-label">
+                        <span class="required">*</span> {{ entry_email }}
+                    </label>
+                    <input type="email" name="email" value="" placeholder="{{ entry_email }}" id="sidebar-input-email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="input-password" class="rm-control-label">
+                        <span class="required">*</span> {{ entry_password }}
+                    </label>
+                    <input type="password" name="password" value="" placeholder="{{ entry_password }}" id="sidebar-input-password" class="form-control">
+                    <input type="hidden" name="redirect" value="#">
+                </div>
+                <div class="d-flex flex-column align-items-center">
+                    <a href="{{ forgotten_url }}">{{ button_forgotten }}</a>
+                    <input type="submit" id="fm-mobile-login-button" value="{{ button_login }}" class="rm-btn dark">
+                </div>
+            </form>
+        </div>
+        <div class="rm_mobile_account-register">
+            <div class="rm-content-title text-center">{{ button_register }}</div>
+            <div class="rm-account-login-text">
+                {{ text_register }}
+            </div>
+            <div class="text-center">
+                <button onclick="location = '{{ register_url }}';" type="button" class="rm-btn primary">
+                    <span class="rm-btn-text">{{ button_register }}</span>
+                </button>
+            </div>
+        </div>
+        <script>
+        $('#fm-mobile-login-button').on('click', function() {
+            $.ajax({
+        		type: 'post',
+        		url:  'index.php?route=octemplates/module/oct_popup_login/login',
+        		dataType: 'json',
+        		cache: false,
+        		data: $('#rm-mobile-login').serialize(),
+        		beforeSend: function() {
+        			masked('body', true);
+        		},
+        		complete: function() {
+        			masked('body', false);
+        		},
+        		success: function(json) {
+        	        if (json['warning']) {
+        				rmNotify('danger', json['warning']);
+        	        } else {
+
+        				if (json['redirect']) {
+        					location = json['redirect'];
+        				} else {
+        					location = '{{ account_url }}';
+        				}
+        	        }
+        	    }
+            });
+        });
+        </script>
+        {% endif %}
+    </div>
+</div>
+
+<div class="rm_mobile_viewed">
+    <div class="rm-sidebar-title d-flex align-items-center">
+        <div class="rm_mobile_menu_back rm_mobile_menu_first_back d-flex align-items-center">
+            <span class="rm_mobile_menu_back-icon"></span>
+            <span class="rm_mobile_menu_back-text">{{ oct_product_views }}</span>
+        </div>
+        <span class="rm-sidebar-title-close modal-close">
+            <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+            <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+        </span>
+    </div>
+    <div id="oct_sidebar_viewed"></div>
+</div>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_lazyload</code>
+	<name>Octemplates - LazyLoad</name>
+	<version>1.0.0</version>
+	<author>OCTemplates</author>
+	<link>https://octemplates.net/</link>
+    <file path="catalog/controller/extension/module/{bestseller,carousel,latest,featured,special}.php|catalog/controller/product/{category,product,manufacturer,search,special}.php">
+		<operation error="skip">
+			<search><![CDATA[public function index(]]></search>
+			<add position="after"><![CDATA[
+            $data['oct_lazyload'] = false;
+
+            $this->load->model('tool/image');
+
+            $data['oct_lazy_image'] = $this->model_tool_image->resize($this->config->get('theme_oct_remarket_lazyload_image') ? $this->config->get('theme_oct_remarket_lazyload_image') : 'catalog/remarket/lazy-image.svg', 30, 30);
+
+			if ($this->registry->has('oct_mobiledetect')) {
+		        if ($this->oct_mobiledetect->isMobile() && !$this->oct_mobiledetect->isTablet() && $this->config->get('theme_oct_remarket_lazyload_mobile')) {
+		            $data['oct_lazyload'] = true;
+		        } elseif ($this->oct_mobiledetect->isTablet() && $this->config->get('theme_oct_remarket_lazyload_tablet')) {
+                    $data['oct_lazyload'] = true;
+                } elseif ($this->config->get('theme_oct_remarket_lazyload_desktop')) {
+                    $data['oct_lazyload'] = true;
+                }
+		    } elseif ($this->config->get('theme_oct_remarket_lazyload_desktop')) {
+                $data['oct_lazyload'] = true;
+            }
+			]]></add>
+    	</operation>
+		<operation error="skip">
+			<search><![CDATA[public function info(]]></search>
+			<add position="after"><![CDATA[
+            $data['oct_lazyload'] = false;
+
+            $this->load->model('tool/image');
+
+            $data['oct_lazy_image'] = $this->model_tool_image->resize($this->config->get('theme_oct_remarket_lazyload_image') ? $this->config->get('theme_oct_remarket_lazyload_image') : 'catalog/remarket/lazy-image.svg', 30, 30);
+
+			if ($this->registry->has('oct_mobiledetect')) {
+		        if ($this->oct_mobiledetect->isMobile() && !$this->oct_mobiledetect->isTablet() && $this->config->get('theme_oct_remarket_lazyload_mobile')) {
+		            $data['oct_lazyload'] = true;
+		        } elseif ($this->oct_mobiledetect->isTablet() && $this->config->get('theme_oct_remarket_lazyload_tablet')) {
+                    $data['oct_lazyload'] = true;
+                } elseif ($this->config->get('theme_oct_remarket_lazyload_desktop')) {
+                    $data['oct_lazyload'] = true;
+                }
+		    } elseif ($this->config->get('theme_oct_remarket_lazyload_desktop')) {
+                $data['oct_lazyload'] = true;
+            }
+			]]></add>
+    	</operation>
+	</file>
+</modification>

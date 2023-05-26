@@ -1,0 +1,110 @@
+{{ header }}
+<div class="container">
+	<nav aria-label="breadcrumb">
+		<ul class="breadcrumb rm-breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+			{% if loop.last %}
+				<li class="breadcrumb-item rm-breadcrumb-item">{{ breadcrumb.text }}</li>
+			{% else %}
+				<li class="breadcrumb-item rm-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	</nav>
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div id="content" class="row no-gutters">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content rm-ocstore-content h-100">
+		    		{% if articles %}
+		    		<div class="rm-category-sort d-flex justify-content-between">
+					<div class="sort-limit">
+						<select id="input-sort" class="sort-select" onchange="location = this.value;">
+							{% for sorts in sorts %}
+							{% if sorts.value == '%s-%s'|format(sort, order) %}
+							<option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+							{% else %}
+							<option value="{{ sorts.href }}">{{ sorts.text }}</option>
+							{% endif %}
+							{% endfor %}
+						</select>
+						<select id="input-limit" class="limit-select" onchange="location = this.value;">
+							{% for limits in limits %}
+							{% if limits.value == limit %}
+							<option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+							{% else %}
+							<option value="{{ limits.href }}">{{ limits.text }}</option>
+							{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				{% if thumb or description %}
+				<div class="row my-4">
+			        {% if thumb %}
+			        <div class="col-sm-2"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail" /></div>
+			        {% endif %}
+			        {% if description %}
+			        <div class="col-sm-10">{{ description }}</div>
+				    {% endif %}
+			    </div>
+				{% endif %}
+				<div class="row no-gutters">  
+			        {% for article in articles %} 
+			        <div class="ocs-article-box col-sm-12 col-md-6 col-lg-4 col-xl-3">
+					    <div class="rm-module-item border-0 d-flex flex-column h-100">
+						    <div class="rm-module-img">
+								<a href="{{ article.href }}">
+								<img src="{{ article.thumb }}" alt="{{ article.name }}" title="{{ article.name }}" class="img-responsive" />
+								</a>
+							</div>
+							<div class="rm-module-title">
+								<a href="{{ article.href }}">{{ article.name }}</a>
+							</div>
+							{% if article.rating %}
+							<div class="rm-module-rating d-flex align-items-center justify-content-center">
+								<div class="rm-module-rating-stars d-flex align-items-center">
+									{% for i in 1..5 %}
+									{% if product.rating < i %}
+									<span class="rm-module-rating-star"></span>
+									{% else %}
+									<span class="rm-module-rating-star rm-module-rating-star-is"></span>
+									{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+					        {% endif %}
+					        <div class="rm-product-description my-4">{{ article.description }}</div>
+							<button class="rm-btn primary mt-auto" type="button" onclick="location.href = ('{{ article.href }}');"><i class="fas fa-share"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_more }}</span></button>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+      <div class="row">
+        <div class="col-sm-6 text-left">{{ pagination }}</div>
+      </div>
+      {% else %}
+      <p>{{ text_empty }}</p>
+      <div class="buttons">
+        <div class="pull-right"><a href="{{ continue }}" class="rm-btn secondary">{{ button_continue }}</a></div>
+      </div>
+      {% endif %}
+      </div>
+			{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+</div>
+{{ footer }}

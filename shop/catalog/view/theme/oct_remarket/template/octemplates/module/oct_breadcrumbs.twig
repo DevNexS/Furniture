@@ -1,0 +1,36 @@
+<nav aria-label="breadcrumb">
+	<ul class="breadcrumb rm-breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+		{% if loop.last %}
+			<li class="breadcrumb-item rm-breadcrumb-item">{{ breadcrumb.text }}</li>
+		{% else %}
+			<li class="breadcrumb-item rm-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endif %}
+	{% endfor %}
+	</ul>
+</nav>
+{% if oct_remarket_data.micro is defined and oct_remarket_data.micro %}
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement":
+	[
+		{% for breadcrumb in breadcrumbs %}
+			{% if loop.first %}
+			{% else %}
+			{
+				"@type": "ListItem",
+				"position": {{ loop.index -1 }},
+				"item":
+				{
+					"@id": "{{ breadcrumb.href }}",
+					"name": "{{ breadcrumb.text }}"
+				}
+			}{% if not loop.last %},{% endif %}
+			{% endif %}
+		{% endfor %}
+	]
+}
+</script>
+{% endif %}

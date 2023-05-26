@@ -1,0 +1,94 @@
+* {
+	outline: none;
+}
+@media (max-width: $break-md-max) {
+	html {
+	    height: 100%;
+	}
+}
+p {
+	margin: 0;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+
+a, a:hover, a:active {
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+	@media (min-width: $break-lg) {
+		transition: color $mainTransition;
+	}
+}
+
+button {
+	cursor: pointer;
+	border: 0;
+}
+
+@supports (-webkit-touch-callout: none) {
+	.form-control,
+	input[type=text] {
+		@media (max-width: $break-sm-max) {
+			font-size: 16px !important;
+		}
+	}
+}
+
+div, p, form, input, a, span, button {
+	box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 400;
+	line-height: normal;
+	margin-bottom: 0;
+}
+
+input, input:hover, input:active, button, button:hover, button:active, .btn, .btn:hover {
+	outline: none;
+	box-shadow: none;
+}
+
+textarea, input[type="text"], input[type="email"] {
+	-webkit-appearance: none;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+@media (min-width: $break-xxl) {
+	.container,
+	.container-fluid,
+	.container-sm,
+	.container-md,
+	.container-lg,
+	.container-xl,
+	.modal-dialog-1110 {
+	    max-width: 1600px !important;
+	}
+}
+
+@-webkit-keyframes autofill {
+  to {
+    color: inherit;
+    background: transparent;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
+}
+
+.fancybox-button--thumbs {
+	display: none !important;
+}
+
+.modal {
+    z-index: 10050;
+}

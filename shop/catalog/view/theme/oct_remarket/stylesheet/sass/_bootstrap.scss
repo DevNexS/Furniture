@@ -1,0 +1,46 @@
+@charset 'UTF-8';
+
+// 1. Variables
+@import 'abstracts/variables';
+
+// 2. Vendors
+@import 'vendors/bootstrap/scss/bootstrap';
+
+// 3. Base styles
+@import 'base/reset';
+@import 'base/global';
+@import 'base/typography';
+
+// 4. Page layout
+@import 'layout/header';
+@import 'layout/menu';
+@import 'layout/mobileMenu';
+@import 'layout/forms';
+@import 'layout/buttons';
+@import 'layout/columns';
+
+// 5. Modules
+@import 'components/advantages';
+@import 'components/bannerPlus';
+@import 'components/carousel';
+@import 'components/categoryWall';
+@import 'components/productsModule';
+@import 'components/news';
+@import 'components/lastReviews';
+@import 'components/slideshowPlus';
+
+// 6. Pages
+@import 'pages/account';
+@import 'pages/blogCategories';
+@import 'pages/blogPost';
+@import 'pages/cart';
+@import 'pages/category';
+@import 'pages/compare';
+@import 'pages/contactUs';
+@import 'pages/product';
+@import 'pages/storeReviews';
+
+// 7. Opencart modules
+@import 'modules/ocfilter';
+@import 'modules/simple';
+@import 'modules/ocstore';

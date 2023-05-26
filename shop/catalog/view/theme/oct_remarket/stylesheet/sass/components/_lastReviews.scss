@@ -1,0 +1,101 @@
+.rm-last-reviews {
+    .row.no-gutters {
+        @media (max-width: $break-xs-max) {
+            overflow-x: auto;
+        }
+    }
+
+    &-col {
+        transition: box-shadow $mainTransition;
+        position: relative;
+        z-index: 1;
+        @media (max-width: $break-xs-max) {
+            flex: 0 0 260px;
+            max-width: 260px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        &:hover {
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+            z-index: 20;
+        }
+    }
+
+    &-item {
+        background-color: #FFFFFF;
+        position: relative;
+        z-index: 2;
+        padding: 20px;
+        box-shadow: -0.5px -0.5px 0 0.5px #F9F9FC, inset -1px -1px 0 0 #F9F9FC;
+        overflow: hidden;
+        @media (min-width: $break-md) {
+            padding: 30px;
+        }
+        @media (max-width: $break-xs-max) {
+            border-radius: 6px;
+        }
+
+        &-bottom {
+            flex-grow: 1;
+        }
+
+        &-image,
+        .rm-module-rating,
+        &-info {
+            margin-bottom: 20px;
+        }
+
+        &-image {
+
+            img {
+                transition: opacity $mainTransition;
+            }
+        }
+
+        &:hover &-image img {
+            opacity: 0.95;
+        }
+
+        .rm-module-reviews span {
+            font-size: 12px;
+            line-height: 15px;
+        }
+
+        &-title {
+            display: block;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        &:hover &-title {
+            color: $linksColor;
+        }
+
+        &-author {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        &-date {
+            font-size: 12px;
+            color: #C1C1C1;
+
+            img {
+                margin-right: 8px;
+            }
+        }
+
+        &-text {
+            font-size: 13px;
+            line-height: 20px;
+            color: $lightTextColor;
+        }
+    }
+}

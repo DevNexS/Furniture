@@ -1,0 +1,25 @@
+{% if comments %}
+{% for comment in comments %}
+<div class="rm-comments-item">
+	<div class="row align-items-start align-items-lg-center">
+		<div class="col-md-3 rm-comments-item-info text-center">
+			<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--user-icon" alt="user-icon" width="50" height="50" />
+			<div class="rm-comments-item-info-name">{{ comment.author }}</div>
+			<div class="rm-comments-item-info-dat">{{ comment.date_added }}</div>
+		</div>
+		<div class="col-md-9">
+			<div class="rm-comments-item-text">{{ comment.text }}</div>
+			{% if comment.admin_text %}
+			<div class="rm-store-reviews-item-text-admin">
+				<div class="rm-store-reviews-item-text-admin-title">{{ text_admin_title }}</div>
+				<p>{{ comment.admin_text }}</p>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endfor %}
+{{ pagination }}
+{% else  %}
+<div class="p-4">{{ entry_empty_comments }}</div>
+{% endif %}

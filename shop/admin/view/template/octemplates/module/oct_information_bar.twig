@@ -1,0 +1,170 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		{% if success %}
+	    <script>
+			usNotify('success', '{{ success }}');
+		</script>
+	    {% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+					<div class="tab-content">
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+							<div class="col-sm-10">
+								<div class="toggle-group">
+									<input type="checkbox" name="oct_information_bar_status" {% if oct_information_bar_status %}checked="checked"{% endif %} id="oct_information_bar_status" tabindex="1">
+									<label for="oct_information_bar_status"></label>
+									<div class="onoffswitch pull-left" aria-hidden="true">
+										<div class="onoffswitch-label">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="all_settings" {% if (oct_information_bar_status is not defined or (oct_information_bar_status is defined and not oct_information_bar_status)) %}style="display:none"{% endif %}>
+							<ul class="nav nav-tabs" id="language">
+								{% for language in languages %}
+								<li><a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+								{% endfor %}
+							</ul>
+							<div class="tab-content">
+								{% for language in languages %}
+								<div class="tab-pane" id="language{{ language.language_id }}">
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="input-text{{ language.language_id }}">{{ entry_text }}</label>
+										<div class="col-sm-10">
+											<textarea name="oct_information_bar_data[module_text][{{ language.language_id }}]" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control" placeholder="{{ entry_text }}" id="input-text{{ language.language_id }}">{{ oct_information_bar_data.module_text[language.language_id] is defined ? oct_information_bar_data.module_text[language.language_id] : '' }}</textarea>
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-day">{{ entry_value }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="oct_information_bar_data[value]" value="{{ (oct_information_bar_data.value is defined and oct_information_bar_data.value) ? oct_information_bar_data.value : 'oct_information_bar' }}" id="input-day" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-day"><span data-toggle="tooltip" title="{{ entry_helper_max_day }}">{{ entry_max_day }}</span></label>
+								<div class="col-sm-10">
+									<input type="text" name="oct_information_bar_data[max_day]" value="{{ oct_information_bar_data.max_day }}" id="input-day" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="select-oct_information_bar_data_indormation_id">{{ entry_link }}</label>
+								<div class="col-sm-10">
+									<select id="select-oct_information_bar_data_indormation_id" name="oct_information_bar_data[indormation_id]" class="form-control">
+										<option value=""> -- </option>
+										{% for information in informations %}
+										<option value="{{ information.information_id }}" {% if oct_information_bar_data.indormation_id == information.information_id %}selected="selected"{% endif %}>{{ information.title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-background_bar">{{ entry_background_bar }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[background_bar]" value="{{ oct_information_bar_data.background_bar is defined and oct_information_bar_data.background_bar ? oct_information_bar_data.background_bar : 'rgb(20, 29, 38)' }}" id="input-background_bar" class="form-control spectrum" />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-color_text">{{ entry_bar_color_text }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[color_text]" value="{{ oct_information_bar_data.color_text is defined and oct_information_bar_data.color_text ? oct_information_bar_data.color_text : 'rgb(190, 190, 190)' }}" id="input-color_text" class="form-control spectrum" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-color_url">{{ entry_bar_color_url }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[color_url]" value="{{ oct_information_bar_data.color_url is defined and oct_information_bar_data.color_url ? oct_information_bar_data.color_url : 'rgb(113, 190, 0)' }}" id="input-color_url" class="form-control spectrum" />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-background_button">{{ entry_bar_background_button }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[background_button]" value="{{ oct_information_bar_data.background_button is defined and oct_information_bar_data.background_button ? oct_information_bar_data.background_button : 'rgb(113, 190, 0)' }}" id="input-background_button" class="form-control spectrum" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-background_button_hover">{{ entry_bar_background_button_hover }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[background_button_hover]" value="{{ oct_information_bar_data['background_button_hover'] is defined and oct_information_bar_data.background_button_hover ? oct_information_bar_data.background_button_hover : 'rgb(255, 255, 255)' }}" id="input-background_button_hover" class="form-control spectrum" />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-color_text_button">{{ entry_bar_color_text_button }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[color_text_button]" value="{{ oct_information_bar_data.color_text_button is defined and oct_information_bar_data.color_text_button ? oct_information_bar_data.color_text_button : 'rgba(0, 0, 0, .85)' }}" id="input-color_text_button" class="form-control spectrum" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-6">
+									<label class="col-sm-4 control-label" for="input-color_text_button_hover">{{ entry_bar_color_text_button_hover }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="oct_information_bar_data[color_text_button_hover]" value="{{ oct_information_bar_data.color_text_button_hover is defined and oct_information_bar_data.color_text_button_hover ? oct_information_bar_data.color_text_button_hover : 'rgb(0, 0, 0)' }}" id="input-color_text_button_hover" class="form-control spectrum" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(".spectrum").spectrum({
+	preferredFormat: "rgb",
+	showInitial: true,
+	showInput: true,
+	showAlpha: true,
+	showPalette: true,
+	palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
+});
+
+$('#oct_information_bar_status').change(function() {
+	var $input = $(this);
+
+	if ($input.is(":checked")) {
+		$("#all_settings").slideDown('slow');
+	} else {
+		$("#all_settings").slideUp('slow');
+	}
+});
+
+$('#language a:first').tab('show');
+</script>
+{{ footer }}

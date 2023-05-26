@@ -1,0 +1,61 @@
+{% if ((oct_analytics_google_status is defined and oct_analytics_google_status) and oct_analytics_google_code is not empty) %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ oct_analytics_google_code }}"></script>
+<script id="octAnalytics">
+	window.dataLayer = window.dataLayer || [];
+
+	function gtag(){dataLayer.push(arguments);}
+
+	gtag('js', new Date());
+
+	gtag('config', '{{ oct_analytics_google_code }}');
+
+	{% if ((oct_analytics_google_status is defined and oct_analytics_google_status) and oct_analytics_googleads_code is not empty) %}
+	gtag('config', '{{ oct_analytics_googleads_code }}');
+	{% endif %}
+</script>
+{% endif %}
+
+{% if ((oct_analytics_yandex_status is defined and oct_analytics_yandex_status) and oct_analytics_yandex_code is not empty) %}
+	<!-- Yandex.Metrika counter -->
+	<script>
+		{% if ((oct_analytics_yandex_ecommerce is defined and oct_analytics_yandex_ecommerce) and (oct_analytics_yandex_container is defined and oct_analytics_yandex_container)) %}
+		window.{{ oct_analytics_yandex_container }} = window.{{ oct_analytics_yandex_container }} || [];
+		{% endif %}
+
+		(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+		m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+		(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+		ym({{ oct_analytics_yandex_code }}, "init", {
+	        clickmap:true,
+	        trackLinks:true,
+	        accurateTrackBounce:true,
+	        webvisor:true,
+	        {% if ((oct_analytics_yandex_ecommerce is defined and oct_analytics_yandex_ecommerce) and (oct_analytics_yandex_container is defined and oct_analytics_yandex_container)) %}
+	        ecommerce:"{{ oct_analytics_yandex_container }}"
+	        {% endif %}
+		});
+	</script>
+	<noscript><div><img src="https://mc.yandex.ru/watch/{{ oct_analytics_yandex_code }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+	<!-- /Yandex.Metrika counter -->
+
+	{% if ((oct_analytics_yandex_ecommerce is defined and oct_analytics_yandex_ecommerce) and (oct_analytics_yandex_container is defined and oct_analytics_yandex_container)) %}
+	<script>
+	function octYandexEcommerce(value) {
+	    if(typeof {{ oct_analytics_yandex_container }} != 'undefined') {
+	        var products = [{
+	            "id": value['oct_analytics_yandex_product_id'],
+	            "name": value['oct_analytics_yandex_name'],
+	            "price": value['oct_analytics_yandex_price'],
+	            "brand": value['oct_analytics_yandex_manufacturer'],
+	            "category": value['oct_analytics_yandex_category'],
+	            "quantity": value['oct_analytics_yandex_quantity']
+	        }];
+
+	        {{ oct_analytics_yandex_container }}.push({"ecommerce": {"add": {"products": products}}});
+	    }
+	}
+	</script>
+	{% endif %}
+{% endif %}

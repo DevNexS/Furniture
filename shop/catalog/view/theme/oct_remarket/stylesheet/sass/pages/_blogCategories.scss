@@ -1,0 +1,109 @@
+.rm-blog-categories-item {
+    background: #FFFFFF;
+    transition: box-shadow $mainTransition;
+    border-radius: 2px;
+    margin-bottom: 30px;
+    height: calc(100% - 30px);
+
+    &:hover {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+
+        a {
+            color: $linksColor;
+        }
+
+        .img-fluid {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+    }
+
+    &-image {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        min-height: 200px;
+        @media (min-width: $break-xxs) {
+            min-height: 216px;
+        }
+        @media (min-width: $break-xs) {
+            min-height: 261px;
+        }
+        @media (min-width: $break-sm) {
+            min-height: 371px;
+        }
+        @media (min-width: $break-md) {
+            min-height: 225px;
+        }
+        @media (min-width: $break-lg) {
+            min-height: 228px;
+        }
+        @media (min-width: $break-xl) {
+            min-height: 278px;
+        }
+        @media (min-width: $break-xxl) {
+            min-height: 362px;
+        }
+    }
+
+    .img-fluid {
+        transition: opacity 0.3s ease, transform 0.8s ease;
+        backface-visibility: hidden;
+        width: 100%;
+    }
+
+    &-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: rgba(55, 55, 55, 0.43);
+        opacity: 0.99;
+        font-size: 12px;
+        line-height: 15px;
+        color: #F4F4F4;
+        padding: 0 30px;
+
+        > div {
+            display: flex;
+            align-items: center;
+
+            img {
+                margin-right: 8px;
+            }
+        }
+    }
+
+    &-text {
+        padding: 30px;
+        border-right: $mainBorder;
+        border-bottom: $mainBorder;
+        border-left: $mainBorder;
+
+        a {
+            font-weight: 500;
+            line-height: 24px;
+            display: inline-block;
+            margin-bottom: 30px;
+            color: $darkTextColor !important;
+            font-size: 16px;
+
+            &:hover {
+                color: $linksColor !important;
+            }
+        }
+
+        p {
+            color: $lightTextColor;
+            font-size: 13px;
+            line-height: 20px;
+        }
+    }
+}
+
+@media (max-width: $break-xs-max) {
+    .rm-blog-row-item {
+        padding: 0;
+    }
+}

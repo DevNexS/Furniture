@@ -1,0 +1,145 @@
+{% if page == 1 %}
+<div class="tab-pane rm-content p-0 rm-product-tabs-questions" id="{{ oct_id_div }}">
+    {% if poup_is_not %}
+        <div class="rm-product-tabs-questions-top">
+            <button type="button" class="rm-btn dark mb-3" data-toggle="modal" data-target="#rm-popup-faq">{{ text_faq_button }}</button>
+            {% if oct_faqs is empty %}
+                <p class="my-3 text-center text-sm-left"><b>{{ text_faq_title }}</b></p>
+        		<img src="catalog/view/theme/oct_remarket/img/answers-empty.svg" alt="" class="img-fluid d-block d-md-none my-4 mx-auto" width="360" height="199" />
+            {% endif %}
+            <div class="modal" id="rm-popup-faq" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered narrow" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">{{ text_faq }}</div>
+                            <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+                                <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-faq" enctype="multipart/form-data" method="post">
+                                <div class="pb-4">{{ text_faq_text }}</div>
+                                <div class="form-group">
+                                    <input type="text" name="name" {% if firstname %}value="{{ firstname }}"{% endif %} class="form-control" id="faqInputName" placeholder="{{ entry_name }}">
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="faqInputEmail" class="fsz-14 dark-text fw-500 pb-1">{{ text_faq_email }}</label>
+                                    <span class="small">{{ text_faq_email_detail }}</span>
+                                    <input type="text" name="email" {% if email_user %}value="{{ email_user }}"{% endif %} class="form-control" id="faqInputEmail" placeholder="{{ text_faq_email }}">
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="faqText" name="text" class="form-control" placeholder="{{ text_faq_textarea }}"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    {{ captcha }}
+                                </div>
+                                <button type="button" id="button-oct_faq" class="rm-btn dark">{{ button_continue }}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if oct_faqs %}
+        <div id="{{ oct_faqs_id }}">
+            {% for oct_faq in oct_faqs %}
+            <div class="rm-product-tabs-questions-item">
+                <div class="rm-product-tabs-questions-item-info d-flex justify-content-between d-md-block">
+                    <span class="rm-product-tabs-questions-item-author">{{ text_faq_autor }}{{ oct_faq.author }}</span>
+                    <span class="rm-product-tabs-questions-item-date">{{ oct_faq.date_added }}</span>
+                </div>
+                <div class="rm-product-tabs-questions-item-text">
+                    <p>{{ oct_faq.text }}</p>
+                </div>
+                {% if oct_faq.answer is defined and oct_faq.answer %}
+                <div class="rm-product-tabs-questions-item-answer">
+                    <div class="rm-product-tabs-questions-item-answer-title">{{ text_faq_answer }}</div>
+                    <div class="rm-product-tabs-questions-item-answer-text">
+                        <p>{{ oct_faq.answer }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="text-right">{{ pagination }}</div>
+        </div>
+    {% endif %}
+</div>
+<script>
+$("#faqInputName, faqInputEmail, #faqText").on("change paste keyup", function() {
+  $(this).removeClass('error_style');
+});
+$('body').on('click', '#{{ oct_faqs_id }} .pagination a', function(e){
+    e.preventDefault();
+
+    $('#{{ oct_faqs_id }}').html();
+
+    $('#{{ oct_faqs_id }}').load(this.href);
+
+    scrollToElement('#product_questions');
+});
+
+$('#button-oct_faq').on('click', function() {
+	$.ajax({
+		url: 'index.php?route=octemplates/faq/oct_product_faq/write&faqp_id={{ product_id }}',
+		type: 'post',
+		dataType: 'json',
+		data: $("#form-faq").serialize(),
+		beforeSend: function() {
+			$('#button-oct_faq').button('loading');
+            $('#rm-popup-faq input, #rm-popup-faq textarea').removeClass('error_style');
+		},
+		complete: function() {
+			$('#button-oct_faq').button('reset');
+		},
+		success: function(json) {
+            $('.alert-dismissible').remove();
+
+            if (json['error']) {
+                let errorOption = '';
+
+                $.each(json['error'], function(i, val) {
+                    $('#rm-popup-faq [name="' + i + '"]').addClass('error_style');
+                    errorOption += '<div class="alert-text-item">' + val + '</div>';
+                });
+
+                rmNotify('danger', errorOption);
+            }
+
+			if (json['success']) {
+                rmNotify('success', json['success']);
+
+                $('#rm-popup-faq').modal('hide');
+                $('#form-faq input[name=\'name\']').val('');
+                $('#form-faq textarea[name=\'text\']').val('');
+			}
+		}
+	});
+});
+</script>
+{% else %}
+{% if oct_faqs %}
+    {% for oct_faq in oct_faqs %}
+    <div class="rm-product-tabs-questions-item">
+        <div class="rm-product-tabs-questions-item-info d-flex justify-content-between d-md-block">
+            <span class="rm-product-tabs-questions-item-author">{{ text_faq_autor }}{{ oct_faq.author }}</span>
+            <span class="rm-product-tabs-questions-item-date">{{ oct_faq.date_added }}</span>
+        </div>
+        <div class="rm-product-tabs-questions-item-text">
+            <p>{{ oct_faq.text }}</p>
+        </div>
+        {% if oct_faq.answer is defined and oct_faq.answer %}
+        <div class="rm-product-tabs-questions-item-answer">
+            <div class="rm-product-tabs-questions-item-answer-title">{{ text_faq_answer }}</div>
+            <div class="rm-product-tabs-questions-item-answer-text">
+                <p>{{ oct_faq.answer }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <div class="text-right">{{ pagination }}</div>
+{% endif %}
+{% endif %}

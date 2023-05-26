@@ -1,0 +1,52 @@
+{% if oct_benefits %}
+<div id="rm-shop-advantages-{{ module }}" class="rm-advantages">
+	<div class="row row-padding-top">
+		{% set key = 0 %}
+	    {% for oct_benefit in oct_benefits %}
+	    {% set key = key + 1 %}
+	        {% if oct_benefit.title[language_id] is defined and oct_benefit.title[language_id] %}
+			<div class="col-sm-6 col-md-4 col-xl-2">
+			{% if oct_benefit.link[language_id] is defined and oct_benefit.link[language_id] %}
+				<a href="{{ oct_benefit.link[language_id] }}" class="rm-advantages-item d-flex flex-sm-column justify-content-center justify-content-sm-start align-items-center text-sm-center" id="block{{ module }}-{{ key }}">
+					<span class="rm-advantages-item-icon"><i class="{{ oct_benefit.icon }}"></i></span>
+					<span class="d-flex flex-column align-items-start align-items-sm-center">
+						<span class="rm-advantages-item-title">{{ oct_benefit.title[language_id] }}</span>
+						{% if oct_benefit.text[language_id] is defined and oct_benefit.text[language_id] %}
+						<span class="rm-advantages-item-text">{{ oct_benefit.text[language_id] }}</span>
+						{% endif %}
+					</span>
+				</a>
+			{% else %}
+				<div class="rm-advantages-item d-flex flex-sm-column justify-content-center justify-content-sm-start align-items-center text-sm-center" id="block{{ module }}-{{ key }}">
+					<span class="rm-advantages-item-icon"><i class="{{ oct_benefit.icon }}"></i></span>
+					<span class="d-flex flex-column align-items-start align-items-sm-center">
+						<span class="rm-advantages-item-title">{{ oct_benefit.title[language_id] }}</span>
+						{% if oct_benefit.text[language_id] is defined and oct_benefit.text[language_id] %}
+						<span class="rm-advantages-item-text">{{ oct_benefit.text[language_id] }}</span>
+						{% endif %}
+					</span>
+				</div>
+			{% endif %}
+			</div>
+			<style>
+				{% if oct_benefit.color_icon %}
+				#block{{ module }}-{{ key }} i {color: {{ oct_benefit.color_icon }};}
+				{% endif %}
+
+				{% if oct_benefit.color_title %}
+				#block{{ module }}-{{ key }} .rm-advantages-item-title {color: {{ oct_benefit.color_title }};}
+				{% endif %}
+
+				{% if oct_benefit.color_text %}
+				#block{{ module }}-{{ key }} .rm-advantages-item-text {color: {{ oct_benefit.color_text }};}
+				{% endif %}
+
+				{% if oct_benefit.color_fon_hover %}
+				#block{{ module }}-{{ key }}:hover i, #block{{ module }}-{{ key }}:hover .rm-advantages-item-title {color: {{ oct_benefit.color_fon_hover }};}
+				{% endif %}
+	        </style>
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+{% endif %}

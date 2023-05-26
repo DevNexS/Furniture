@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_remarket_breadcrumbs</code>
+	<name>Octemplates - Breadcrumbs</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/controller/account/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('octemplates/main/oct_functions/octBreadcrumbs', $oct_data);
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/affiliate/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('octemplates/main/oct_functions/octBreadcrumbs', $oct_data);
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/checkout/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('octemplates/main/oct_functions/octBreadcrumbs', $oct_data);
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/error/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('octemplates/main/oct_functions/octBreadcrumbs', $oct_data);
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/information/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('octemplates/main/oct_functions/octBreadcrumbs', $oct_data);
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/controller/product/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('octemplates/main/oct_functions/octBreadcrumbs', $oct_data);
+			]]></add>
+    	</operation>
+	</file>
+</modification>

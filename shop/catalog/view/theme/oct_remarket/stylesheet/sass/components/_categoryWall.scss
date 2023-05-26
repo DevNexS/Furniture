@@ -1,0 +1,51 @@
+.rm-category-wall-item {
+    background: #FFFFFF;
+    transition: box-shadow $mainTransition;
+    position: relative;
+    z-index: 1;
+    box-shadow: -0.5px -0.5px 0 0.5px #F9F9FC, inset -1px -1px 0 0 #F9F9FC;
+
+    > a {
+        transition: color $mainTransition;
+        padding: 25px;
+    }
+
+    ul {
+        padding: 0 25px 25px;
+
+        li + li {
+            margin-top: 6px;
+        }
+
+        a {
+            color: $lightTextColor;
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &-image {
+        margin-bottom: 25px;
+    }
+
+    img {
+        transition: opacity $mainTransition;
+    }
+
+    &:hover {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+        z-index: 2;
+
+        img {
+            opacity: 0.9;
+        }
+
+        span {
+            text-decoration: underline;
+            color: $linksColor;
+        }
+    }
+}

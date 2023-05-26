@@ -1,0 +1,1357 @@
+{{ header }}
+<div id="product-product" class="container">
+    {{ oct_breadcrumbs }}
+    <div class="content-top-box">{{ content_top }}</div>
+    <div class="rm-product-mobile-fixed fixed-bottom d-lg-none d-flex align-items-center justify-content-between w-100">
+        <div class="rm-product-mobile-fixed-price d-flex flex-column">
+            {% if not special %}
+                <span class="rm-product-mobile-fixed-price-new">{{ price }}</span>
+            {% else %}
+                <span class="rm-product-mobile-fixed-price-old">{{ price }}</span>
+                <span class="rm-product-mobile-fixed-price-new">{{ special }}</span>
+            {% endif %}
+        </div>
+        <div class="rm-product-mobile-fixed-buttons d-flex align-items-center">
+            <button type="button" class="rm-btn wishlist" onclick="wishlist.add('{{ product_id }}');" title="{{ button_wishlist }}">
+                <span class="rm-btn-icon"><img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--fixed-product-button-wishlist-icon" alt="{{ button_wishlist }}" width="20" height="17"></span>
+            </button>
+            <button type="button" class="rm-btn compare" onclick="compare.add('{{ product_id }}');" title="{{ button_compare }}">
+                <span class="rm-btn-icon"><img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--fixed-product-button-compare-icon" alt="{{ button_compare }}" width="18" height="18"></span>
+            </button>
+            {% if oct_popup_purchase_status is defined and can_buy is not empty %}
+            <button type="button" name="button" class="rm-btn secondary rm-product-one-click-btn d-flex align-items-center" onclick="octPopPurchase('{{ product_id }}')">
+                <span class="rm-cart-btn-icon"></span>
+                <span class="rm-btn-text">{{ oct_product_oneclickbuy }}</span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    <main>
+        <div id="content" class="rm-content rm-product">
+            <div class="rm-product-top d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <div class="rm-product-title order-1 order-md-0"><h1>{{ heading_title }}</h1></div>
+                {% if oct_desktop is not defined %}
+                <div class="d-none d-lg-flex align-items-center flex-column flex-lg-row rm-product-top-buttons order-0 order-md-1">
+                    <button type="button" class="rm-product-top-button rm-product-top-button-wishlist d-flex align-items-center justify-content-center" onclick="wishlist.add('{{ product_id }}');" title="{{ button_wishlist }}">
+                        <span class="rm-product-top-button-icon"></span>
+                        <span class="rm-product-top-button-text d-lg-none">{{ button_wishlist }}</span>
+                    </button>
+                    <button type="button" class="rm-product-top-button rm-product-top-button-compare d-flex align-items-center justify-content-center" onclick="compare.add('{{ product_id }}');" title="{{ button_compare }}">
+                        <span class="rm-product-top-button-icon"></span>
+                        <span class="rm-product-top-button-text d-lg-none">{{ button_compare }}</span>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row no-gutters">
+                <div class="col-lg-12 col-xl-6">
+                    <div class="rm-product-images h-100">
+            			{% if oct_product_stickers %}
+            			<div class="rm-module-stickers">
+            				{% for key, oct_sticker in oct_product_stickers %}
+            					{% if oct_sticker is not empty %}
+            					<div class="rm-module-stickers-sticker rm-product-stickers-{{ key }}">
+            						{{ oct_sticker }}
+            					</div>
+            					{% endif %}
+            				{% endfor %}
+            			</div>
+            			{% endif %}
+                        {% if thumb or images %}
+                            {% if thumb %}
+                                <div class="rm-product-images-main">
+                                    <div class="rm-product-slide">
+                                        <a href="{{ popup }}" class="oct-gallery" onclick="return false;">
+                                            <img src="{{ thumb }}" class="img-fluid" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ thumb_width }}" height="{{ thumb_height }}" />
+                                        </a>
+                                    </div>
+                                    {% for key, image in images %}
+                                        {% set i = key + 1 %}
+                                        {% if loop.index0 > 0 %}
+                                            <div class="rm-product-slide">
+                                                <a href="{{ image.popup_fancy }}" class="oct-gallery" onclick="return false;">
+                                                    <img src="{{ image.popup }}" class="img-fluid" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ thumb_width }}" height="{{ thumb_height }}" />
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if images %}
+                                <div class="rm-product-images-additional d-none d-md-block">
+                                    {% for key, image in images %}
+                                        {% set i = key + 1 %}
+                                        <div class="rm-product-images-additional-item">
+                                            <a href="{{ image.popup }}" onClick="return false;" data-href="{{ image.popup }}">
+                                                <img src="{{ image.thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ image.images_width }}" height="{{ image.images_height }}" />
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <script>
+                                $(function() {
+                                    setTimeout(function() {
+                                        $('#image-additional').slick('refresh');
+                                        $('.image-additional-box').addClass('overflow-visible');
+                                    }, 500);
+
+                                    {% if oct_remarket_data.product_gallery is not defined %}
+                        			var sliderProducts = $('.rm-product-images-main a');
+
+                        			sliderProducts.on('click', function(e) {
+                        				e.preventDefault();
+
+                        				var totalSlides = $(this).parents('.rm-product-images-main').slick("getSlick").slideCount,
+                        				dataIndex = $(this).parents('.rm-product-slide').data('slick-index'),
+                        				trueIndex;
+
+                        				switch(true) {
+                        					case (dataIndex < 0):
+                        						trueIndex = totalSlides+dataIndex;
+
+                        						break;
+                        					case (dataIndex >= totalSlides):
+                        						trueIndex = dataIndex%totalSlides;
+
+                        						break;
+                        					default:
+                        						trueIndex = dataIndex;
+                        				}
+
+                        				$.fancybox.open(sliderProducts, {backFocus: false, hideScrollbar: false, loop : true}, trueIndex);
+
+                        				return false;
+                        			});
+                        			{% endif %}
+
+                                    {% if images %}
+                                    $('.rm-product-images-main').slick({
+                                        infinite: true,
+                                        slidesToShow: 1,
+                                        slidesToScroll: 1,
+                                        fade: false,
+                                        draggable: false,
+                                        asNavFor: '.rm-product-images-additional',
+                                        dots: false,
+                                        arrows: false,
+                                        responsive: [
+                                            {
+                                                breakpoint: 768,
+                                                settings: {
+                                                    dots: {% if images|length <= 1 %}false{% else %}true{% endif %}
+                                                }
+                                            }
+                                        ]
+                                    });
+                                    $('.rm-product-images-additional').slick({
+                                        infinite: {% if images|length > 3 %}true{% else %}false{% endif %},
+                                        slidesToShow: 5,
+                                        slidesToScroll: 1,
+                                        focusOnSelect: true,
+                                        asNavFor: '.rm-product-images-main',
+                                        dots: false,
+                                        prevArrow: "<button type='button' class='slick-prev pull-left'>&lt;</button>",
+                                        nextArrow: "<button type='button' class='slick-next pull-right'>&gt;</button>",
+                                        responsive: [
+                                            {
+                                                breakpoint: 1600,
+                                                settings: {
+                                                    slidesToShow: 4,
+                                                    slidesToScroll: 1
+                                                }
+                                            }, {
+                                                breakpoint: 1200,
+                                                settings: {
+                                                    slidesToShow: 5,
+                                                    slidesToScroll: 1
+                                                }
+                                            }, {
+                                                breakpoint: 992,
+                                                settings: {
+                                                    slidesToShow: 3,
+                                                    slidesToScroll: 1
+                                                }
+                                            }, {
+                                                breakpoint: 376,
+                                                settings: {
+                                                    slidesToShow: 2,
+                                                    slidesToScroll: 1
+                                                }
+                                            }
+                                        ]
+                                    });
+                                    {% else %}
+                                    $('.rm-product-images-main').slick({});
+                                    {% endif %}
+                                });
+                            </script>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="product" class="col-md-6 col-lg-6 col-xl-3">
+                    <div class="rm-product-center h-100">
+                        <div class="rm-product-center-info">
+                            {% if manufacturer %}
+                                <div class="rm-product-center-info-item">
+                                    <span class="rm-product-center-info-item-title">{{ text_manufacturer }}</span>
+                                    <span>
+                                        <a href="{{ manufacturers }}">{{ manufacturer }}</a>
+                                    </span>
+                                </div>
+                            {% endif %}
+                            {% if oct_remarket_data.product_model is defined and oct_remarket_data.product_model == 'on' %}
+                                <div class="rm-product-center-info-item">
+                                    <span class="rm-product-center-info-item-title">{{ text_model }}</span>
+                                    <span>{{ model }}</span>
+                                </div>
+                            {% endif %}
+                            {% if review_status %}
+                                <div class="rm-product-center-info-item rm-product-center-info-item-reviews d-flex align-items-center">
+                                    <span class="rm-product-center-info-item-title">{{ oct_product_reviews }}</span>
+                                    <span class="blue-link" id="reviews-quick-view" onclick="$('a[href=\'#product_reviews\']').trigger('click');scrollToElement('.tab-content');">({{ total_reviews }})</span>
+                                    <div class="rm-module-rating-stars d-flex align-items-center">
+                                        {% for i in 1..5 %}
+                                            {% if rating < i %}
+                                                <span class="rm-module-rating-star"></span>
+                                            {% else %}
+                                                <span class="rm-module-rating-star rm-module-rating-star-is"></span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="rm-module-stock{% if out_of_stock %} rm-out-of-stock{% endif %}">{{ stock }}</div>
+                        </div>
+                        {% if price %}
+                        <div class="rm-product-center-price">
+                            {% if not special %}
+                                <span>{{ price }}</span>
+                            {% else %}
+                                {% if product_timer %}
+                                    <div class="rm-day-discounts-timer rm-product-timer d-flex-inline mb-4">
+                                        <div class="rm-day-discounts-timer-text">{{ oct_product_timer }}</div>
+                                        <div class="rm-day-discounts-timer-inner d-inline-flex align-items-start justify-content-center">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div id="rm-timer-days" class="rm-day-discounts-timer-number"></div>
+                                                <span>{{ oct_product_timer_days }}</span>
+                                            </div>
+                                            <div class="rm-day-discounts-timer-delimiter animated">:</div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div id="rm-timer-hours" class="rm-day-discounts-timer-number"></div>
+                                                <span>{{ oct_product_timer_hours }}</span>
+                                            </div>
+                                            <div class="rm-day-discounts-timer-delimiter animated">:</div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div id="rm-timer-minutes" class="rm-day-discounts-timer-number"></div>
+                                                <span>{{ oct_product_timer_minutes }}</span>
+                                            </div>
+                                            <div class="rm-day-discounts-timer-delimiter animated">:</div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div id="rm-timer-seconds" class="rm-day-discounts-timer-number"></div>
+                                                <span>{{ oct_product_timer_seconds }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        function timerSpecial(id, deadline) {
+                                            const addZero = (num) => {
+                                                if (num <= 9) {
+                                                    return '0' + num;
+                                                } else {
+                                                    return num;
+                                                }
+                                            };
+
+                                            const getTimeRemaining = (endtime) => {
+                                                const t = Date.parse(endtime) - Date.parse(new Date()),
+                                                    seconds = Math.floor((t/1000) % 60),
+                                                    minutes = Math.floor((t/1000/60) % 60),
+                                                    hours = Math.floor((t/(1000 * 60 * 60)) % 24),
+                                                    days = Math.floor((t/(1000 * 60 * 60 * 24)));
+
+                                                return {
+                                                    'total': t,
+                                                    'days': days,
+                                                    'hours': hours,
+                                                    'minutes': minutes,
+                                                    'seconds': seconds
+                                                };
+                                            };
+
+                                            const setClock = (selector, endtime) => {
+                                                const timer = document.querySelector(selector),
+                                                    days = timer.querySelector('#rm-timer-days'),
+                                                    hours = timer.querySelector('#rm-timer-hours'),
+                                                    minutes = timer.querySelector('#rm-timer-minutes'),
+                                                    seconds = timer.querySelector('#rm-timer-seconds'),
+                                                    timeInterval = setInterval(updateClock, 1000);
+
+                                                updateClock();
+
+                                                function updateClock() {
+                                                    const t = getTimeRemaining(endtime);
+
+                                                    days.textContent = addZero(t.days);
+                                                    hours.textContent = addZero(t.hours);
+                                                    minutes.textContent = addZero(t.minutes);
+                                                    seconds.textContent = addZero(t.seconds);
+
+                                                    if (t.total <= 0) {
+                                                        days.textContent = "00";
+                                                        hours.textContent = "00";
+                                                        minutes.textContent = "00";
+                                                        seconds.textContent = "00";
+
+                                                        clearInterval(timeInterval);
+                                                    }
+                                                }
+                                            };
+
+                                            setClock(id, deadline);
+                                        }
+
+                                        let deadLine = '{{ special_date_end }}T00:00:00';
+                                        timerSpecial('.rm-product-timer', deadLine);
+                                    </script>
+                                {% endif %}
+                                <div class="d-flex align-items-center">
+                                    <span class="rm-product-center-price-old">{{ price }}</span>
+                                    {% if special and oct_sticker_you_save %}
+                                        <div id="main-product-you-save" class="rm-product-center-price-sticker d-flex align-items-center justify-content-center">{{ you_save }}</div>
+                                    {% endif %}
+                                </div>
+                                <span>{{ special }}</span>
+                            {% endif %}
+                            {% if tax %}
+                                <div class="rm-product-center-price-tax">{{ text_tax }}
+                                    <span>{{ tax }}</span>
+                                </div>
+                            {% endif %}
+                            {% if discounts %}
+                                {% for discount in discounts %}
+                                    <div class="rm-product-center-price-discount">{{ discount.quantity }}{{ text_discount }}{{ discount.price }}</div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if oct_popup_found_cheaper_status is defined and oct_popup_found_cheaper_status == 'on' and can_buy is not empty %}
+                			<div class="rm-product-found-cheaper blue-link" onclick="octPopupFoundCheaper('{{ product_id }}');">{{ oct_product_cheaper }}</div>
+                			{% endif %}
+                        </div>
+                        {% endif %}
+                        {% if can_buy is not empty %}
+                            {% if options or minimum > 1 or points or reward %}
+                            <div id="rm-product-options-box" class="rm-product-center-options">
+                                {% if options %}
+                                    {% for option in options %}
+                                        {% if option.type == 'select' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>
+                                                    {% endif %}
+                                                </label>
+                                                <select name="option[{{ option.product_option_id }}]" id="input-option{{ option.product_option_id }}" class="rm-select form-control">
+                                                    <option value="">{{ text_select }}</option>
+                                                    {% for option_value in option.product_option_value %}
+                                                        <option value="{{ option_value.product_option_value_id }}">{{ option_value.name }}
+                                                            {% if option_value.price %}
+                                                                ({{ option_value.price_prefix }}{{ option_value.price }})
+                                                            {% endif %}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'radio' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </label>
+                                                <div id="input-option{{ option.product_option_id }}" class="options-box d-flex">
+                                                    {% for option_value in option.product_option_value %}
+                                                        <div class="radio">
+                                                            <label
+                                                                data-toggle="tooltip"
+                                                                data-trigger="hover"
+                                                                class="option optid-{{ option.product_option_id }} not-selected {% if option_value.image %} radio-img{% else %}rm-radio{% endif %}"
+                                                                title="{{ option_value.name }} {% if option_value.price %}{{ option_value.price_prefix }}{{ option_value.price }}{% endif %}">
+                                                                <input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" class="input-radio"/>
+                                                                {% if option_value.image %}
+                                                                    <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" width="50" height="50" />
+                                                                {% else %}
+                                                                    {{ option_value.name }}
+                                                                {% endif %}
+                                                            </label>
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    $(document).on('touchstart click', 'label.optid-{{ option.product_option_id }}', function(event) {
+                                                                        $('label.optid-{{ option.product_option_id }}').removeClass('selected').addClass('not-selected');
+                                                                        $(this).removeClass('not-selected').addClass('selected');
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'checkbox' %}
+                                            <div class="form-checkbox-group">
+                                                <div class="rm-control-label">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </div>
+                                                <div id="input-option{{ option.product_option_id }}">
+                                                    {% for option_value in option.product_option_value %}
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                {% if option_value.image %}<img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" width="50" height="50" />{% endif %}
+                                                                <input type="checkbox" id="option[{{ option.product_option_id }}][{{ option_value.product_option_value_id }}]" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" class="rm-form-checkbox-input"/>
+                                                                <span class="check-box"></span>
+                                                                {{ option_value.name }}
+                                                                {% if option_value.price %}
+                                                                    ({{ option_value.price_prefix }}{{ option_value.price }})
+                                                                {% endif %}
+                                                            </label>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'text' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>
+                                                    {% endif %}
+                                                </label>
+                                                <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control"/>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'textarea' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </label>
+                                                <textarea name="option[{{ option.product_option_id }}]" rows="5" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control">{{ option.value }}</textarea>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'file' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </label>
+                                                <button type="button" id="button-upload{{ option.product_option_id }}" data-loading-text="{{ text_loading }}" class="rm-btn dark">
+                                                    <i class="fa fa-upload"></i>
+                                                    {{ button_upload }}</button>
+                                                <input type="hidden" name="option[{{ option.product_option_id }}]" value="" id="input-option{{ option.product_option_id }}"/>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'date' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </label>
+                                                <div class="input-group date">
+                                                    <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="YYYY-MM-DD" id="input-option{{ option.product_option_id }}" class="form-control"/>
+                                                    <span class="input-group-btn">
+                                                        <button class="rm-btn rm-input-with-btn dark" type="button">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'datetime' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </label>
+                                                <div class="input-group datetime">
+                                                    <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="YYYY-MM-DD HH:mm" id="input-option{{ option.product_option_id }}" class="form-control"/>
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="rm-btn rm-input-with-btn dark">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'time' %}
+                                            <div class="form-group">
+                                                <label class="rm-control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}
+                                                    {% if option.required %}
+                                                        <span class="required">*</span>{% endif %}
+                                                </label>
+                                                <div class="input-group time">
+                                                    <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="HH:mm" id="input-option{{ option.product_option_id }}" class="form-control"/>
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="rm-btn rm-input-with-btn dark">
+                                                            <i class="fa fa-clock"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% if minimum > 1 %}
+                                    <div class="rm-product-option-minquant">{{ text_minimum }}</div>
+                                {% endif %}
+                                {% if points %}
+                                    <div class="rm-product-option-bonus">{{ text_points }}
+                                        {{ points }}</div>
+                                {% endif %}
+                                {% if reward %}
+                                    <div class="rm-product-option-bonus">{{ text_reward }}
+                                        {{ reward }}</div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% if recurrings %}
+                                <div class="rm-product-option mt-3">
+                                    <div class="rm-control-label">{{ text_payment_recurring }}
+                                        <span class="required">*</span></div>
+                                    <div class="form-group">
+                                        <select name="recurring_id" class="rm-select form-control">
+                                            <option value="">{{ text_select }}</option>
+                                            {% for recurring in recurrings %}
+                                                <option value="{{ recurring.recurring_id }}">{{ recurring.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="help-block" id="recurring-description"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="rm-product-center-buttons">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="btn-group rm-product-quantity" role="group">
+                                            <input type="text" class="form-control" name="quantity" value="{{ minimum }}" id="input-quantity" aria-label="Quantity"/>
+                                            <div class="d-flex flex-column">
+                                                <button type="button" aria-label="Plus" class="rm-product-quantity-btn-plus d-flex align-items-center justify-content-center" onclick="updateValueProduct(false, true, false);">
+                                                    <span></span></button>
+                                                <div class="rm-product-quantity-btn-border"></div>
+                                                <button type="button" aria-label="Minus" class="rm-product-quantity-btn-minus d-flex align-items-center justify-content-center" onclick="updateValueProduct(true, false, false);">
+                                                    <span></span></button>
+                                            </div>
+                                            <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                            <input type="hidden" id="min-product-quantity" value="{{ minimum }}" name="min_quantity">
+                                            <input type="hidden" id="max-product-quantity" value="{{ max_quantity }}" name="max_quantity">
+                                        </div>
+                                    </div>
+                                    <button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="rm-btn dark rm-product-btn rm-product-btn-cart d-flex align-items-center justify-content-center w-100">
+                                        <span class="rm-cart-btn-icon"></span>
+                                        <span class="rm-btn-text">{{ button_cart }}</span>
+                                    </button>
+                                </div>
+                                {% if oct_popup_purchase_status is defined %}
+                    			<button type="button" class="rm-btn secondary rm-product-btn button-fast-order rm-product-one-click-btn w-100 text-center d-none d-sm-block" onclick="octPopPurchase('{{ product_id }}')"><span class="rm-btn-text">{{ oct_product_quickbuy }}</span></button>
+                    			{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3">
+                    <div class="rm-product-right">
+                        {% if can_buy is not empty %}
+            			{{ oct_byoneclick }}
+            			{% endif %}
+                        {% if oct_attributs %}
+                        <div class="rm-product-attr">
+                            <div class="rm-product-attr-title">
+                                <span class="rm-product-right-title">{{ oct_product_attributes }}</span>
+                                <span class="blue-link" id="attr-quick-view" onclick="$('a[href=\'#product_attributes\']').trigger('click');scrollToElement('.tab-content');">{{ oct_product_attributes_seeall }}</span>
+                            </div>
+                            <div class="rm-product-attr-list">
+                                {% for attribute in oct_attributs %}
+                                <div class="rm-product-attr-list-item d-flex d-sm-block">
+                                    <div>{{ attribute.name }}</div>
+                                    <div>{{ attribute.text }}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if (oct_remarket_data.product_advantage is defined and oct_remarket_data.product_advantage == 'on') and (oct_product_advantages is defined and oct_product_advantages is not empty) %}
+                            <div class="rm-product-advantages">
+                                {% for advantage in oct_product_advantages %}
+                                <span class="rm-product-advantages-item d-flex align-items-center">
+                                    <span class="rm-product-advantages-item-image">
+                                        <i class="{{ advantage.icone }}"></i>
+                                    </span>
+                                    <span class="rm-product-advantages-item-info d-flex flex-column">
+                                        <a href="{{ advantage.link }}" {% if advantage.information_id and advantage.popup %} data-rel="{{ advantage.information_id }}" {% elseif advantage.link != "javascript:;" %} target="_blank" {% endif %} class="rm-product-advantages-item-title{% if advantage.popup %} agree{% endif %}">{{ advantage.title }}</a>
+                                        <span class="rm-product-advantages-item-text">{{ advantage.text }}</span>
+                                    </span>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+    					{% if product_js_button is defined and product_js_button %}
+    				        <div class="rm-product-social-buttons">{{ product_js_button }}</div>
+    				    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-padding-top rm-product-tabs">
+            <div class="col-12">
+                <ul id="oct-tabs" class="nav nav-tabs">
+                    {% if description %}
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center active" data-toggle="tab" href="#product_description"><span class="nav-link-text">{{ oct_product_maintab }}</span></a>
+                        </li>
+                    {% endif %}
+                    {% if attribute_groups %}
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center{% if not description %} active{% endif %}" data-toggle="tab" href="#product_attributes"><span class="nav-link-text">{{ tab_attribute }}</span></a>
+                        </li>
+                    {% endif %}
+                    {% if review_status %}
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center{% if not description and not attribute_groups %} active{% endif %}" data-toggle="tab" href="#product_reviews">{{ tab_review }}</a>
+                        </li>
+                    {% endif %}
+                    {% if oct_product_faq %}
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" data-toggle="tab" href="#product_questions">{{ tab_oct_faq }}</a>
+                        </li>
+                    {% endif %}
+                    {% if (dop_tab.title is defined and dop_tab.title) and (dop_tab.text is defined and dop_tab.text) %}
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" data-toggle="tab" href="#product_dop_tab"><span class="nav-link-text">{{ dop_tab.title }}</span></a>
+                        </li>
+                    {% endif %}
+                    {% if oct_product_extra_tabs %}
+                        {% set key = 0 %}
+                        {% for extra_tab in oct_product_extra_tabs %}
+                            {% set key = key + 1 %}
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" data-toggle="tab" href="#product_extra_tab-{{ key }}"><span class="nav-link-text">{{ extra_tab.title }}</span></a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <script>
+        $.fn.octTabbing=function(t){return this.each(function(){$(this).on("click",function(t){let i=0;$(this).prevAll().each(function(){i+=$(this).width()});document.getElementById("oct-tabs").scrollWidth;let n=i-($(this).parent().width()-$(this).width())/2;n<0&&(n=0),$(this).parent().animate({scrollLeft:n},300)})})};
+        $('#oct-tabs li').octTabbing();
+        </script>
+        <div class="tab-content">
+            {% if description %}
+                <div class="tab-pane rm-content rm-product-tabs-description show active" id="product_description">
+                    {{ description }}
+                    {% if tags %}
+                        <p class="rm-product-tags">{{ text_tags }}
+                            {% for i in 0..tags | length %}
+                                {% if i < (tags|length - 1) %}
+                                    <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,
+                                {% else %}
+                                    <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if attribute_groups %}
+                <div class="tab-pane rm-content rm-product-tabs-attributes{% if not description %} show active{% endif %}" id="product_attributes">
+                    {% for attribute_group in attribute_groups %}
+                        <div class="rm-product-tabs-attributtes-list">
+                            <div class="rm-product-tabs-attributtes-list-title">{{ attribute_group.name }}</div>
+                            {% for attribute in attribute_group.attribute %}
+                                <div class="rm-product-tabs-attributtes-list-item d-flex justify-content-between">
+                                    <div>{{ attribute.name }}</div>
+                                    <div>{{ attribute.text }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if review_status %}
+                <div class="tab-pane rm-content rm-product-tabs-reviews rm-store-reviews{% if not description and not attribute_groups %} show active{% endif %}" id="product_reviews">
+                    <div class="rm-store-reviews-top d-flex flex-column flex-md-row justify-content-between">
+                        <div class="d-flex flex-column align-items-start">
+                            <div class="rm-store-reviews-top-title align-items-center{% if total_reviews == 0 %} d-none d-md-flex{% endif %}">{{ tab_review_view }}</div>
+                            <div class="rm-store-reviews-top-value{% if total_reviews == 0 %} d-none d-md-block{% endif %}">{{ oct_rating }}<span>/ 5</span></div>
+                            <div class="rm-store-reviews-top-value-text{% if total_reviews == 0 %} d-none d-md-block{% endif %}">{{ tab_review_c }}</div>
+                            {% if review_guest %}
+                                <button type="button" class="rm-btn dark" data-toggle="modal" data-target="#rm-popup-review">{{ text_write }}</button>
+                                <div class="modal" id="rm-popup-review" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered wide" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-title">{{ text_write }}</div>
+                                                <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true" class="modal-close-icon modal-close-left"></span>
+                                                    <span aria-hidden="true" class="modal-close-icon modal-close-right"></span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="form-review" class="d-flex flex-column flex-md-row">
+                                                    <div class="modal-body-left d-flex flex-column align-items-center">
+                                                        <img src="{{ thumb }}" class="modal-body-img d-none d-md-block mx-auto" title="{{ heading_title }}" alt="{{ heading_title }}">
+                                                        <div class="modal-product-title">{{ heading_title }}</div>
+                                                        <div class="rm-review-block mt-4 mt-md-auto text-center">
+                                                            <div class="control-label">{{ text_oct_review }}</div>
+                                                            <div class="rm-module-rating-stars d-flex align-items-center justify-content-center">
+                                                                <label class="rm-module-rating-star"><input class="d-none" type="radio" name="rating" value="1"/></label>
+                                                                <label class="rm-module-rating-star"><input class="d-none" type="radio" name="rating" value="2"/></label>
+                                                                <label class="rm-module-rating-star"><input class="d-none" type="radio" name="rating" value="3"/></label>
+                                                                <label class="rm-module-rating-star"><input class="d-none" type="radio" name="rating" value="4"/></label>
+                                                                <label class="rm-module-rating-star"><input class="d-none" type="radio" name="rating" value="5"/></label>
+                                                            </div>
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    $('#form-review .rm-module-rating-star').on('click', function() {
+                                                                        if ($(this).hasClass('rm-module-rating-star-is')) {
+                                                                            $(this).nextAll().removeClass('rm-module-rating-star-is');
+                                                                        } else {
+                                                                            $(this).addClass('rm-module-rating-star-is');
+                                                                            $(this).prevAll().addClass('rm-module-rating-star-is');
+                                                                        }
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-body-right">
+                                                        <div class="form-group">
+                                                            <input type="text" name="name" class="form-control" id="InputName" placeholder="{{ entry_name }}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <textarea id="input-review" name="text" class="form-control" placeholder="{{ oct_product_yourreview }}"></textarea>
+                                                        </div>
+                                                        <div class="rm-modal-comment">{{ text_note }}</div>
+                                                        <div class="form-group">
+                                                            {{ captcha }}
+                                                        </div>
+                                                        <button type="button" id="button-review" class="rm-btn dark">{{ button_continue }}</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="rm-product-reviews-top-right{% if total_reviews == 0 %} d-none d-md-block{% endif %}">
+                            {% for oct_key, oct_raiting_stat in oct_raiting_stats %}
+                                <div class="rm-product-reviews-rating-item d-flex align-items-center">
+                                    <div class="rm-product-reviews-rating-stars d-flex align-items-center">
+                                        <span class="rm-module-rating-star{% if oct_key >= 5 %} rm-module-rating-star-is{% endif %}"></span>
+                                        <span class="rm-module-rating-star{% if oct_key >= 4 %}  rm-module-rating-star-is{% endif %}"></span>
+                                        <span class="rm-module-rating-star{% if oct_key >= 3 %}  rm-module-rating-star-is{% endif %}"></span>
+                                        <span class="rm-module-rating-star{% if oct_key >= 2 %}  rm-module-rating-star-is{% endif %}"></span>
+                                        <span class="rm-module-rating-star{% if oct_key >= 1 %}  rm-module-rating-star-is{% endif %}"></span>
+                                    </div>
+                                    <div class="rm-product-reviews-rating-line">
+                                        <span class="rm-product-reviews-rating-line-value" style="width: {{ oct_raiting_stat.raiting }}%;"></span>
+                                    </div>
+                                    <div class="rm-product-reviews-rating-value text-center">{{ oct_raiting_stat.sum }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="review">
+                        {% if oct_reviews_list is not empty %}
+                            {{ oct_reviews_list }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if oct_product_faq is defined and oct_product_faq %}
+            {{ oct_product_faq }}
+            {% endif %}
+            {% if (dop_tab.title is defined and dop_tab.title) and (dop_tab.text is defined and dop_tab.text) %}
+    			<div class="tab-pane rm-content rm-product-tabs-description" id="product_dop_tab">
+                    {{ dop_tab.text }}
+                </div>
+            {% endif %}
+    		{% if oct_product_extra_tabs %}
+    	        {% set key = 0 %}
+    	        {% for extra_tab in oct_product_extra_tabs %}
+    	            {% set key = key + 1 %}
+    					<div class="tab-pane rm-content rm-product-tabs-description" id="product_extra_tab-{{ key }}">
+    	                    {{ extra_tab.text }}
+    	                </div>
+    	        {% endfor %}
+    	    {% endif %}
+        </div>
+    </main>
+    {% if products %}
+        {{ products }}
+    {% endif %}
+    {% if oct_related_articles %}
+    <div class="row row-padding-top">
+        <div class="col-12 rm-module-header">
+			<span>{{ oct_product_related_articles }}</span>
+		</div>
+    </div>
+    <div class="row no-gutters">
+        {% for article in oct_related_articles %}
+        <div class="col-12 col-md-6 col-xl-3 rm-news-col">
+            <div class="rm-news-item d-flex flex-column justify-content-between h-100">
+                <div class="rm-news-item-top">
+                    <div class="rm-news-item-date">{{ article.date_added }}</div>
+                    <a href="{{ article.href }}" class="rm-news-item-photo">
+						<img src="{{ article.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ article.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="img-fluid oct-lazy"{% else %} class="img-fluid"{% endif %} alt="{{ article.name }}" title="{{ article.name }}" width="{{ article.width }}" height="{{ article.height }}" />
+                    </a>
+                </div>
+                <div class="rm-news-item-bottom d-flex flex-column justify-content-between h-100">
+					<a href="{{ article.href }}" class="rm-news-item-title">{{ article.name }}</a>
+					<div class="rm-news-item-text">
+						{{ article.description }}
+					</div>
+				</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {{ content_bottom }}
+</div>
+<script>
+    $('select[name=\'recurring_id\'], input[name="quantity"]').change(function() {
+        $.ajax({
+            url: 'index.php?route=product/product/getRecurringDescription',
+            type: 'post',
+            data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+            dataType: 'json',
+            cache: false,
+            beforeSend: function() {
+                $('#recurring-description').html('');
+            },
+            success: function(json) {
+                $('.alert-dismissible, .text-danger').remove();
+
+                if (json['success']) {
+                    $('#recurring-description').html(json['success']);
+                }
+            }
+        });
+    });
+</script>
+<script>
+    $('body').on('click', '#button-cart', function(){
+        $.ajax({
+            url: 'index.php?route=checkout/cart/add',
+            type: 'post',
+            data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+            dataType: 'json',
+            cache: false,
+            beforeSend: function() {
+                $('#button-cart').button('loading');
+            },
+            complete: function() {
+                $('#button-cart').button('reset');
+            },
+            success: function(json) {
+                $('.alert-dismissible, .text-danger').remove();
+                $('.form-group').removeClass('has-error');
+
+                if (json['error']) {
+                    if (json['error']['option']) {
+                        let errorOption = '';
+                        for (i in json['error']['option']) {
+                            var element = $('#input-option' + i.replace('_', '-'));
+
+                            if (element.parent().hasClass('input-group')) {
+                                element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                            } else {
+                                element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                            }
+                            errorOption += '<div class="alert-text-item">' + json['error']['option'][i] + '</div>';
+                        }
+                        rmNotify('danger', errorOption);
+                    }
+
+                    if (json['error']['error_warning']) {
+                        rmNotify('danger', json['error']['error_warning']);
+                    }
+
+                    if (json['error']['recurring']) {
+                        $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+                    }
+
+                    // Highlight any found errors
+                    $('.text-danger').parent().addClass('has-error');
+                }
+
+                if (json['success']) {
+                    if (json['isPopup']) {
+                        octPopupCart();
+                    } else {
+                        rmNotify('success', json['success']);
+                    }
+
+                    if (typeof octYandexEcommerce == 'function') {
+                        octYandexEcommerce(json);
+                    }
+
+                    // Need to set timeout otherwise it wont update the total
+                    setTimeout(function() {
+            					  $('#oct-cart-quantity, .rm-header-cart-quantity, #mobile_cart_index, .oct-fixed-bar-quantity-cart').html(json['total_products']);
+                        $('.rm-header-cart-text').html(json['total_amount']);
+                    }, 100);
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    });
+</script>
+<script>
+    {% if oct_datetimepicker is defined and oct_datetimepicker %}
+        $('.date').datetimepicker({
+            language: '{{ datepicker }}',
+            pickTime: false,
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar-alt',
+                up: 'fa fa-arrow-up',
+                down: 'fa fa-arrow-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-calendar-check',
+                clear: 'fa fa-trash-alt',
+                close: 'fa fa-times'
+            }
+        });
+
+        $('.datetime').datetimepicker({
+            language: '{{ datepicker }}',
+            pickDate: true,
+            pickTime: true,
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar-alt',
+                up: 'fa fa-arrow-up',
+                down: 'fa fa-arrow-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-calendar-check',
+                clear: 'fa fa-trash-alt',
+                close: 'fa fa-times'
+            }
+        });
+
+        $('.time').datetimepicker({
+            language: '{{ datepicker }}',
+            pickDate: false,
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar-alt',
+                up: 'fa fa-arrow-up',
+                down: 'fa fa-arrow-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-calendar-check',
+                clear: 'fa fa-trash-alt',
+                close: 'fa fa-times'
+            }
+        });
+    {% endif %}
+
+    $('button[id^=\'button-upload\']').on('click', function() {
+        var node = this;
+
+        $('#form-upload').remove();
+
+        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+        $('#form-upload input[name=\'file\']').trigger('click');
+
+        if (typeof timer != 'undefined') {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(function() {
+            if ($('#form-upload input[name=\'file\']').val() != '') {
+                clearInterval(timer);
+
+                $.ajax({
+                    url: 'index.php?route=tool/upload',
+                    type: 'post',
+                    dataType: 'json',
+                    data: new FormData($('#form-upload')[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $(node).button('loading');
+                    },
+                    complete: function() {
+                        $(node).button('reset');
+                    },
+                    success: function(json) {
+                        $('.text-danger').remove();
+
+                        if (json['error']) {
+                            $(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+                        }
+
+                        if (json['success']) {
+                            alert(json['success']);
+
+                            $(node).parent().find('input').val(json['code']);
+                        }
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        }, 500);
+    });
+</script>
+<script>
+    $('#review').delegate('.pagination a', 'click', function(e) {
+        e.preventDefault();
+
+        $('#review').fadeOut('fast');
+
+        $('#review').load(this.href);
+
+        $('#review').fadeIn('fast');
+
+        scrollToElement('#review');
+    });
+
+    $("#InputName, #input-review").on("change paste keyup", function() {
+        $(this).removeClass('error_style');
+    });
+
+    $('#button-review').on('click', function() {
+        $.ajax({
+            url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+            type: 'post',
+            dataType: 'json',
+            cache: false,
+            data: $('#form-review').serialize(),
+            beforeSend: function() {
+                $('#button-review').button('loading');
+            },
+            complete: function() {
+                $('#button-review').button('reset');
+            },
+            success: function(json) {
+                $('.alert-dismissible').remove();
+
+                if (json['error']) {
+                    let errorOption = '';
+
+                    $.each(json['error'], function(i, val) {
+                        $('#rm-popup-review [name="' + i + '"]').addClass('error_style');
+                        errorOption += '<div class="alert-text-item">' + val + '</div>';
+                    });
+
+                    rmNotify('danger', errorOption);
+                }
+
+                if (json['success']) {
+                    rmNotify('success', json['success']);
+                    $('#rm-popup-review').modal('hide');
+                    $('#form-review input[name=\'name\']').val('');
+                    $('#form-review textarea[name=\'text\']').val('');
+                    $('#rm-popup-review input[name=\'rating\']:checked').prop('checked', false);
+                    $('#rm-popup-review .rm-module-rating-star-is').removeClass('rm-module-rating-star-is');
+                }
+            }
+        });
+    });
+
+    $('#input-quantity').on('change', function(e) {
+        updateValueProduct(false, false, true);
+    });
+
+    function updateValueProduct(minus, plus, manual) {
+        let min = parseInt($('#input-quantity').val());
+        let currentMinimum = parseInt($('#min-product-quantity').val());
+        let max = parseInt($('#max-product-quantity').val());
+
+        if (max === 0)
+            return;
+
+        if (minus && min > 1) {
+
+            if (currentMinimum >= min) {
+                $("#input-quantity").val(currentMinimum);
+                updateProductPrice();
+                return;
+            } else if (min > max) {
+                $('#input-quantity').val(max);
+                updateProductPrice();
+                return;
+            }
+
+            $('#input-quantity').val(~~ $('#input-quantity').val() - 1);
+        }
+
+        if (plus) {
+            if (max && min > max - 1) {
+                $('#input-quantity').val(max);
+                updateProductPrice();
+                return;
+            } else if (currentMinimum > min) {
+                $('#input-quantity').val(currentMinimum);
+                updateProductPrice();
+                return;
+            }
+
+            $('#input-quantity').val(~~ $('#input-quantity').val() + 1);
+        }
+
+        if (manual) {
+            if (currentMinimum >= min) {
+                $('#input-quantity').val(currentMinimum);
+                updateProductPrice();
+                return;
+            } else if (min > max) {
+                $('#input-quantity').val(max);
+                updateProductPrice();
+                return;
+            }
+
+        }
+
+        updateProductPrice();
+    }
+
+    $('#rm-product-options-box input, #rm-product-options-box select').on('change', function() {
+        updateProductPrice();
+    });
+
+    {% if oct_remarket_data.product_zoom is defined and oct_remarket_data.product_zoom %}
+    $(document).ready(function() {
+        $(".oct-gallery").zoom();
+    });
+    {% endif %}
+
+    {% if oct_remarket_data.product_gallery is defined and oct_remarket_data.product_gallery == 'on' %}
+        $('.oct-gallery').on('click',function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'index.php?route=octemplates/main/oct_functions/octGallery',
+                type: 'post',
+                dataType: 'html',
+                cache: false,
+                data: { product_id: "{{ product_id }}", goto: $(this).attr('rel') },
+                beforeSend: function() {},
+                complete: function() {},
+                success: function(data) {
+                    $('.modal-holder').html(data);
+                    $('#rm-product-gallery').modal('show');
+                }
+            });
+        });
+    {% endif %}
+
+    function updateProductPrice() {
+        $.ajax({
+            type: 'post',
+            url: 'index.php?route=octemplates/main/oct_functions/updatePrices',
+            data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select'),
+            dataType: 'json',
+            cache: false,
+            success: function(json) {
+                {% if special %}
+                    $('.rm-product-center-price-old').html(json['price']);
+                    $('.rm-product-center-price > span').html(json['special']);
+                {% else %}
+                    $('.rm-product-center-price > span').html(json['price']);
+                {% endif %}
+
+                {% if oct_sticker_you_save and you_save %}
+                    $('#main-product-you-save').html(json['you_save']);
+                {% endif %}
+
+                {% if tax %}
+                    $('.rm-product-center-price-tax > span').html(json['tax']);
+                {% endif %}
+        }
+    });
+}
+{% if minimum > 1 %}
+    updateProductPrice();
+{% endif %}
+</script>
+{% if oct_is_youtube %}
+    <script>
+        function findVideos() {
+            let videos = document.querySelectorAll('.rm-video');
+
+            for (let i = 0; videos.length > i; i++) {
+                setupVideo(videos[i]);
+            }
+        }
+
+        function setupVideo(video) {
+            let link = video.querySelector('.rm-video__link');
+            let media = video.querySelector('.rm-video__media');
+            let button = video.querySelector('.rm-video__button');
+            let id = parseMediaURL(media);
+
+            video.addEventListener('click', () => {
+                let iframe = createIframe(id);
+
+                link.remove();
+                button.remove();
+                video.appendChild(iframe);
+            });
+
+            link.removeAttribute('href');
+            video.classList.add('rm-video--enabled');
+        }
+
+        function parseMediaURL(media) {
+            let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
+            let url = media.src;
+            let match = url.match(regexp);
+
+            return match[1];
+        }
+
+        function createIframe(id) {
+            let iframe = document.createElement('iframe');
+
+            iframe.setAttribute('allowfullscreen', '');
+            iframe.setAttribute('allow', 'autoplay');
+            iframe.setAttribute('src', generateURL(id));
+            iframe.classList.add('rm-video__media');
+
+            return iframe;
+        }
+
+        function generateURL(id) {
+            let query = '?rel=0&showinfo=0&autoplay=1';
+
+            return 'https://www.youtube.com/embed/' + id + query;
+        }
+
+        findVideos();
+    </script>
+{% endif %}
+{% if ((oct_analytics_yandex_ecommerce is defined and oct_analytics_yandex_ecommerce) and (oct_analytics_yandex_container is defined and oct_analytics_yandex_container)) %}
+<script>
+$(document).ready(function() {
+    if(typeof {{ oct_analytics_yandex_container }} != 'undefined') {
+        {{ oct_analytics_yandex_container }}.push({
+            "ecommerce": {
+                "detail": {
+                    "products": [{
+                        "id": "{{ product_id }}",
+                        "name" : "{{ oct_analytics_yandex_product_name }}",
+                        "price": "{% if oct_analytics_yandex_product_special %}{{ oct_analytics_yandex_product_special }}{% else %}{{ oct_analytics_yandex_product_price }}{% endif %}",
+                        {% if manufacturer %}
+                        "brand": "{{ manufacturer }}",
+                        {% endif %}
+                        {% if oct_analytics_yandex_product_category is defined and oct_analytics_yandex_product_category is not empty %}
+                        "category": "{{ oct_analytics_yandex_product_category }}"
+                        {% endif %}
+                    }]
+                }
+            }
+        });
+    }
+});
+</script>
+{% endif %}
+{% if oct_remarket_data.micro is defined and oct_remarket_data.micro %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "url": "{{ share }}",
+    "category": "{{ oct_product_categories }}",
+    "image": "{{ thumb }}",
+    "brand": {"@type": "Brand","name": "{{ manufacturer }}"},
+    "manufacturer": "{{ manufacturer }}",
+    "model": "{{ model }}",
+    "productID": "{{ product_id }}",
+    {% if upc is defined and upc%}
+    "gtin12": "{{ upc }}",
+    {% endif %}
+    {% if ean is defined and ean %}
+    "gtin8": "{{ ean }}",
+    {% endif %}
+    {% if mpn is defined and mpn %}
+    "mpn": "{{ mpn }}",
+    {% endif %}
+    {% if sku is defined and sku  %}
+    "sku": "{{ sku }}",
+    {% endif %}
+    {% if rating %}
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ rating }}",
+        "ratingCount": "{{ total_reviews }}",
+        "reviewCount": "{{ total_reviews }}",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    {% endif %}
+
+    "description": "{{ oct_description_microdata }}",
+    "name": "{{ oct_micro_heading_title }}",
+
+    "offers": {
+        "@type": "Offer",
+        "url": "{{ share }}",
+
+        {% if oct_special_microdata %}
+        {% set special_date = 'now'|date_modify("+30 day") %}
+        "priceValidUntil" : "{{ special_date|date('Y-m-d') }}",
+        {% else %}
+        "priceValidUntil" : "{{ now|date_modify("+60 days") | date("Y-m-d") }}",
+        {% endif %}
+
+        {% if out_of_stock %}
+        "availability": "https://schema.org/OutOfStock",
+        {% else %}
+        "availability": "https://schema.org/InStock",
+        {% endif %}
+
+        "price": "{% if not oct_special_microdata %}{{ oct_price_microdata }}{% else %}{{ oct_special_microdata }}{% endif %}",
+        "priceCurrency": "{{ oct_price_currency }}",
+        "itemCondition": "https://schema.org/NewCondition"
+
+    {% if rating %}
+    },
+
+    "review": [
+        {% for rew_one in oct_reviews_all %}
+        {
+            "@type": "Review",
+            "author": {
+			   "@type": "Person",
+			   "name": "{{ rew_one.author }}"
+			},
+            "datePublished": "{{ rew_one.date_added }}",
+            "description": "{{ rew_one.text }}",
+            "reviewRating": {
+                "@type": "Rating",
+                "bestRating": "5",
+                "ratingValue": "{{ rew_one.rating }}",
+                "worstRating": "1"
+            }
+        }{% if oct_reviews_all|length > loop.index %},{% endif %}
+
+        {% endfor %}
+    ]
+    {% else %}
+    }
+    {% endif %}
+}
+</script>
+{% endif %}
+{{ footer }}

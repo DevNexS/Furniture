@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_remarket_theme_langs</code>
+	<name>Octemplates - ReMarket Theme Langs</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+
+	<file path="catalog/language/*/*.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['thousand_point']]]></search>
+			<add position="after"><![CDATA[$_['thousand_point'] = ' ';]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/ru-ru.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['button_cart']]]></search>
+			<add position="after"><![CDATA[$_['button_cart'] = 'В корзину';]]></add>
+    	</operation>
+		<operation error="skip">
+			<search regex="true"><![CDATA[~(;|;\n{1,})$~]]></search>
+			<add position="replace"><![CDATA[$1
+			if (file_exists(DIR_MODIFICATION . "catalog/language/ru-ru/octemplates/oct_remarket.php")) {
+				include(DIR_MODIFICATION . "catalog/language/ru-ru/octemplates/oct_remarket.php");
+			} else {
+				include(DIR_LANGUAGE."ru-ru/octemplates/oct_remarket.php");
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/uk-ua/uk-ua.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['button_cart']]]></search>
+			<add position="after"><![CDATA[$_['button_cart'] = 'До кошика';]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[$_['code']]]></search>
+			<add position="after"><![CDATA[$_['datepicker'] = 'uk';]]></add>
+    	</operation>
+		<operation error="skip">
+			<search regex="true"><![CDATA[~(;|;\n{1,})$~]]></search>
+			<add position="replace"><![CDATA[$1
+			if (file_exists(DIR_MODIFICATION . "catalog/language/uk-ua/octemplates/oct_remarket.php")) {
+				include(DIR_MODIFICATION . "catalog/language/uk-ua/octemplates/oct_remarket.php");
+			} else {
+				include(DIR_LANGUAGE."uk-ua/octemplates/oct_remarket.php");
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/en-gb/en-gb.php">
+    	<operation error="skip">
+			<search regex="true"><![CDATA[~(;|;\n{1,})$~]]></search>
+			<add position="replace"><![CDATA[$1
+			if (file_exists(DIR_MODIFICATION . "catalog/language/en-gb/octemplates/oct_remarket.php")) {
+				include(DIR_MODIFICATION . "catalog/language/en-gb/octemplates/oct_remarket.php");
+			} else {
+				include(DIR_LANGUAGE."en-gb/octemplates/oct_remarket.php");
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/account/forgotten.php">
+    	<operation error="skip">
+			<search><![CDATA[Нажмите кнопку Вперед]]></search>
+			<add position="replace"><![CDATA[Нажмите кнопку Продолжить]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/uk-ua/account/forgotten.php">
+    	<operation error="skip">
+			<search><![CDATA[Натисніть кнопку Вперед]]></search>
+			<add position="replace"><![CDATA[Натисніть кнопку Продовжити]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/en-gb/account/forgotten.php">
+    	<operation error="skip">
+			<search><![CDATA[Click submit]]></search>
+			<add position="replace"><![CDATA[Click Continue]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/account/register.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['text_agree']           = 'Я прочитал <a href="%s" class="agree"><b>%s</b></a> и согласен с <br /> условиями безопасности и обработки персональных данных';]]></search>
+			<add position="replace"><![CDATA[
+			$_['text_agree']           = 'Я прочитал <a href="%s" class="agree"><b>%s</b></a> и согласен с условиями безопасности и обработки персональных данных';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/affiliate/register.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['text_agree']                = 'Я прочитал <a href="%s" class="agree"><b>%s</b></a> и согласен с <br /> условиями безопасности и обработки персональных данных';]]></search>
+			<add position="replace"><![CDATA[
+			$_['text_agree']                = 'Я прочитал <a href="%s" class="agree"><b>%s</b></a> и согласен с условиями безопасности и обработки персональных данных';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/checkout/checkout.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['text_agree']                     = 'Я прочитал <a href="%s" class="agree"><b>%s</b></a> и согласен с <br /> условиями безопасности и обработки персональных данных';]]></search>
+			<add position="replace"><![CDATA[
+			$_['text_agree']                     = 'Я прочитал <a href="%s" class="agree"><b>%s</b></a> и согласен с условиями безопасности и обработки персональных данных';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/product/product.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['tab_review']]]></search>
+			<add position="after"><![CDATA[
+			$_['tab_review'] = '<span class="nav-link-text">Отзывов</span><span class="nav-link-qty">%s</span>';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/en-gb/product/product.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['tab_review']]]></search>
+			<add position="after"><![CDATA[
+			$_['tab_review'] = '<span class="nav-link-text">Reviews</span><span class="nav-link-qty">%s</span>';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/uk-ua/product/product.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['tab_review']]]></search>
+			<add position="after"><![CDATA[
+			$_['tab_review'] = '<span class="nav-link-text">Відгуків</span><span class="nav-link-qty">%s</span>';
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/*/information/contact.php">
+    	<operation error="skip">
+			<search><![CDATA[$_['text_success']]]></search>
+			<add position="after"><![CDATA[
+			$_['text_message'] = $_['text_success'];
+			]]></add>
+    	</operation>
+	</file>
+</modification>

@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EJ7G5Z8FXS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EJ7G5Z8FXS');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.5/dist/flowbite.min.css" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+  
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'Alpha': ['Alpha', 'sans-serif'],
+              'Formular': ['Formular', 'sans-serif'],
+            },
+            colors: {
+              clifford: '#da373d',
+            }
+          }
+        }
+      }
+    </script>
+  
+    <style>
+  @import url('https://fonts.cdnfonts.com/css/alpha');
+  @import url('https://fonts.cdnfonts.com/css/formular');
+  .hover-image-scale {
+    overflow: hidden;
+  }
+  .hover-image-scale img {
+    transition: 1s;
+    display: block; 
+  }
+  .hover-image-scale img:hover {
+    transform: scale(1.1); 
+  }
+  .sticky {
+    position: sticky;
+    top: 0;
+    min-height: 2em;
+    background: white;
+  }
+  
+  #centerLayer {
+      margin-left: 20%; 
+      width: 15%; 
+      margin-top: 22%;
+      font-size: 40px;
+      font-weight: 300;
+  }
+  
+  #font-banner {
+      font-size: 30px;
+      font-weight: 500;
+  }
+  
+
+  
+  </style>
+</head>
+<body class="bg-white text-gray-600 work-sans leading-normal text-base tracking-normal">
+<!--Nav-->
+<!-- <nav id="header" class="w-full top-0 py-1 sticky z-40" style="border-bottom: 1px solid rgba(0,0,0,.35);">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
+
+        <label for="menu-toggle" class="cursor-pointer md:hidden block">
+            <svg class="fill-current text-gray-900" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <title>menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+            </svg>
+        </label>
+        <input class="hidden" type="checkbox" id="menu-toggle" />
+
+        <div class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1" id="menu">
+            <nav>
+                <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+                    <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Furniture</a></li>
+                    <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Doors</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="order-1 md:order-2">
+            <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+                RPGROUP
+            </a>
+        </div>
+
+        <div class="hidden order-2 md:order-3 md:flex md:items-center md:w-auto w-full" id="menu">
+            <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+                <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Services</a></li>
+                <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Contacts</a></li>
+            </ul>
+
+        </div>
+    </div>
+</nav> -->
+
+<nav id="header" class="bg-white border-gray-200 sticky px-2 md:px-3 py-2 z-40" style="border-bottom: 1px solid rgba(0,0,0,.35);">
+  <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3.5">
+      <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-black text-xl" href="/fr/">
+         RPGROUP
+      </a>
+      <div class="flex items-center md:order-1">
+          <button data-collapse-toggle="mega-menu" type="button" class="font-Formular inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mega-menu" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+          </button>
+      </div>
+      <div id="mega-menu" class="hidden justify-between items-center w-full text-sm md:flex md:w-auto md:order-1">
+          <ul class="flex flex-col mt-4 font-medium md:flex-row md:space-x-8 md:mt-0">
+              <li>
+                  <a href="/fr/" class="font-Formular block py-2 text-[16px] pr-4 pl-3 text-rose-800 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800" aria-current="page">Maison</a>
+              </li>
+              <li>
+                  <button id="mega-menu-dropdown-button" data-dropdown-toggle="mega-menu-dropdown" class="font-Formular flex text-[16px] justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">
+                    Meubles <svg aria-hidden="true" class="ml-1 w-5 h-5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div id="mega-menu-dropdown" class="grid hidden absolute z-10 grid-cols-3 w-auto text-sm bg-white rounded-lg border border-gray-100 shadow-md md:grid-cols-3">
+                      <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                          <ul class="space-y-4" aria-labelledby="mega-menu-dropdown-button">
+                              <li>
+                                  <a href="business" class="font-Formular text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                    Pour le business
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                      <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                          <ul class="space-y-4">
+                              <li>
+                                  <a href="turnkey" class=" text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                    Clé en main
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                      <div class="p-4 text-gray-900 dark:text-white">
+                          <ul class="space-y-4">
+                              <li>
+                                  <a href="doors" class="font-Formular text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                    Des portes
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </li>
+              <li>
+                  <a href="services" class=" text-[16px] block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">Prestations de service</a>
+              </li>
+              <li>
+                  <a href="/fr/contacts" class=" text-[16px] block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">Contacts</a>
+              </li>
+              <li>
+                <a href="rules" class=" text-[16px] block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-rose-800 md:dark:hover:text-rose-800 dark:hover:text-rose-800">Règles de fonctionnement</a>
+              </li>
+
+              <div id="mega-menu" class="justify-between items-center w-full text-sm md:flex md:w-auto md:order-1">
+                  <ul class="flex flex-col font-medium md:flex-row md:space-x-8 md:mt-0">
+                      <li>
+                          <button id="mega-menu-dropdown-button-2" data-dropdown-toggle="mega-menu-dropdown-2" class="flex text-[16px] justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-rose-800 md:p-0 dark:text-gray-400 md:dark:hover:text-rose-800 dark:hover:text-rose-800">
+                              FR <svg aria-hidden="true" class="ml-1 w-5 h-5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                          </button>
+                          <div id="mega-menu-dropdown-2" class="grid hidden absolute z-10 grid-cols-1 w-auto text-sm bg-white rounded-lg border border-gray-100 shadow-md md:grid-cols-1">
+                              <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                                  <ul class="space-y-4" aria-labelledby="mega-menu-dropdown-button">
+                                      <li>
+                                        <a href="/lv/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                              LV
+                                       </a>                              
+                                     </li>
+                                     <li>
+                                      <a href="/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                            ENG
+                                     </a>                              
+                                   </li>
+                                   <li>
+                                    <a href="/de/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                          DE
+                                   </a>                              
+                                 </li>
+                                 <li>
+                                  <a href="/ru/rules" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                        RU
+                                 </a>                              
+                               </li>
+                               <!-- <li>
+                                <a href="#" class="text-[15px] text-gray-500 dark:text-gray-400 hover:text-rose-800 dark:hover:text-rose-800">
+                                      FIN
+                               </a>                              
+                             </li> -->
+                          </ul>
+                </div>            
+          </ul>
+      </div>
+  </div>
+</nav>
+
+<!-- <section class="w-full mx-auto bg-nordic-gray-light flex pt-12 md:pt-0 md:items-center bg-cover bg-centre" style="filter: brightness(80%); max-width:2560px; height: 40rem; background-image: url('https://content.poliform.it/assets/2021/11/Poliform_cover_collection_1920x864px_KITCHEN.jpg');">
+    <div class="container mx-auto">
+        <div class="flex flex-col w-full justify-center items-center px-6 tracking-wide">
+            <h1 class="text-white text-5xl my-6 font-Formular">МЕБЕЛЬ | ДЛЯ БИЗНЕСА</h1>
+            <a class="text-xl inline-block no-underline border-b border-white leading-relaxed hover:text-white hover:border-white font-Formular" href="#">products</a>
+        </div>
+      </div>
+    </section> -->
+
+    <section class="w-full bg-nordic-gray-light flex md:pt-0 md:items-center" style="max-width:2560px; height: 30rem;">
+        <img class="absolute w-full md:items-center object-cover object-centre" style="max-width:2560px; height: 30rem; filter: brightness(75%);"  src="https://ip-nablyudenie.ru/wp-content/uploads/2020/07/55c36b5c1a23f721132680fcf164ac48.jpg">
+        <div class="container mx-1/2 mb-36 text-center">
+            <div class="absolute absolute-col w-full px-6 tracking-wide">
+                <h1 class="text-white lg:text-5xl text-4xl my-8 lg:my-4 ">RÈGLES D'UTILISATION DES MEUBLES</h1>
+                <p class="lg:text-lg text-md leading-relaxed text-white font-Formular lg:w-3/5 mx-auto leading-relaxed" href="#">La période pendant laquelle le meuble conserve sa beauté et sa facilité d'entretien dépend en grande partie des conditions de son fonctionnement et de son entretien approprié. Chaque produit est conçu dans un but précis, il est donc nécessaire d'utiliser n'importe quel article conformément à son objectif fonctionnel.</p>
+            </div>
+          </div>
+        </section>
+<style>
+
+
+</style>
+
+
+
+<section class="text-gray-600 body-font">
+    <div class="container px-5 py-12 mx-auto">
+      <div class="flex flex-col w-full">
+        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+            • À la réception de la marchandise, assurez-vous de vérifier son intégralité et les signes extérieurs de qualité. Il est recommandé d'effectuer le contrôle par inspection externe afin de détecter les défauts apparents et l'absence des raccords nécessaires.</p><br>
+        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+            • N'oubliez pas que la réception d'un meuble sans signaler les défauts des produits d'ameublement qui pourraient être constatés lors d'un examen externe prive l'acheteur du droit de s'y référer dans le futur. Ce n'est pas un inconvénient (défaut) des meubles que les articles contiennent des caractéristiques qui sont déterminées par l'idée stylistique du fabricant des matières premières ou l'origine naturelle des matières premières, en particulier : des différences insignifiantes dans la texture ou les nuances en bois massif, placage naturel, pierre naturelle, etc. Sur les éléments de meubles en bois ou plaqués sur les faces avant, les défauts du bois sont autorisés : nœuds jusqu'à 15 mm ; tortuosité, yeux, poches ne dépassant pas 20 mm de long, 1,5 mm de large, 3 mm de profondeur. De plus, les plis sur le matériau de parement des éléments souples ne sont pas un défaut.</p><br>
+            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+               • Les meubles doivent être utilisés dans des pièces sèches et chaudes avec chauffage et ventilation à une température de l'air non inférieure à +10*C et non supérieure à +40*C et à une humidité relative de 45-65%. Des écarts importants par rapport à ces modes entraînent une détérioration significative des qualités de consommation des meubles. Évitez les changements brusques de température et d'humidité.</p><br>
+                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                    • Il est déconseillé de placer les meubles en bois naturel, plaqué ou vernis à moins de 1 m des sources de chaleur, ainsi qu'en plein soleil, ou de permettre un chauffage supérieur à +70*C. La violation de ces conditions provoque un vieillissement accéléré de la peinture et une déformation des panneaux de meubles. Les meubles avec une surface stratifiée ou doublée d'un film PVC décoratif doivent être situés à une distance d'au moins 15 cm des appareils de chauffage.</p><br>
+                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                        • La surface des éléments de mobilier doit être protégée d'une exposition prolongée à l'humidité, car. Une exposition prolongée à l'humidité peut entraîner le décollement des bords et le gonflement des pièces. Les surfaces recouvertes de peinture ou de vernis ne doivent pas être exposées à des liquides qui dissolvent la peinture.</p><br>
+                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                           • Il est nécessaire de protéger les parties du meuble et ses éléments structurels contre les dommages mécaniques, qui peuvent être causés par l'impact d'objets solides, de poudres abrasives, ainsi que par un effort physique excessif. La masse du corps humain ne peut être supportée que par des produits et éléments spécialement conçus à cet effet - armoires avec sièges, repose-pieds, lits, etc.</p><br>
+                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                               • Lorsque vous utilisez des meubles, n'utilisez pas une force excessive pour ouvrir les façades, les tiroirs ou les autres pièces mobiles. Leur bon fonctionnement est assuré par un réglage. Pour éviter les déformations des façades et des tiroirs, il est déconseillé de les garder ouverts longtemps. N'oubliez pas que les charnières avec un angle d'ouverture d'environ 90 degrés sont principalement utilisées pour les façades ; si vous essayez d'ouvrir la façade à un angle plus grand, les charnières peuvent se casser. Éviter la contamination et la pénétration de corps étrangers dans les mécanismes des ferrures de meubles.</p><br>
+                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                   • Les portes et mécanismes coulissants doivent être protégés des impacts et des chocs brusques, cela pourrait faire tomber le mécanisme du rouleau.</p><br>
+                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                       • Il est déconseillé de placer les meubles en bois naturel, plaqué ou vernis à moins de 1 m des sources de chaleur, ainsi qu'en plein soleil, ou de permettre un chauffage supérieur à +70*C. La violation de ces conditions provoque un vieillissement accéléré de la peinture et une déformation des panneaux de meubles. Les meubles avec une surface stratifiée ou doublée d'un film PVC décoratif doivent être situés à une distance d'au moins 15 cm des appareils de chauffage.</p><br>
+                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                           • Il est recommandé de nettoyer toute partie du meuble dès que possible après une contamination. Une exposition prolongée à la saleté augmente considérablement le risque de traînées, de taches et de dommages aux produits d'ameublement et à leurs pièces. Pour l'entretien des meubles, les produits destinés à cet effet doivent être utilisés, conformément aux instructions qui leur sont jointes sur la méthode et la portée de leur application. Il est recommandé d'utiliser un chiffon doux, sec ou légèrement humide, pour le nettoyage. Après avoir terminé tout nettoyage, essuyez et séchez les pièces qui ont été traitées. Faites attention aux parties intérieures des meubles, dont l'accès à l'air est limité.</p><br>
+                                           <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                            • Lors de l'entretien des meubles de cuisine, il est interdit d'utiliser des produits présentant des contre-indications au contact avec des produits alimentaires.</p><br>
+                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2"> 
+                                                • Ne déplacez pas les meubles lorsqu'ils sont chargés. Lors d'un déménagement, il est recommandé de libérer le meuble des étagères et tiroirs amovibles. Il n'est pas recommandé de déplacer le meuble "à la traîne", afin d'éviter l'apparition de dommages mécaniques.</p><br>
+                                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                    • Il est déconseillé de placer les meubles en bois naturel, plaqué ou vernis à moins de 1 m des sources de chaleur, ainsi qu'en plein soleil, ou de permettre un chauffage supérieur à +70*C. La violation de ces conditions provoque un vieillissement accéléré de la peinture et une déformation des panneaux de meubles. Les meubles avec une surface stratifiée ou doublée d'un film PVC décoratif doivent être situés à une distance d'au moins 15 cm des appareils de chauffage.</p><br>
+                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                        • Il n'est pas recommandé d'assembler et de démonter les meubles d'armoire plus de deux fois.</p><br>
+                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                            • Il est déconseillé de placer les meubles en bois naturel, plaqué ou vernis à moins de 1 m des sources de chaleur, ainsi qu'en plein soleil, ou de permettre un chauffage supérieur à +70*C. La violation de ces conditions provoque un vieillissement accéléré de la peinture et une déformation des panneaux de meubles. Les meubles avec une surface stratifiée ou doublée d'un film PVC décoratif doivent être situés à une distance d'au moins 15 cm des appareils de chauffage.</p><br>
+                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                • Afin d'éviter la casse du lit, il est déconseillé d'appliquer de fortes charges verticales sur les matelas et le sommier à lattes du lit (sauter, marcher, se lever).</p><br>
+                             <!--BOLD NOTES-->                  <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">       <!--BOLD NOTES--> 
+                                                                    Les recommandations ci-dessus sont générales pour les meubles et les éléments d'intérieur.</p><br>
+                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                        Les recommandations ci-dessous attirent l'attention sur l'utilisation et l'entretien de certaines surfaces et matériaux.</p><br>
+                                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base  ml-2">
+                                                                            • Lors de l'utilisation et de l'entretien des surfaces en granit et en marbre, il faut tenir compte du fait qu'il s'agit de matériaux vivants et que leur particularité est la capacité d'absorber les liquides et qu'il existe donc un risque de traînées et de taches. Protéger les surfaces d'une exposition prolongée à l'humidité. Il est recommandé de protéger ces surfaces avec des hydrofuges spéciaux pour granit et marbre. Après avoir appliqué ces produits, essuyez soigneusement la surface avec un chiffon doux et sec.</p><br>
+                                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                • Les produits d'une pierre artificielle demandent un minimum de sortie pour le maintien de l'apparence. Une forte chute de température (eau bouillante glacée) n'est pas recommandée. Lorsque vous versez de l'eau bouillante dans un évier en pierre artificielle, il est recommandé d'ouvrir de l'eau froide. Il est recommandé de placer les poêles à frire et les casseroles de la cuisinière ou du four sur des supports. N'exposez pas les produits en pierre artificielle à une exposition prolongée à des produits chimiques agressifs. Si de telles substances entrent en contact avec la surface du plan de travail ou de l'évier, rincez-les immédiatement avec beaucoup d'eau et de savon. Il est recommandé de nettoyer les produits en pierre artificielle avec des détergents ménagers à l'aide d'une éponge douce. Les débarbouillettes métalliques et les détergents contenant des particules abrasives ne sont pas autorisés. La surface en pierre artificielle n'est pas destinée à être utilisée comme surface de coupe, car cela pourrait endommager le polissage. Par conséquent, utilisez des planches à découper pour couper les aliments et les légumes. En cas de violations importantes de l'apparence - rayures profondes, éclats et fissures - il est nécessaire de contacter des spécialistes pour la réparation, sans démonter le produit.</p><br>
+                                                                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                    • Le polish peut être utilisé sur les meubles en bois poli et non poli pour donner une finition brillante et éliminer les taches et les marques de main. Avant utilisation, nous vous recommandons de lire le mode d'emploi et de tester l'effet de la composition sur une petite zone peu visible. En l'absence d'outils spéciaux, vous pouvez utiliser une solution de savon doux. Il n'est pas recommandé de placer des objets chauds sur la surface du meuble, utilisez toujours des sous-verres.</p><br>
+                                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                        • L'entretien des revêtements peints est effectué par un tissu doux humide avec l'utilisation de vernis spéciaux. En l'absence d'outils spéciaux, vous pouvez utiliser une solution de savon doux. Après avoir essuyé la surface avec un détergent, essuyez-la immédiatement avec un chiffon doux et sec. Il convient de rappeler que toutes les surfaces peintes peuvent changer de couleur dans le temps en fonction du degré d'exposition à la lumière.</p><br>
+                                                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                            • Lors de l'utilisation et de l'entretien des surfaces en verre et en céramique, elles doivent être protégées contre les chocs. Les débarbouillettes métalliques et les détergents contenant des particules abrasives ne sont pas autorisés.</p><br>
+                                                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                                • Les meubles en cuir naturel et artificiel doivent parfois être traités avec des produits spéciaux, qui assureront une bonne protection. Pour l'entretien des meubles en cuir naturel, il est recommandé de recourir aux services d'une entreprise qui effectue des travaux de nettoyage de meubles appropriés, ou d'utiliser des produits destinés à l'entretien des meubles en cuir ou en tapisserie. Le cuir artificiel est nettoyé avec une éponge en mousse ou un chiffon doux en utilisant une solution savonneuse douce. Pour enlever les taches, il est recommandé d'utiliser des produits spéciaux.</p><br>
+                                                                                                <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                                    • Lors de l'entretien des surfaces métalliques (aluminium, acier inoxydable ou métaux avec différents types de revêtements), il est déconseillé d'utiliser des produits aux propriétés abrasives ou corrosives, ainsi que des tampons à récurer métalliques. Après le nettoyage, le brillant de la surface, si nécessaire, sera poli avec un chiffon doux et sec.</p><br>
+                                                                                                    <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                                                        La garantie est résiliée si l'une des clauses est violée.</p><br><br>
+                                                                                                        <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base font-bold ml-2">
+                                                                                                            SIA “R.P. Group”</p><br>
+                                                                                                            <p class="lg:w-4/4 sm:text-xl text-xl text-gray-900 mx-auto leading-relaxed text-base ml-2">
+                                                                                                                Latvija, Rīga, Tvaikonu iela 5, LV-1007<br>Reģ. Nr. LV40003514469<br>Tel. 29224123</p><br>
+      </div>
+    </div>
+  </section>
+
+<footer class="mt-auto w-full py-4 px-4 sm:px-6 lg:px-8 mx-auto bg-gray-100">
+    <div class="bg-gray-100">
+      <div class="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
+        <a class="flex title-font font-medium items-center justify-center text-gray-900">
+          <img class="w-2/3 h-2/3" src="/img/logo.png" alt="Image Description">
+        </a>
+        <p class="text-sm text-gray-500 sm:mt-0 mt-4">© 2022 RPGroup — All Rights Reserved.</p>
+        <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+          <a class="text-gray-500">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+              <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+              <circle cx="4" cy="4" r="2" stroke="none"></circle>
+            </svg>
+          </a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

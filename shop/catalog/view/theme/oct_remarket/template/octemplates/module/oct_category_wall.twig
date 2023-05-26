@@ -1,0 +1,40 @@
+{% if categories is not empty %}
+<div class="rm-category-wall">
+	<div class="row row-padding-top">
+		<div class="col-12 rm-module-header">
+			<span>{{ heading_title }}</span>
+		</div>
+	</div>
+	<div class="row no-gutters">
+		{% for category in categories %}
+	  	<div class="col-6 col-sm-3 col-lg-2 rm-category-wall-item">
+			<a href="{{ category.href }}" class="d-flex flex-column justify-content-between align-items-center text-center">
+				{% if (category.thumb) %}
+				<span class="rm-category-wall-item-image"><img src="{{ category.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ category.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="oct-lazy"{% endif %} alt="{{ category.name }}" title="{{ category.name }}" width="{{ category.width }}" height="{{ category.height }}" /></span>
+				{% endif %}
+				<span>{{ category.name }}</span>
+			</a>
+			{% if category.children %}
+			<ul class="list-unstyled">
+				{% set countstop = 1 %}
+				{% for child in category.children %}
+					{% set countstop = countstop + 1 %}
+					<li><a href="{{ child.href }}">{{ child.name }}</a></li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+		{% endfor %}
+	</div>
+	<div class="row mt-3 d-md-none">
+		<div class="col-12 text-center">
+			<button type="button" class="rm-btn primary rm-footer-catalog-btn w-100 mb-0" onclick="rmSidebar('{{ oct_menu }}', 'menu', 1);">
+				<span class="rm-btn-icon">
+					<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--footer-catalog-icon" alt="" width="14" height="14">
+				</span>
+				<span class="rm-btn-text">{{ oct_menu_catalog }}</span>
+			</button>
+		</div>
+	</div>
+</div>
+{% endif %}

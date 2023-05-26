@@ -1,0 +1,51 @@
+{{ header }}
+<div id="account-address" class="container account-container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="rm-page-title">{{ text_address_book }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	{% if success %}
+	<script>
+	rmNotify('success', '{{ success }}');
+	</script>
+	{% endif %}
+	{% if error_warning %}
+	<script>
+	rmNotify('warning', '{{ error_warning }}');
+	</script>
+	{% endif %}
+	<div id="content" class="row">
+		{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-lg-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-lg-9' %}
+	    {% else %}
+	    {% set class = 'col-lg-12' %}
+	    {% endif %}
+	    <div class="{{ class }}">
+		    <div class="rm-content h-100">
+		      {% if addresses %}
+		      {% for result in addresses %}
+		      <div class="rm-acc-address-list-item">
+		      	<div class="mb-3 d-flex justify-content-between align-items-center">
+		      		<a href="{{ result.update }}">{{ button_edit }}</a>
+		      		<a href="{{ result.delete }}" class="d-flex align-items-center red"><i class="fas fa-times"></i><span class="ml-2">{{ button_delete }}</span></a>
+		      	</div>
+      			<div>{{ result.address }}</div>
+		      </div>
+		      {% endfor %}
+		      {% else %}
+		      <div class="rm-content-text">{{ text_empty }}</div>
+		      {% endif %}
+	          <a href="{{ add }}" class="rm-btn dark"><span class="rm-btn-text">+ {{ button_new_address }}</span></a>
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+{{ footer }}

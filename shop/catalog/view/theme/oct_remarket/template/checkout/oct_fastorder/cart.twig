@@ -1,0 +1,133 @@
+<div id="cart-table">
+	{% if attention %}
+	<div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ attention }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert-danger mt-4"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	<script type="text/javascript">
+		$(function () {
+			$('#button-go').attr('disabled', 'disabled');
+			$('#button-go').addClass('disabled');
+		});
+	</script>
+	{% else %}
+	<script type="text/javascript">
+		$(function () {
+			$('#button-go').removeAttr('disabled');
+			$('#button-go').removeClass('disabled');
+			$('.oct-checkout .alert-danger').addClass('d-none');
+		});
+	</script>
+	{% endif %}
+
+	{% for product in products %}
+	<div class="row mt-4">
+		<div class="col-lg-12">
+			<div class="oct-checkout-block oct-checkout-cart d-flex flex-column flex-md-row justify-content-between p-3">
+				<div class="oct-checkout-cart-product-info d-flex align-items-md-center">
+					{% if product.thumb %}
+					<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}"
+							title="{{ product.name }}" width="60" height="60" /></a>
+					{% endif %}
+					<div class="pl-3">
+						<a href="{{ product.href }}" class="blue-link d-block mb-2">{{ product.name }}</a>
+						{% if not product.stock %}
+						<span class="required">***</span>
+						{% endif %}
+
+						{% if product.option %}
+						{% for option in product['option'] %}
+						<div class="oct-checkout-cart-product-option">
+							{{ option.name }}: <span class="light-text">{{ option.value }}</span>
+							{% if oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.quantity_status and option.oct_quantity_value and option.oct_quantity_value %}
+							x{{ option.oct_quantity_value }}
+							{% endif %}
+							{% if oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.allow_sku and option.sku or oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.status and oct_advanced_options_settings_data.allow_model and option.model %}({% if oct_advanced_options_settings_data.allow_sku and option.sku %}{{ text_option_sku }}:
+							{{ option.sku }},
+							{% endif %}{% if oct_advanced_options_settings_data.allow_model and option.model %}{{ text_option_model }}:
+							{{ option.model }}{% endif %})
+							{% endif %}
+							</small>
+						</div>
+						{% endfor %}
+						{% endif %}
+						{% if product.reward %}
+						<br />
+						<small>{{ product.reward }}</small>
+						{% endif %}
+						{% if product.recurring %}
+						<br />
+						<small>{{ text_recurring_item }}{{ product.recurring }}</small>
+						{% endif %}
+					</div>
+				</div>
+				<div class="oct-checkout-cart-actions">
+					<div class="oct-checkout-cart-buttons d-flex align-items-stretch justify-content-end">
+						<div class="oct-checkout-cart-quantity d-flex align-items-center justify-content-center">
+							<input name="product_id_q" value="{{ product.product_id }}" style="display: none;"
+								type="hidden" />
+							<input name="product_id" value="{{ product.key }}" style="display: none;" type="hidden" />
+							<input id="quantity-{{ product.quantity }}" type="text" name="quantity"
+								value="{{ product.quantity }}" class="form-control"
+								onchange="update_manual(this, '{{ product.key }}');" aria-label="Quantity" />
+						</div>
+						<button type="button" aria-label="Delete"
+							class="oct-checkout-cart-delete-btn d-flex align-items-center justify-content-center"
+							onclick="update(this, 'remove');">
+							<span class="oct-checkout-cart-delete-btn-icon"></span>
+						</button>
+					</div>
+					<div class="oct-checkout-cart-total">{{ column_total }} {{ product.total }}</div>
+					<div class="oct-checkout-cart-price">{{ column_price }} {{ product.price }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+<div class="oct-bottom-total-cart d-none">
+	{% for total in totals %}
+	<div class="oct-checkout-actions-total-item d-flex justify-content-between">
+		<span class="light-text">{{ total.title }}</span>
+		<span>{{ total.text }}</span>
+	</div>
+	{% endfor %}
+	{% if weight %}
+	<div class="oct-checkout-actions-total-item d-flex justify-content-between">
+		<span class="light-text">{{ text_weight }}</span>
+		<span>{{ weight }}</span>
+	</div>
+	{% endif %}
+</div>
+<script>
+	function updateTotal() {
+		let oldTotal = document.querySelector('.oct-checkout-actions-total'),
+			content = document.querySelector('.oct-bottom-total-cart');
+
+		oldTotal.innerHTML = content.innerHTML;
+	}
+	updateTotal();
+</script>
+
+{% for voucher in vouchers %}
+
+<div class="row mt-4">
+	<div class="col-lg-12">
+		<div class="oct-checkout-block oct-checkout-cart d-flex flex-column flex-md-row align-items-center p-3">
+			<p>{{ voucher.description }}</p>
+			<input type="text" name="" value="1" size="1" disabled="disabled" hidden class="form-control" />
+			<div class="ml-auto d-flex flex-column align-items-end">
+				<button type="button"
+					class="oct-checkout-cart-delete-btn d-flex align-items-center justify-content-center m-0"
+					onclick="voucher_remove('{{ voucher.key }}');"><span
+						class="oct-checkout-cart-delete-btn-icon"></span></button>
+				<div class="oct-checkout-cart-total">{{ voucher.amount }}</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}

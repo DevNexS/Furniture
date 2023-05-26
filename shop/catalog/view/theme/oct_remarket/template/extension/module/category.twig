@@ -1,0 +1,42 @@
+{% if categories and not oct_detect %}
+<div class="rm-module-column-box">
+	<div class="rm-column-title">{{ text_module_category }}</div>
+	<ul class="list-unstyled rm-column-categories">
+		{% for category in categories %}
+			<li class="rm-column-categories-item{% if category.category_id == category_id %} active{% endif %}">
+				<span class="d-flex justify-content-between">
+					<a href="{{ category.href }}">{{ category.name }}</a>
+					{% if category.children %}
+					<span class="rm-categories-toggle">
+						<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--category-column-toggle" class="chevron-down" alt="" width="12" height="8" />
+					</span>
+					{% endif %}
+				</span>
+				{% if category.children %}
+				<ul class="rm-categories-children rm-categories-2 list-unstyled">
+				{% for child in category.children %}
+					<li class="rm-column-categories-item{% if child.category_id == child_id %} active{% endif %}">
+						<span class="d-flex justify-content-between">
+							<a href="{{ child.href }}">{{ child.name }}</a>
+							{% if child.children %}
+								<span class="rm-categories-toggle">
+									<img src="catalog/view/theme/oct_remarket/img/sprite.svg#include--category-column-toggle" class="chevron-down" alt="" width="12" height="8" />
+								</span>
+							{% endif %}
+						</span>
+						{% if child.children %}
+						<ul class="rm-categories-children rm-categories-3 list-unstyled">
+				        	{% for ch in child.children %}
+								<li class="rm-column-categories-item{% if ch.category_id == ch_id %} active{% endif %}"><span><a href="{{ ch.href }}">{{ ch.name }}</a></span></li>
+							{% endfor %}
+						</ul>
+				        {% endif %}
+			        </li>
+				{% endfor %}
+				</ul>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endif %}

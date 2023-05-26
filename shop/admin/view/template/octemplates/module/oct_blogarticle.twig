@@ -1,0 +1,196 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<div class="toggle-group">
+							    <input type="checkbox" name="status" {% if status %}checked="checked"{% endif %} id="input-status" tabindex="1">
+							    <label for="input-status"></label>
+							    <div class="onoffswitch pull-left" aria-hidden="true">
+							        <div class="onoffswitch-label">
+							            <div class="onoffswitch-inner"></div>
+							            <div class="onoffswitch-switch"></div>
+							        </div>
+							    </div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+							{% if error_name %}
+							<div class="text-danger">
+								<script>
+									usNotify('warning', '{{ error_name }}');
+								</script>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label>
+						<div class="col-sm-10">
+							<ul class="nav nav-tabs" id="title">
+								{% for language in languages %}
+				            	<li><a href="#tab-title-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+				            	{% endfor %}
+				            </ul>
+				            <div class="tab-content">
+				            	{% for language in languages %}
+				            	<div class="tab-pane" id="tab-title-language{{ language.language_id }}">
+					            	<input type="text" name="title[{{ language.language_id }}]" value="{{ title[language.language_id] }}" placeholder="{{ entry_title }}" id="input-title" class="form-control" />
+									{% if error_title[language.language_id] %}
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_title[language.language_id] }}');
+										</script>
+									</div>
+									{% endif %}
+								</div>
+								{% endfor %}
+				            </div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-category"><span data-toggle="tooltip" title="{{ help_category }}">{{ entry_category }}</span></label>
+						<div class="col-sm-10">
+							<input type="text" name="category" value="" placeholder="{{ entry_category }}" id="input-category" class="form-control" />
+							<div id="blog-category" class="well well-sm" style="height: 150px; overflow: auto;">
+							{% for blog_category in blog_categories %}
+								<div id="blog-category{{ blog_category.blogcategory_id }}"><i class="fa fa-minus-circle"></i> {{ blog_category.name }}
+									<input type="hidden" name="blog_categories[]" value="{{ blog_category.blogcategory_id }}" />
+								</div>
+							{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-limit">{{ entry_limit }}</label>
+							<div class="col-sm-8">
+								<input type="text" name="limit" value="{{ limit }}" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="col-sm-4 control-label" for="input-limit_description">{{ entry_limit_description }}</label>
+							<div class="col-sm-8">
+								<input type="text" name="limit_description" value="{{ limit_description }}" placeholder="{{ entry_limit_description }}" id="input-limit" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-width">{{ entry_image_size }}</label>
+						<div class="col-sm-10">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="input-group">
+										<input type="text" name="width" value="{{ width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control" />
+										<span class="input-group-addon">px</span>
+									</div>
+									{% if error_width %}
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_width }}');
+										</script>
+									</div>
+									{% endif %}
+								</div>
+								<div class="col-sm-6">
+									<div class="input-group">
+										<input type="text" name="height" value="{{ height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control" />
+										<span class="input-group-addon">px</span>
+									</div>
+									{% if error_height %}
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_height }}');
+										</script>
+									</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="select-sort">{{ entry_sort }}</label>
+						<div class="col-sm-10">
+							<div class="col-sm-6">
+								<select name="sort" class="form-control">
+									<option value="a.sort_order"{% if sort == 'a.sort_order' %} selected="selected"{% endif %}>{{ entry_sort_order }}</option>
+									<option value="ad.name"{% if sort == 'ad.name' %} selected="selected"{% endif %}>{{ entry_sort_name }}</option>
+									<option value="a.date_added"{% if sort == 'a.date_added' %} selected="selected"{% endif %}>{{ entry_sort_date_added }}</option>
+								</select>
+							</div>
+							<div class="col-sm-6">
+								<select name="order" class="form-control">
+									<option value="ASC"{% if order == 'ASC' %} selected="selected"{% endif %}>{{ entry_order_asc }}</option>
+									<option value="DESC"{% if order == 'DESC' %} selected="selected"{% endif %}>{{ entry_order_desc }}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('input[name=\'category\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=octemplates/blog/oct_blogcategory/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			cache: false,
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['blogcategory_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'category\']').val('');
+
+		$('#blog-category' + item['value']).remove();
+
+		$('#blog-category').append('<div id="blog-category' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="blog_categories[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+$('#blog-category').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+$('#title a:first').tab('show');
+</script>
+{{ footer }}
